@@ -3,4 +3,4 @@
 > 👨‍💻 芒果小洛 `<br/>`
 > 💻 [qkmango.cn](http://qkmango.cn)
 
-![logo](doc/README/logo.svg)
+![logo](doc/readme/logo.svg)
