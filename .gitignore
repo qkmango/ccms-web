@@ -7,3 +7,24 @@
 
 # Local History for Visual Studio Code
 .history/
+test/*
+
+
+
+lib/layui-v2.6.3/
+lib/layui-v2.6.3/layui_update.js
+**/*.bak.*
+page/user/common/data.json
+api/test.json
+page/*/*/*test.json
+page/**/*.test.json
+**/*.test.css
+
+
+# eslint
+package-lock.json
+package.json
+.eslintrc.json
+
+# Node
+node_modules/
