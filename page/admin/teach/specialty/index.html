@@ -6,9 +6,9 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../../../lib/layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="../../../../css/public.css" media="all">
-    <link rel="stylesheet" href="../../../../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
 </head>
 
 <body>
@@ -56,13 +56,13 @@
     </div>
 </div>
 
-<script src="../../../../lib/layui/layui.js" charset="utf-8"></script>
-<script src="../../../../lib/util/utils.js"></script>
+<script src="/lib/layui/layui.js" charset="utf-8"></script>
+<script src="/lib/util/utils.js"></script>
 
 <script>
     const tableReloadKey = window.location.hash+':tableReload';
     layui.extend({
-        'cascader': '../../../../js/lay-module/cascader/cascader',
+        'cascader': '/js/lay-module/cascader/cascader',
     })
     layui.use(['form', 'table','cascader'], function () {
         const $ = layui.jquery;
@@ -78,7 +78,7 @@
                 lazy: true,
                 lazyLoad: function (node, resolve) {
                     $.ajax({
-                        url:'../../../../tree/faculty/lazy/list.do',
+                        url:'/tree/faculty/lazy/list.do',
                         dataType: 'json',
                         success: function (res) {
                             if (res.success) {
@@ -101,7 +101,7 @@
 
         const cardTable = table.render({
             elem: '#currentTableId',
-            url: '../../../../teach/specialty/pagination/list.do',
+            url: '/teach/specialty/pagination/list.do',
             method: 'post',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print'],
@@ -175,7 +175,7 @@
                     btn: ['删除','取消'], icon:3, shadeClose:true,
                     btn1:function (index) {
                         $.ajax({
-                            url: '../../../../teach/specialty/one/delete.do',
+                            url: '/teach/specialty/one/delete.do',
                             data: {'id': obj.data.id},
                             type: 'post',
                             dataType: 'json',

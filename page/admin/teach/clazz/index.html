@@ -6,9 +6,9 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../../../lib/layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="../../../../css/public.css" media="all">
-    <link rel="stylesheet" href="../../../../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
 </head>
 
 <body>
@@ -63,14 +63,14 @@
     </div>
 </div>
 
-<script src="../../../../lib/layui/layui.js" charset="utf-8"></script>
-<script src="../../../../lib/util/utils.js"></script>
-<script src="../../../../lib/util/layui_verify_config.js"></script>
+<script src="/lib/layui/layui.js" charset="utf-8"></script>
+<script src="/lib/util/utils.js"></script>
+<script src="/lib/util/layui_verify_config.js"></script>
 
 <script>
     const tableReloadKey = window.location.hash+':tableReload';
     layui.extend({
-        'cascader': '../../../../js/lay-module/cascader/cascader',
+        'cascader': '/js/lay-module/cascader/cascader',
     })
     layui.use(['form', 'table','cascader','laydate'], function () {
         const $ = layui.jquery;
@@ -99,9 +99,9 @@
                     let url = '';
                     //判断，如果是根节点，则加载区域数据，否则加载商户数据
                     if (node.root === true) {
-                        url = '../../../../tree/faculty/lazy/list.do';
+                        url = '/tree/faculty/lazy/list.do';
                     } else {
-                        url = '../../../../tree/specialty/lazy/list.do?faculty=' + node.data.value;
+                        url = '/tree/specialty/lazy/list.do?faculty=' + node.data.value;
                     }
 
                     $.ajax({
@@ -128,7 +128,7 @@
 
         const cardTable = table.render({
             elem: '#currentTableId',
-            url: '../../../../teach/clazz/pagination/list.do',
+            url: '/teach/clazz/pagination/list.do',
             method: 'post',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print'],
@@ -214,7 +214,7 @@
                     btn: ['删除','取消'], icon:3, shadeClose:true,
                     btn1:function (index) {
                         $.ajax({
-                            url: '../../../../teach/clazz/one/delete.do',
+                            url: '/teach/clazz/one/delete.do',
                             data: {'id': obj.data.clazz.id},
                             type: 'post',
                             dataType: 'json',

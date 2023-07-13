@@ -6,9 +6,9 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../../lib/layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="../../../css/public.css" media="all">
-    <link rel="stylesheet" href="../../../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
 </head>
 
 <body>
@@ -62,9 +62,9 @@
         </div>
     </div>
 
-    <script src="../../../lib/layui/layui.js" charset="utf-8"></script>
-    <script src="../../../js/lay-module/layuimini/miniTab.js"></script>
-    <script src="../../../lib/util/utils.js"></script>
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-module/layuimini/miniTab.js"></script>
+    <script src="/lib/util/utils.js"></script>
     <script src="/lib/util/common.js"></script>
     <script>
 
@@ -81,7 +81,7 @@
 
             const cardTable = table.render({
                 elem: '#currentTableId',
-                // url: '../../../card/pagination/list.do',
+                // url: '/card/pagination/list.do',
                 url: common.url('card/pagination/list.do'),
                 // url: './index.index.test.json',
                 method: 'post',
@@ -106,8 +106,8 @@
                 page: true,
                 skin: 'line',
                 xhrFields: {
-            withCredentials: true,
-        },
+                    withCredentials: true,
+                },
                 contentType: 'application/json; charset=utf-8',
                 parseData: function (res) {
                     return {
@@ -144,7 +144,7 @@
                         shadeClose:true,
                         btn1:function (index) {
                             $.ajax({
-                                url: '../../../card/update/state.do',
+                                url: '/card/update/state.do',
                                 data: { 'user': data.user.id, 'lock': !data.card.lock },
                                 type: 'post',
                                 dataType: 'json',
@@ -173,9 +173,10 @@
                     }
 
                     //信息
-                    sessionStorage.setItem('page/admin/card/detail.html',data.user.id.toString())
+                    // console.log(data);
+                    // sessionStorage.setItem('page/admin/card/detail.html',)
                     miniTab.openNewTabByIframe({
-                        href: "page/admin/card/detail.html",
+                        href: "page/admin/card/detail.html?account="+data.account.toString(),
                         title: "卡详情",
                     });
                 }
