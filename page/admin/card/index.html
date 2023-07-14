@@ -173,10 +173,9 @@
                     }
 
                     //信息
-                    // console.log(data);
-                    // sessionStorage.setItem('page/admin/card/detail.html',)
+                    sessionStorage.setItem('#/page/admin/card/detail.html',data.account.toString());
                     miniTab.openNewTabByIframe({
-                        href: "page/admin/card/detail.html?account="+data.account.toString(),
+                        href: "page/admin/card/detail.html",
                         title: "卡详情",
                     });
                 }
