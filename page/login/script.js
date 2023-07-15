@@ -45,17 +45,7 @@ layui.use(['jquery', 'layer'], function () {
     button.onclick = function () {
         login();
         return;
-        if (checkId() & checkPassword()) {
-            if (isAjax) {
-                console.log('无效');
-                return;
-            }
-            console.log('有效');
-            isAjax = true;
-            login();
-        }
-    }
-
+    };
 
     const locale = Cookies.get('locale');
     if (locale === 'en_US') {
@@ -64,34 +54,37 @@ layui.use(['jquery', 'layer'], function () {
         document.querySelector('#zh_CN').className = 'this_locale_btn';
     }
 
-
     //登陆
     function login() {
-        console.log('ajax' + new Date())
+        console.log('ajax' + new Date());
         $.ajax({
-            url: "../../account/login.do",
+            url: common.url('account/login.do'),
             async: false,
             data: {
                 id: id.value.trim(),
                 password: password.value.trim(),
-                role: role.value.trim()
+                role: role.value.trim(),
             },
-            type: "post",
-            dataType: "json",
-            success: function (res) {
-                if (res.success) {
-                    layer.msg(res.message, {icon: 1}, end => window.location.href = "../../index.html");
-                    return
-                }
-                layer.msg(res.message, {icon: 2}, end => isAjax = false);
-
+            type: 'post',
+            dataType: 'json',
+            xhrFields: { withCredentials: true },
+            success: function (res, status, xhr) {
+                console.log(res);
+                console.log(status);
+                console.log(xhr);
+                var cookies = xhr.getAllResponseHeaders();
+                console.log(cookies);
+                // if (res.success) {
+                //     layer.msg(res.message, {icon: 1}, end => window.location.href = "../../index.html");
+                //     return
+                // }
+                // layer.msg(res.message, {icon: 2}, end => isAjax = false);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                layer.msg(jqXHR.status + '', {icon: 2}, end => isAjax = false);
-            }
-        })
+                layer.msg(jqXHR.status + '', { icon: 2 }, (end) => (isAjax = false));
+            },
+        });
     }
-
 
     // 认证，传入认证地址
     auth = function (platform, purpose, role) {
@@ -100,16 +93,15 @@ layui.use(['jquery', 'layer'], function () {
                 window.location.href = res.data;
                 return;
             }
-            layer.msg(res.message, {icon: 2});
+            layer.msg(res.message, { icon: 2 });
         });
-    }
-
-})
+    };
+});
 
 /**
  * 更改语言
  */
 function changeLocale(locale) {
-    Cookies.set('locale', locale, {expires: 7});
+    Cookies.set('locale', locale, { expires: 7 });
     window.location.reload();
 }

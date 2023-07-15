@@ -29,7 +29,7 @@
                             
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">账号</label>
+                                <label class="layui-form-label">账户</label>
                                 <div class="layui-input-inline">
                                     <input type="text" name="account" autocomplete="off" class="layui-input">
                                 </div>
@@ -81,15 +81,13 @@
 
             const cardTable = table.render({
                 elem: '#currentTableId',
-                // url: '/card/pagination/list.do',
                 url: common.url('card/pagination/list.do'),
-                // url: './index.index.test.json',
                 method: 'post',
                 toolbar: '#toolbarDemo',
                 defaultToolbar: ['filter', 'exports', 'print'],
                 cols: [[
                     { field: 'id', width: 120, title: 'ID', sort: true,fixed:'left', templet: d=> { return d.id } },
-                    { field: 'account', title: '账号', templet: d=> { return d.account } },
+                    { field: 'account', title: '账户', templet: d=> { return d.account } },
                     { field: 'balance', width: 100, title: '余额', align: 'right', templet: d=> { return d.balance/100 } },
                     { field: 'state', width: 100, title: '状态',align: 'center', templet: d=> { 
                         switch(d.state) {
@@ -166,17 +164,17 @@
 
                 } else if (obj.event === 'info') {
                     //关闭之前打开的详情页
-                    const tabCloseBtn = window.top.document.querySelector('li[lay-id="page/admin/card/detail.html"]>i')
+                    const tabCloseBtn = window.top.document.querySelector('li[lay-id="page/admin/account/detail.html"]>i')
                     console.log(tabCloseBtn)
                     if (tabCloseBtn!=null) {
                         tabCloseBtn.click();
                     }
 
-                    //信息
-                    sessionStorage.setItem('#/page/admin/card/detail.html',data.account.toString());
+                    //详情
+                    sessionStorage.setItem('#/page/admin/account/detail.html',data.account.toString());
                     miniTab.openNewTabByIframe({
-                        href: "page/admin/card/detail.html",
-                        title: "卡详情",
+                        href: "page/admin/account/detail.html",
+                        title: "账户详情",
                     });
                 }
             });

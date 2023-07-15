@@ -10,25 +10,31 @@
     },
     "menuInfo": [
         {
-            "title": "卡管理",
+            "title": "账户管理",
             "icon": "fa fa-credit-card",
             "target": "_self",
             "child": [
                 {
-                    "title": "卡列表",
-                    "href": "page/admin/card/index.html",
+                    "title": "账户列表",
+                    "href": "page/admin/account/account_list.html",
                     "icon": "fa fa-list",
                     "target": "_self"
                 },
                 {
-                    "title": "开卡",
-                    "href": "page/admin/card/insert.html",
+                    "title": "卡列表",
+                    "href": "page/admin/account/card_list.html",
+                    "icon": "fa fa-list",
+                    "target": "_self"
+                },
+                {
+                    "title": "添加账户",
+                    "href": "page/admin/account/insert.html",
                     "icon": "fa fa-plus-square",
                     "target": "_self"
                 },
                 {
-                    "title": "卡详情",
-                    "href": "page/admin/card/detail.html",
+                    "title": "账户详情",
+                    "href": "page/admin/account/detail.html",
                     "icon": "fa fa-info-circle",
                     "target": "_self"
                 }
@@ -145,7 +151,7 @@
             ]
         },
         {
-            "title": "教学部门",
+            "title": "部门管理",
             "icon": "fa fa-sitemap",
             "target": "_self",
             "child": [
@@ -207,9 +213,9 @@
                     ]
                 },
                 {
-                    "title": "组织架构",
+                    "title": "部门架构",
                     "icon": "fa fa-sitemap",
-                    "href": "page/admin/teach/organization.html",
+                    "href": "page/admin/department/structure.html",
                     "target": "_self"
                 }
             ]

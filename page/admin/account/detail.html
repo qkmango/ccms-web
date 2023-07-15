@@ -22,7 +22,7 @@
             <div class="layuimini-main">
                 <form class="layui-form layui-form-pane" action="" lay-filter="detail">
                     <div class="layui-form-item">
-                        <label class="layui-form-label">账号</label>
+                        <label class="layui-form-label">账户ID</label>
                         <div class="layui-input-block">
                             <input
                                 type="text"
@@ -41,76 +41,29 @@
                                     <div class="layui-card-header">账户信息</div>
                                     <div class="layui-card-body">
                                         <table class="layui-table" lay-skin="nob">
-                                            <tbody id="account_tbody">
-                                                <tr>
-                                                    <td>账户ID</td>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>账户角色</td>
-                                                    <td>user</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>账户状态</td>
-                                                    <td>user</td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody id="account_tbody"></tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="layui-col-md6">
+                            <div class="layui-col-md6" id="card_block">
                                 <div class="layui-card">
                                     <div class="layui-card-header">卡信息</div>
                                     <div class="layui-card-body">
                                         <table class="layui-table" lay-skin="nob">
-                                            <tbody id="card_tbody">
-                                                <tr>
-                                                    <td>卡ID</td>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>所属账户</td>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>卡余额</td>
-                                                    <td>user</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>卡状态</td>
-                                                    <td>user</td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody id="card_tbody"></tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="layui-col-md6">
+                            <div class="layui-col-md6" id="user_block">
                                 <div class="layui-card">
                                     <div class="layui-card-header">用户信息</div>
                                     <div class="layui-card-body">
                                         <table class="layui-table" lay-skin="nob">
-                                            <tbody id="user_tbody">
-                                                <tr>
-                                                    <td>ID</td>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>姓名</td>
-                                                    <td>user2</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>拥有卡ID</td>
-                                                    <td>user</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>邮件</td>
-                                                    <td>2@qq.com</td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody id="user_tbody"></tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -121,24 +74,7 @@
                                     <div class="layui-card-header">部门信息</div>
                                     <div class="layui-card-body">
                                         <table class="layui-table" lay-skin="nob">
-                                            <tbody id="department_tbody">
-                                                <tr>
-                                                    <td>ID</td>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>姓名</td>
-                                                    <td>user2</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>拥有卡ID</td>
-                                                    <td>user</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>邮件</td>
-                                                    <td>2@qq.com</td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody id="department_tbody"></tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -151,9 +87,7 @@
                             <button type="button" lay-submit lay-filter="cabceled" class="layui-btn layui-btn-danger">
                                 <i class="fa fa-close"></i> 注销
                             </button>
-                            <button type="button" lay-submit lay-filter="state" class="layui-btn layui-btn-danger">
-                                <i class="fa fa-lock"></i> 挂失 / 解挂
-                            </button>
+
                             <button
                                 type="button"
                                 lay-submit
@@ -162,12 +96,20 @@
                             >
                                 <i class="fa fa-key"></i> 重置密码
                             </button>
-                            <button type="button" lay-submit lay-filter="consume" class="layui-btn layui-bg-green">
-                                <i class="fa fa-bar-chart"></i> 消费查询
-                            </button>
-                            <button type="button" lay-submit lay-filter="recharge" class="layui-btn layui-bg-green">
-                                <i class="fa fa-jpy"></i> 充值
-                            </button>
+
+                            <span id="user_operation">
+                                <button type="button" lay-submit lay-filter="state" class="layui-btn layui-btn-danger">
+                                    <i class="fa fa-lock"></i> 挂失 / 解挂
+                                </button>
+
+                                <button type="button" lay-submit lay-filter="consume" class="layui-btn layui-bg-green">
+                                    <i class="fa fa-bar-chart"></i> 消费查询
+                                </button>
+                                <button type="button" lay-submit lay-filter="recharge" class="layui-btn layui-bg-green">
+                                    <i class="fa fa-jpy"></i> 充值
+                                </button>
+                            </span>
+
                             <button class="layui-btn layui-bg-green" lay-submit lay-filter="searchBtn" id="searchBtn">
                                 <i class="fa fa-search"></i> 查询
                             </button>
@@ -208,8 +150,7 @@
                 // 搜索
                 form.on('submit(searchBtn)', function (data) {
                     $.ajax({
-                        // url: common.url('/account/one/account-info.do'),
-                        url: './index.test.json',
+                        url: common.url('account/one/account-info.do'),
                         data: { account: data.field.account },
                         type: 'get',
                         dataType: 'json',
@@ -218,12 +159,20 @@
                         },
                         success: function (res) {
                             if (!res.success) {
-                                layer.msg('未查询到', { icon: 2 });
+                                layer.msg(res.message, { icon: 2 });
                                 return;
                             }
                             loaded = true;
                             //赋值
                             setData(res.data);
+
+                            //判断如果不是用户，隐藏用户相关的操作按钮
+                            if (res.data.account.role === 'user') {
+                                document.querySelector('#user_operation').style.display = 'inline';
+                            } else {
+                                document.querySelector('#user_operation').style.display = 'none';
+                                return;
+                            }
 
                             //判断如果已经注销，禁用 注销、解挂、挂失 按钮
                             const { account, card, user, departmentChain } = res.data;
@@ -519,7 +468,12 @@
                 const user_tbody = document.querySelector('#user_tbody');
                 const department_tbody = document.querySelector('#department_tbody');
 
+                const user_block = document.querySelector('#user_block');
+                const card_block = document.querySelector('#card_block');
+
                 const { account, card, user, departmentChain } = data;
+
+                // 账户
                 account_tbody.innerHTML = `<tr>
                         <td>账户ID</td>
                         <td>${account.id}</td>
@@ -549,6 +503,30 @@
                         }</td>
                     </tr>`;
 
+                // 部门
+                let department_str = '';
+                departmentChain.forEach((department) => {
+                    department_str += department.name + ' > ';
+                });
+                department_tbody.innerHTML = `<tr>
+                        <td>ID</td>
+                        <td>${departmentChain[departmentChain.length - 1].id}</td>
+                    </tr>
+                    <tr>
+                        <td>部门</td>
+                        <td>${department_str.substring(0, department_str.length - 3)}</td>
+                    </tr>`;
+
+                // 判断如果不是用户，隐藏用户信息和卡信息
+                if (account.role != 'user') {
+                    user_block.style.display = 'none';
+                    card_block.style.display = 'none';
+                    return;
+                }
+                user_block.style.display = 'block';
+                card_block.style.display = 'block';
+
+                // 卡
                 card_tbody.innerHTML = `<tr>
                         <td>卡ID</td>
                         <td>${card.id}</td>
@@ -574,6 +552,7 @@
                         }</td>
                     </tr>`;
 
+                // 用户
                 user_tbody.innerHTML = `<tr>
                         <td>ID</td>
                         <td>${user.id}</td>
@@ -588,21 +567,7 @@
                     </tr>
                     <tr>
                         <td>邮件</td>
-                        <td>${user.email}</td>
-                    </tr>`;
-
-                let department_str = '';
-                departmentChain.forEach((department) => {
-                    department_str += department.name + ' > ';
-                });
-
-                department_tbody.innerHTML = `<tr>
-                        <td>ID</td>
-                        <td>${departmentChain[departmentChain.length - 1].id}</td>
-                    </tr>
-                    <tr>
-                        <td>部门</td>
-                        <td>${department_str.substring(0, department_str.length - 3)}</td>
+                        <td>${user.email == null ? '' : user.email}</td>
                     </tr>`;
             }
         </script>
