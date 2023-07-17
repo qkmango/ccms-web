@@ -1,8 +1,10 @@
+// import common from '/lib/util/common.js';
 let $, layer, auth;
 
 layui.use(['jquery', 'layer'], function () {
     $ = layui.jquery;
     layer = layui.layer;
+    common.ajaxSetup($);
 
     //是否正在执行ajax，防止过次点击执行
     let isAjax = false;
@@ -56,7 +58,6 @@ layui.use(['jquery', 'layer'], function () {
 
     //登陆
     function login() {
-        console.log('ajax' + new Date());
         $.ajax({
             url: common.url('account/login.do'),
             async: false,
@@ -66,19 +67,13 @@ layui.use(['jquery', 'layer'], function () {
                 role: role.value.trim(),
             },
             type: 'post',
-            dataType: 'json',
-            xhrFields: { withCredentials: true },
-            success: function (res, status, xhr) {
-                console.log(res);
-                console.log(status);
-                console.log(xhr);
-                var cookies = xhr.getAllResponseHeaders();
-                console.log(cookies);
-                // if (res.success) {
-                //     layer.msg(res.message, {icon: 1}, end => window.location.href = "../../index.html");
-                //     return
-                // }
-                // layer.msg(res.message, {icon: 2}, end => isAjax = false);
+            success: function (res) {
+                if (res.success) {
+                    common.token(res.data);
+                    layer.msg(res.message, { icon: 1 }, (end) => (window.location.href = '../../index.html'));
+                    return;
+                }
+                layer.msg(res.message, { icon: 2 }, (end) => (isAjax = false));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 layer.msg(jqXHR.status + '', { icon: 2 }, (end) => (isAjax = false));

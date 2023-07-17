@@ -109,6 +109,8 @@
                 const cascader = layui.cascader;
                 form.verify(layui_verify_config);
 
+                common.ajaxSetup($);
+
                 let tree = cascader({
                     elem: '#department',
                     clearable: true,

@@ -156,61 +156,10 @@
             "target": "_self",
             "child": [
                 {
-                    "title": "学院",
-                    "icon": "fa fa-building",
-                    "target": "_self",
-                    "child": [
-                        {
-                            "title": "学院列表",
-                            "icon": "fa fa-list",
-                            "href": "page/admin/teach/faculty/index.html",
-                            "target": "_self"
-                        },
-                        {
-                            "title": "添加学院",
-                            "icon": "fa fa-plus-square",
-                            "href": "page/admin/teach/faculty/insert.html",
-                            "target": "_self"
-                        }
-                    ]
-                },
-                {
-                    "title": "专业",
-                    "icon": "fa fa-graduation-cap",
-                    "target": "_self",
-                    "child": [
-                        {
-                            "title": "专业列表",
-                            "icon": "fa fa-list",
-                            "href": "page/admin/teach/specialty/index.html",
-                            "target": "_self"
-                        },
-                        {
-                            "title": "添加专业",
-                            "icon": "fa fa-plus-square",
-                            "href": "page/admin/teach/specialty/insert.html",
-                            "target": "_self"
-                        }
-                    ]
-                },
-                {
-                    "title": "班级",
-                    "icon": "fa fa-users",
-                    "target": "_self",
-                    "child": [
-                        {
-                            "title": "班级列表",
-                            "icon": "fa fa-list",
-                            "href": "page/admin/teach/clazz/index.html",
-                            "target": "_self"
-                        },
-                        {
-                            "title": "添加班级",
-                            "icon": "fa fa-plus-square",
-                            "href": "page/admin/teach/clazz/insert.html",
-                            "target": "_self"
-                        }
-                    ]
+                    "title": "添加部门",
+                    "icon": "fa fa-plus-square",
+                    "href": "page/admin/department/insert.html",
+                    "target": "_self"
                 },
                 {
                     "title": "部门架构",
@@ -250,8 +199,6 @@
                     "href": "page/admin/pay/record/index.html",
                     "target": "_self"
                 }
-
-
             ]
         },
         {
