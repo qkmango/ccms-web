@@ -170,7 +170,7 @@
 }
 
 .layuimini-tab .layui-tab-title .layui-this .layuimini-tab-active {
-    background-color: var(--green2);
+    background-color: var(--green);
 }
 
 .layuimini-tab > .layui-tab-title, .layuimini-tab > .close-box {

@@ -6,9 +6,7 @@ test/*
 
 
 
-lib/layui-v2.6.3/
-lib/layui-v2.6.3/layui_update.js
-lib/layui-v2.8.11
+lib/layui-v*
 **/*.bak.*
 page/user/common/data.json
 api/test.json
