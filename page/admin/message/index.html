@@ -72,6 +72,7 @@
     <script src="/js/lay-module/layuimini/miniTab.js"></script>
     <script src="/lib/util/datetime.js"></script>
     <script src="/lib/util/utils.js"></script>
+    <script src="/lib/util/common.js"></script>
 
     <script>
 
@@ -88,6 +89,9 @@
             miniTab = layui.miniTab;
             laydate = layui.laydate;
 
+            // ajax 全局配置
+            common.ajaxSetup($);
+
             //渲染日期时间选择框
             laydate.render({
                 elem: '#startCreateTime',
@@ -100,7 +104,7 @@
 
             const cardTable = table.render({
                 elem: '#currentTableId',
-                url: '/message/pagination/list.do',
+                url: common.url('/message/pagination/list.do'),
                 // url: './index.test.json',
                 method: 'post',
                 toolbar: '#toolbarDemo',

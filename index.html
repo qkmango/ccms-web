@@ -157,7 +157,7 @@
 
 <script src="js/lay-config.js?v=2.0.0" charset="utf-8"></script>
 <script src="/lib/util/common.js"></script>
-<script type="module">
+<script>
     // import common from '/lib/util/common.js';
 
     layui.use(['jquery', 'layer', 'miniAdmin'], function () {
@@ -172,19 +172,11 @@
 				// url:"test/testLogin.json",
 				url:common.url("test/testLogin.do"),
 				type:"post",
-				// dataType:"json",
-                // xhrFields: {
-                //     withCredentials: true,
-                // },
-                // headers: {
-                //     Authorization: "this.token()",
-                // },
 				success:function (res) {
 					if (!res.success) {
 						window.location.href = 'page/login/index.html';
 						return;
 					}
-                    // sessionStorage.account = JSON.stringify(res.data)
                     common.account(res.data);
                     document.querySelector('#name').innerText = res.data.id;
 					let iniUrl = `api/init_${res.data.role}.json`;

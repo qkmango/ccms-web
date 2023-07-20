@@ -130,6 +130,7 @@
 <script src="/lib/util/utils.js"></script>
 <script src="/lib/util/fieldMapping.js"></script>
 <script src="/lib/util/layui_verify_config.js"></script>
+<script src="/lib/util/common.js"></script>
 
 <script>
 
@@ -142,6 +143,9 @@
     // 判断是否已经编辑，如果已经编辑则刷新页面；
     // 从sessionStorage中获取标志值，如果 === 'true' 则刷新页面
     const tableReloadKey = window.location.hash + ':tableReload';
+
+    // ajax 
+    common.ajaxSetup($);
 
     layui.use(['form', 'table','laydate'], function () {
         $ = layui.jquery;
@@ -174,7 +178,7 @@
 
         const cardTable = table.render({
             elem: '#currentTableId',
-            url: '/pay/record/pagination/list.do',
+            url: common.url('/pay/record/pagination/list.do'),
             method: 'post',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print'],

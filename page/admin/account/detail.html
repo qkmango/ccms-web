@@ -136,6 +136,9 @@
                 form = layui.form;
                 miniTab = layui.miniTab;
 
+                // ajax全局配置
+                common.ajaxSetup($);
+
                 //配置layui表单验证配置
                 form.verify(layui_verify_config);
 
@@ -153,10 +156,6 @@
                         url: common.url('account/one/account-info.do'),
                         data: { account: data.field.account },
                         type: 'get',
-                        dataType: 'json',
-                        xhrFields: {
-                            withCredentials: true,
-                        },
                         success: function (res) {
                             if (!res.success) {
                                 layer.msg(res.message, { icon: 2 });

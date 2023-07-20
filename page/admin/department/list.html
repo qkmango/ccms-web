@@ -2,7 +2,7 @@
 <html lang="zh">
     <head>
         <meta charset="utf-8" />
-        <title>账户列表</title>
+        <title>部门列表</title>
         <meta name="renderer" content="webkit" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -20,40 +20,27 @@
                         <form class="layui-form layui-form-pane" lay-filter="queryParams" id="queryParams">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">账户</label>
+                                    <label class="layui-form-label">ID</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="id" autocomplete="off" class="layui-input" />
+                                        <input type="number" name="id" autocomplete="off" class="layui-input" />
                                     </div>
                                 </div>
 
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">角色</label>
+                                    <label class="layui-form-label">层次</label>
                                     <div class="layui-input-inline">
                                         <select name="role" id="role">
                                             <option value="">全部</option>
-                                            <option value="user">用户</option>
-                                            <option value="admin">管理员</option>
-                                            <option value="pos">刷卡机</option>
+                                            <option value="true">子节点</option>
+                                            <option value="false">非子节点</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">状态</label>
+                                    <label class="layui-form-label">父节点ID</label>
                                     <div class="layui-input-inline">
-                                        <select name="state" id="state">
-                                            <option value="">全部</option>
-                                            <option value="normal">正常</option>
-                                            <option value="canceled">注销</option>
-                                            <option value="frozen">冻结</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">部门ID</label>
-                                    <div class="layui-input-inline">
-                                        <input type="number" name="department" autocomplete="off" class="layui-input" />
+                                        <input type="number" name="parent" autocomplete="off" class="layui-input" />
                                     </div>
                                 </div>
 
@@ -98,46 +85,24 @@
 
                 const cardTable = table.render({
                     elem: '#currentTableId',
-                    // url: './account.test.json',
-                    url: common.url('account/pagination/list.do'),
+                    url: common.url('department/pagination/list.do'),
                     method: 'post',
                     toolbar: '#toolbarDemo',
                     defaultToolbar: ['filter', 'exports', 'print'],
                     cols: [
                         [
-                            { field: 'id', width: 120, title: '账户', sort: true, fixed: 'left' },
+                            { field: 'id', title: 'ID', width: 120, sort: true, fixed: 'left' },
+                            { field: 'name', title: '名称' },
+                            { field: 'parent', title: '父节点ID', width: 120 },
                             {
-                                field: 'account',
-                                title: '角色',
+                                field: 'leaf',
+                                title: '层次',
                                 templet: (d) => {
-                                    switch (d.role) {
-                                        case 'user':
-                                            return '<span class="layui-badge layui-bg-green">用户</span>';
-                                        case 'admin':
-                                            return '<span class="layui-badge layui-bg-blue">管理员</span>';
-                                        case 'pos':
-                                            return '<span class="layui-badge layui-bg-orange">刷卡机</span>';
-                                    }
+                                    return d.leaf ? '子节点' : '非子节点';
                                 },
                             },
-                            { field: 'department', width: 120, title: '部门ID' },
-                            {
-                                field: 'state',
-                                width: 100,
-                                title: '状态',
-                                align: 'center',
-                                templet: (d) => {
-                                    switch (d.state) {
-                                        case 'normal':
-                                            return '<i class="fa fa-check" style="color:var(--green2)"></i> 正常';
-                                        case 'canceled':
-                                            return '<i class="fa fa-close" style="color:var(--gray_5)"></i> 注销';
-                                        case 'frozen':
-                                            return '<i class="fa fa-lock" style="color:var(--red)"></i> 冻结';
-                                    }
-                                },
-                            },
-
+                            { field: 'description', title: '描述' },
+                            { field: 'addition', title: '其他信息' },
                             {
                                 title: '操作',
                                 width: 150,
@@ -173,9 +138,6 @@
                             page: { curr: 1 },
                             where: { param: data.field },
                             contentType: 'application/json; charset=utf-8',
-                            xhrFields: {
-                                withCredentials: true,
-                            },
                             method: 'post',
                         },
                         'data'
@@ -187,22 +149,17 @@
                 table.on('tool(currentTableFilter)', function (obj) {
                     let data = obj.data;
                     console.log(data);
+                    //获取留言详细信息
                     if (obj.event === 'info') {
-                        //关闭之前打开的详情页
-                        const tabCloseBtn = window.top.document.querySelector(
-                            'li[lay-id="page/admin/account/detail.html"]>i'
-                        );
-                        console.log(tabCloseBtn);
-                        if (tabCloseBtn != null) {
-                            tabCloseBtn.click();
-                        }
-
-                        console.log(data);
-                        //信息
-                        sessionStorage.setItem('#/page/admin/account/detail.html', data.id.toString());
-                        miniTab.openNewTabByIframe({
-                            href: 'page/admin/account/detail.html',
-                            title: '账户详情',
+                        const index = layer.open({
+                            title: '部门信息',
+                            type: 2,
+                            offset: 'rb',
+                            anim: 'slideLeft',
+                            area: ['50%', '100%'],
+                            shade: 0.2,
+                            shadeClose: true,
+                            content: 'sub/detail.html?id=' + obj.data.id,
                         });
                     }
                 });

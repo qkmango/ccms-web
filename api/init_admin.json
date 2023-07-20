@@ -156,6 +156,12 @@
             "target": "_self",
             "child": [
                 {
+                    "title": "部门列表",
+                    "icon": "fa fa-list",
+                    "href": "page/admin/department/list.html",
+                    "target": "_self"
+                },
+                {
                     "title": "添加部门",
                     "icon": "fa fa-plus-square",
                     "href": "page/admin/department/insert.html",
