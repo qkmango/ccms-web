@@ -27,12 +27,13 @@
                                 </div>
 
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">层次</label>
+                                    <label class="layui-form-label">类型</label>
                                     <div class="layui-input-inline">
-                                        <select name="role" id="role">
+                                        <select name="type" id="type">
                                             <option value="">全部</option>
-                                            <option value="true">子节点</option>
-                                            <option value="false">非子节点</option>
+                                            <option value="root">根节点</option>
+                                            <option value="middle">中间结点</option>
+                                            <option value="leaf">叶子结点</option>
                                         </select>
                                     </div>
                                 </div>
@@ -95,10 +96,19 @@
                             { field: 'name', title: '名称' },
                             { field: 'parent', title: '父节点ID', width: 120 },
                             {
-                                field: 'leaf',
+                                field: 'type',
                                 title: '层次',
                                 templet: (d) => {
-                                    return d.leaf ? '子节点' : '非子节点';
+                                    switch (d.type) {
+                                        case 'root':
+                                            return '根节点';
+                                        case 'middle':
+                                            return '中间结点';
+                                        case 'leaf':
+                                            return '叶子结点';
+                                        default:
+                                            return '未知';
+                                    }
                                 },
                             },
                             { field: 'description', title: '描述' },

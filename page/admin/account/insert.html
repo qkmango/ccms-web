@@ -115,30 +115,24 @@
                     elem: '#department',
                     clearable: true,
                     props: {
-                        // expandTrigger: 'hover',
-                        // checkStrictly: true,
                         lazy: true,
                         lazyLoad: function (node, resolve) {
                             // 默认根节点的 parent 为0，查询根节点
                             const id = node.value ? node.value : 0;
                             $.ajax({
                                 url: common.url('/department/child-list.do?id=' + id),
-                                dataType: 'json',
-                                xhrFields: {
-                                    withCredentials: true,
-                                },
                                 success: function (res) {
                                     if (res.success) {
-                                        let nodes = Array.from({ length: res.data.length });
-                                        for (let i = 0; i < nodes.length; i++) {
-                                            nodes[i] = {
-                                                value: res.data[i].id,
-                                                label: res.data[i].name,
-                                                leaf: res.data[i].leaf,
-                                            };
+                                            let converData = [];
+                                            for (let i = 0; i < res.data.length; i++) {
+                                                converData.push({
+                                                    value: res.data[i].id,
+                                                    label: res.data[i].name,
+                                                    leaf: res.data[i].type === 'leaf' ? true : false,
+                                                });
+                                            }
+                                            resolve(converData);
                                         }
-                                        resolve(nodes);
-                                    }
                                 },
                             });
                         },
@@ -159,24 +153,10 @@
                         },
                         success: function (res) {
                             if (res.success) {
-                                layer.msg(res.message, {
-                                    icon: 1,
-                                    // end: () =>
-                                    //     form.val('insertForm', {
-                                    //         id: '',
-                                    //         name: '',
-                                    //         idCard: '',
-                                    //         faculty: '',
-                                    //         specialized: '',
-                                    //         clazz: '',
-                                    //     }),
-                                });
+                                layer.msg(res.message, {icon: 1,});
                                 return;
                             }
                             layer.msg(res.message, { icon: 2 });
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            layer.msg(jqXHR.status + '', { icon: 2 });
                         },
                     });
                     return false;

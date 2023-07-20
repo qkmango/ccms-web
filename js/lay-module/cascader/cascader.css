@@ -1090,7 +1090,8 @@
 }
 
 .el-cascader .el-input .el-input__inner:focus {
-    border-color: #d2d2d2 !important;
+    border-color: #16b777!important;
+    box-shadow: 0 0 0 3px rgba(22,183,119,.08);
 }
 
 .el-cascader .el-input .el-icon-arrow-down {

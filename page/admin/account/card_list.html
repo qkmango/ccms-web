@@ -79,6 +79,8 @@
             table = layui.table;
             miniTab = layui.miniTab;
 
+            common.ajaxSetup($);
+
             const cardTable = table.render({
                 elem: '#currentTableId',
                 url: common.url('card/pagination/list.do'),

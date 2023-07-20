@@ -153,7 +153,7 @@
                 // 搜索
                 form.on('submit(searchBtn)', function (data) {
                     $.ajax({
-                        url: common.url('account/one/account-info.do'),
+                        url: common.url('account/one/account-detail.do'),
                         data: { account: data.field.account },
                         type: 'get',
                         success: function (res) {
