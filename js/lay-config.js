@@ -31,4 +31,5 @@ layui
         timeago: 'timeago/timeago', //  转换时间为"xx时间前"
         cardTable: 'cardTable/cardTable', //  卡片表格
         cascader: 'cascader/cascader', //  级联选择器
+        dtree:'dtree/dtree', //  树形组件
     });

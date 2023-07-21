@@ -158,6 +158,7 @@
                         type: 'get',
                         success: function (res) {
                             if (!res.success) {
+                                window.top.progress.error();
                                 layer.msg(res.message, { icon: 2 });
                                 return;
                             }
@@ -198,10 +199,7 @@
                                 stateBtn.innerHTML = '<i class="fa fa-lock"></i> 挂失';
                             }
                             loaded = true;
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            layer.msg(jqXHR.status + '', { icon: 2 });
-                        },
+                        }
                     });
                     return false;
                 });

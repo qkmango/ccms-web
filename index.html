@@ -46,14 +46,16 @@
             margin: auto;
             background-image: url("lib/layui/css/modules/layer/default/loading-1.gif");
         }
+
         /* 进度条 */
         .layui-progress {
             border-radius: 0;
             height: 3px;
         }
+
         .layui-progress-bar {
             height: 100%;
-            border-radius:  0 20px 20px 0;
+            border-radius: 0 20px 20px 0;
         }
     </style>
 </head>
@@ -103,7 +105,7 @@
                         <a href="javascript:;" id="name">未登录</a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a href="javascript:;" layuimini-content-href="page/common/account-info.html"
+                                <a href="javascript:;" layuimini-content-href="page/common/account-detail.html"
                                     data-title="基本资料" data-icon="fa fa-gears">基本资料</a>
                             </dd>
                             <dd>
@@ -237,9 +239,8 @@
             }, 500);
         },
         clear: function () {
-            const _this = this;
-            clearInterval(_this.timerId);
-            clearTimeout(_this.timerId);
+            clearInterval(this.timerId);
+            clearTimeout(this.timerId);
         }
     }
 
@@ -255,8 +256,7 @@
 
         $.ajax({
             // url:"test/testLogin.json",
-            url: common.url("test/testLogin.do"),
-            type: "post",
+            url: common.url("account/one/current-account-info.do"),
             success: function (res) {
                 if (!res.success) {
                     window.location.href = 'page/login/index.html';
@@ -283,21 +283,11 @@
 
         //退出
         document.querySelector('#logout').addEventListener('click', function () {
-            $.ajax({
-                url: common.url("account/logout.do"),
-                type: "post",
-                dataType: "json",
-                success: function (res) {
-                    if (res.success) {
-                        layer.msg(res.message, { icon: 1 }, end => window.top.location.href = 'page/login/index.html');
-                        return
-                    }
-                    layer.msg(res.message, { icon: 2 });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    layer.msg(jqXHR.status + '', { icon: 2 }, end => window.top.location.href = 'page/login/index.html');
-                }
-            })
+            // 清除 account 和 token 信息
+            common.account(null);
+            common.token(null);
+
+            layer.msg("已退出登陆", { icon: 1 }, end => window.top.location.href = 'page/login/index.html');
         });
 
     });
