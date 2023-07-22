@@ -76,7 +76,7 @@ layui.use(['jquery', 'layer'], function () {
                 layer.msg(res.message, { icon: 2 }, (end) => (isAjax = false));
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                layer.msg(jqXHR.status + '', { icon: 2 }, (end) => (isAjax = false));
+                layer.msg(jqXHR.responseJSON.message, { icon: 2 }, (end) => (isAjax = false));
             },
         });
     }

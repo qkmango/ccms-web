@@ -1,140 +1,135 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="utf-8" />
-        <title>账户详情</title>
-        <meta name="renderer" content="webkit" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all" />
-        <link rel="stylesheet" href="/css/public.css" media="all" />
-        <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
-        <style>
-            #searchBtn {
-                position: absolute;
-                right: 18px;
-            }
-        </style>
-    </head>
 
-    <body>
-        <div class="layuimini-container">
-            <div class="layuimini-main">
-                <form class="layui-form layui-form-pane" action="" lay-filter="detail">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">账户ID</label>
-                        <div class="layui-input-block">
-                            <input
-                                type="text"
-                                name="account"
-                                lay-verify="required"
-                                class="layui-input"
-                                oninput="accountOnEdit(event)"
-                            />
-                        </div>
+<head>
+    <meta charset="utf-8" />
+    <title>账户详情</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/css/public.css" media="all" />
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
+    <style>
+        #searchBtn {
+            position: absolute;
+            right: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <form class="layui-form layui-form-pane" action="" lay-filter="detail">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账户ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="account" lay-verify="required" class="layui-input"
+                            oninput="accountOnEdit(event)" />
                     </div>
+                </div>
 
-                    <div class="layui-bg-gray" style="margin-bottom: 15px">
-                        <div class="layui-row layui-col-space15">
-                            <div class="layui-col-md6">
-                                <div class="layui-card">
-                                    <div class="layui-card-header">账户信息</div>
-                                    <div class="layui-card-body">
-                                        <table class="layui-table" lay-skin="nob">
-                                            <tbody id="account_tbody"></tbody>
-                                        </table>
-                                    </div>
+                <div class="layui-bg-gray" style="margin-bottom: 15px">
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-header">账户信息</div>
+                                <div class="layui-card-body">
+                                    <table class="layui-table" lay-skin="nob">
+                                        <tbody id="account_tbody"></tbody>
+                                    </table>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="layui-col-md6" id="card_block">
-                                <div class="layui-card">
-                                    <div class="layui-card-header">卡信息</div>
-                                    <div class="layui-card-body">
-                                        <table class="layui-table" lay-skin="nob">
-                                            <tbody id="card_tbody"></tbody>
-                                        </table>
-                                    </div>
+                        <div class="layui-col-md6" id="card_block">
+                            <div class="layui-card">
+                                <div class="layui-card-header">卡信息</div>
+                                <div class="layui-card-body">
+                                    <table class="layui-table" lay-skin="nob">
+                                        <tbody id="card_tbody"></tbody>
+                                    </table>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="layui-col-md6" id="user_block">
-                                <div class="layui-card">
-                                    <div class="layui-card-header">用户信息</div>
-                                    <div class="layui-card-body">
-                                        <table class="layui-table" lay-skin="nob">
-                                            <tbody id="user_tbody"></tbody>
-                                        </table>
-                                    </div>
+                        <div class="layui-col-md6" id="user_block">
+                            <div class="layui-card">
+                                <div class="layui-card-header">用户信息</div>
+                                <div class="layui-card-body">
+                                    <table class="layui-table" lay-skin="nob">
+                                        <tbody id="user_tbody"></tbody>
+                                    </table>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="layui-col-md6">
-                                <div class="layui-card">
-                                    <div class="layui-card-header">部门信息</div>
-                                    <div class="layui-card-body">
-                                        <table class="layui-table" lay-skin="nob">
-                                            <tbody id="department_tbody"></tbody>
-                                        </table>
-                                    </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-header">部门信息</div>
+                                <div class="layui-card-body">
+                                    <table class="layui-table" lay-skin="nob">
+                                        <tbody id="department_tbody"></tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <div class="layui-btn-container">
-                            <button type="button" lay-submit lay-filter="cabceled" class="layui-btn layui-btn-danger">
-                                <i class="fa fa-close"></i> 注销
+                <div class="layui-form-item">
+                    <div class="layui-btn-container">
+                        <button type="button" lay-submit lay-filter="cabceled" class="layui-btn layui-btn-danger">
+                            <i class="fa fa-close"></i> 注销
+                        </button>
+
+                        <button type="button" lay-submit lay-filter="resetPassword" class="layui-btn layui-btn-warm">
+                            <i class="fa fa-key"></i> 重置密码
+                        </button>
+
+                        <span id="user_operation">
+                            <button type="button" lay-submit lay-filter="state" class="layui-btn layui-btn-danger">
+                                <i class="fa fa-lock"></i> 挂失 / 解挂
                             </button>
 
-                            <button
-                                type="button"
-                                lay-submit
-                                lay-filter="resetPassword"
-                                class="layui-btn layui-btn-warm"
-                            >
-                                <i class="fa fa-key"></i> 重置密码
+                            <button type="button" lay-submit lay-filter="consume" class="layui-btn layui-bg-green">
+                                <i class="fa fa-bar-chart"></i> 消费查询
                             </button>
-
-                            <span id="user_operation">
-                                <button type="button" lay-submit lay-filter="state" class="layui-btn layui-btn-danger">
-                                    <i class="fa fa-lock"></i> 挂失 / 解挂
-                                </button>
-
-                                <button type="button" lay-submit lay-filter="consume" class="layui-btn layui-bg-green">
-                                    <i class="fa fa-bar-chart"></i> 消费查询
-                                </button>
-                                <button type="button" lay-submit lay-filter="recharge" class="layui-btn layui-bg-green">
-                                    <i class="fa fa-jpy"></i> 充值
-                                </button>
-                            </span>
-
-                            <button class="layui-btn layui-bg-green" lay-submit lay-filter="searchBtn" id="searchBtn">
-                                <i class="fa fa-search"></i> 查询
+                            <button type="button" lay-submit lay-filter="recharge" class="layui-btn layui-bg-green">
+                                <i class="fa fa-jpy"></i> 充值
                             </button>
-                        </div>
+                        </span>
+
+                        <button class="layui-btn layui-bg-green" lay-submit lay-filter="searchBtn" id="searchBtn">
+                            <i class="fa fa-search"></i> 查询
+                        </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
-        <script src="/lib/layui/layui.js"></script>
-        <script src="/js/lay-module/layuimini/miniTab.js"></script>
-        <script src="/lib/util/layui_verify_config.js"></script>
-        <script src="/lib/util/amount.js"></script>
-        <script src="/lib/util/common.js"></script>
-        <script>
-            let form,
-                $,
-                layer,
-                loaded = false,
-                miniTab;
+    </div>
+    <script src="/lib/layui/layui.js"></script>
+    <script src="/js/lay-module/layuimini/miniTab.js"></script>
+    <script src="/lib/util/layui_verify_config.js"></script>
+    <script src="/lib/util/amount.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script>
+        let form,
+            $,
+            layer,
+            miniTab;
+
+        //查询的账号
+        queryAccount = null,
 
             layui.use(['form'], function () {
                 layer = layui.layer;
                 $ = layui.$;
                 form = layui.form;
                 miniTab = layui.miniTab;
+
+
 
                 // ajax全局配置
                 common.ajaxSetup($);
@@ -162,43 +157,11 @@
                                 layer.msg(res.message, { icon: 2 });
                                 return;
                             }
-                            loaded = true;
+                            queryAccount = res.data;
                             //赋值
-                            setData(res.data);
-
-                            //判断如果不是用户，隐藏用户相关的操作按钮
-                            if (res.data.account.role === 'user') {
-                                document.querySelector('#user_operation').style.display = 'inline';
-                            } else {
-                                document.querySelector('#user_operation').style.display = 'none';
-                                return;
-                            }
-
-                            //判断如果已经注销，禁用 注销、解挂、挂失 按钮
-                            const { account, card, user, departmentChain } = res.data;
-                            if (account.state === 'canceled') {
-                                const cabceledBtn = document.querySelector('button[lay-filter="cabceled"]');
-                                const stateBtn = document.querySelector('button[lay-filter="state"]');
-                                const resetPasswordBtn = document.querySelector('button[lay-filter="resetPassword"]');
-                                const rechargeBtn = document.querySelector('button[lay-filter="recharge"]');
-
-                                cabceledBtn.disabled = true;
-                                cabceledBtn.className += ' layui-btn-disabled';
-                                stateBtn.disabled = true;
-                                stateBtn.className += ' layui-btn-disabled';
-                                resetPasswordBtn.disabled = true;
-                                resetPasswordBtn.className += ' layui-btn-disabled';
-                                rechargeBtn.disabled = true;
-                                rechargeBtn.className += ' layui-btn-disabled';
-                            }
-                            //如果挂失，显示解挂，如果未挂失，显示挂失
-                            const stateBtn = document.querySelector('button[lay-filter="state"]');
-                            if (card.state === 'loss') {
-                                stateBtn.innerHTML = '<i class="fa fa-unlock-alt"></i> 解挂';
-                            } else {
-                                stateBtn.innerHTML = '<i class="fa fa-lock"></i> 挂失';
-                            }
-                            loaded = true;
+                            setFormData(res.data);
+                            //设置 button 状态
+                            setButtonState(res.data);
                         }
                     });
                     return false;
@@ -206,7 +169,7 @@
 
                 // 重置密码
                 form.on('submit(resetPassword)', function (data) {
-                    if (!loaded) {
+                    if (!queryAccount) {
                         layer.msg('请先查询', { icon: 2 });
                         return false;
                     }
@@ -219,19 +182,15 @@
                         shadeClose: true,
                         btn1: function (index) {
                             $.ajax({
-                                url: '/account/update/resetPassword.do',
-                                data: { user: data.field.id },
+                                url: common.url('/account/update/resetPassword.do'),
+                                data: { account: data.field.account },
                                 type: 'post',
-                                dataType: 'json',
                                 success: function (res) {
                                     if (res.success) {
                                         layer.msg(res.message, { icon: 1 });
                                         return;
                                     }
                                     layer.msg(res.message, { icon: 2 });
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    layer.msg(jqXHR.status + '', { icon: 2 });
                                 },
                             });
                         },
@@ -241,13 +200,18 @@
 
                 //挂失/解挂
                 form.on('submit(state)', function (data) {
-                    if (!loaded) {
+                    if (!queryAccount) {
                         layer.msg('请先查询', { icon: 2 });
                         return false;
                     }
 
-                    const user = data.field.id;
-                    const status = data.field.lock === 'true';
+                    const account = queryAccount.account.id;
+                    let state = queryAccount.card.state;
+                    switch (state) {
+                        case 'loss': state = 'normal'; break;
+                        case 'normal': state = 'loss'; break;
+                        default: return false;
+                    }
 
                     layer.open({
                         title: '挂失',
@@ -256,20 +220,17 @@
                         icon: 3,
                         shadeClose: true,
                         btn1: function (index) {
-                            lockOrUnlock(user, !status);
+                            updateCardState(account, state);
                         },
                     });
                 });
 
                 //注销
                 form.on('submit(cabceled)', function (data) {
-                    console.log(data);
-                    if (!loaded) {
+                    if (!queryAccount) {
                         layer.msg('请先查询', { icon: 2 });
                         return false;
                     }
-
-                    const user = data.field.id;
 
                     layer.open({
                         title: '注销',
@@ -278,46 +239,44 @@
                         icon: 3,
                         shadeClose: true,
                         btn1: function (index) {
-                            cabceled(user);
+                            cabceled(data.field.account);
                         },
                     });
                 });
 
                 //充值
                 form.on('submit(recharge)', function (data) {
-                    console.log(data);
-                    if (!loaded) {
+                    if (!queryAccount) {
                         layer.msg('请先查询', { icon: 2 });
                         return false;
                     }
 
-                    const user = data.field.id;
+                    const account = data.field.account;
 
                     layer.prompt({ title: '充值', formType: 0 }, function (amount, index) {
                         //判断是否为金额
-                        if (!isAmount(amount)) {
+                        if (!Amount.isAmount(amount)) {
                             layer.msg('不是金额', { icon: 2 });
                             return false;
                         }
 
                         //判断小数位数是否为1或2位
-                        const dl = decimalLength(amount);
+                        const dl = Amount.decimalLength(amount);
                         if (!(dl <= 2 && dl >= 0)) {
                             layer.msg(`小数点后最多两位(${dl})`, { icon: 2 });
                             return false;
                         }
 
-                        if (!amountInRange(amount, 1, 1000)) {
+                        if (!Amount.inRange(amount, 1, 1000)) {
                             layer.msg(`充值金额在 1~1000 元(${amount})`, { icon: 2 });
                             return false;
                         }
-                        recharge(user, amountMulti(amount, 2));
+                        recharge(account, Amount.multi(amount, 2));
                         layer.close(index);
                     });
                 });
 
                 form.on('submit(consume)', function (data) {
-                    console.log(data);
                     //关闭之前打开的详情页
                     const tabCloseBtn = window.top.document.querySelector(
                         'li[lay-id="page/admin/consume/index.html"]>i'
@@ -340,172 +299,159 @@
                 return false;
             });
 
-            /**
-             * 账号输入框编辑监听
-             * 修改账号输入框时将其他输入框重置
-             * @param e
-             */
-            function accountOnEdit(e) {
-                loaded = false;
-                setData();
-            }
+        /**
+         * 账号输入框编辑监听
+         * 修改账号输入框时将其他输入框重置
+         * @param e
+         */
+        function accountOnEdit(e) {
+            queryAccount = null;
+            setFormData();
+        }
 
-            /**
-             * 挂失/解挂
-             * @param user 学生ID
-             * @param toLockStatus 将要设置卡的状态 true去挂失，false解挂
-             */
-            function lockOrUnlock(user, toLockStatus) {
-                $.ajax({
-                    url: '/card/update/state.do',
-                    data: { user: user, lock: toLockStatus },
-                    type: 'post',
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res.success) {
-                            layer.msg(res.message, { icon: 1 });
-                            //重新查询
-                            document.querySelector('#searchBtn').click();
-                            return;
-                        }
-                        layer.msg(res.message, { icon: 2 });
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        layer.msg(jqXHR.status + '', { icon: 2 });
-                    },
-                });
-            }
+        /**
+         * 挂失/解挂
+         * @param account
+         * @param toLockStatus 将要设置卡的状态 true去挂失，false解挂
+         */
+        function updateCardState(account, state) {
+            $.ajax({
+                url: common.url('card/update/state.do'),
+                data: { account, state },
+                type: 'post',
+                success: function (res) {
+                    if (res.success) {
+                        layer.msg(res.message, { icon: 1 });
+                        //重新查询
+                        document.querySelector('#searchBtn').click();
+                        return;
+                    }
+                    layer.msg(res.message, { icon: 2 });
+                },
+            });
+        }
 
-            /**
-             * 注销
-             * @param user 账号
-             */
-            function cabceled(user) {
-                $.ajax({
-                    url: '/account/update/cabceled.do',
-                    data: { user: user },
-                    type: 'post',
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res.success) {
-                            layer.msg(res.message, { icon: 1 });
-                            //重新查询
-                            document.querySelector('#searchBtn').click();
-                            return;
-                        }
-                        layer.msg(res.message, { icon: 2 });
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        layer.msg(jqXHR.status + '', { icon: 2 });
-                    },
-                });
-            }
+        /**
+         * 注销
+         * @param account 账号
+         */
+        function cabceled(account) {
+            $.ajax({
+                url: common.url('/account/update/canceled.do'),
+                data: { account },
+                type: 'post',
+                success: function (res) {
+                    if (res.success) {
+                        layer.msg(res.message, { icon: 1 });
+                        //重新查询
+                        document.querySelector('#searchBtn').click();
+                        return;
+                    }
+                    layer.msg(res.message, { icon: 2 });
+                },
+            });
+        }
 
-            /**
-             * 充值
-             * @param user 账号
-             */
-            function recharge(user, balance) {
-                $.ajax({
-                    url: '/card/update/recharge.do',
-                    data: { user, balance },
-                    type: 'post',
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res.success) {
-                            layer.msg(res.message, { icon: 1 });
-                            //重新查询
-                            document.querySelector('#searchBtn').click();
-                            return;
-                        }
-                        layer.msg(res.message, { icon: 2 });
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        layer.msg(jqXHR.status + '', { icon: 2 });
-                    },
-                });
-            }
+        /**
+         * 充值
+         * @param account 账号
+         * @param amount 充值金额
+         */
+        function recharge(account, amount) {
+            $.ajax({
+                url: common.url('card/update/recharge.do'),
+                data: { account, amount },
+                type: 'post',
+                success: function (res) {
+                    if (res.success) {
+                        layer.msg(res.message, { icon: 1 });
+                        //重新查询
+                        document.querySelector('#searchBtn').click();
+                        return;
+                    }
+                    layer.msg(res.message, { icon: 2 });
+                }
+            });
+        }
 
-            /**
-             * 设置值
-             * @param data 数据, 为null或不传时时清空
-             */
-            function setData(data) {
-                if (data == null || data == undefined) {
-                    data = {
-                        account: {
-                            id: '',
-                            role: '',
-                            state: '',
-                        },
-                        card: {
-                            id: '',
-                            account: '',
-                            balance: '',
-                            state: '',
-                        },
-                        user: {
+        /**
+         * 设置值
+         * @param data 数据, 为null或不传时时清空
+         */
+        function setFormData(data) {
+            if (data == null || data == undefined) {
+                data = {
+                    account: {
+                        id: '',
+                        role: '',
+                        state: '',
+                    },
+                    card: {
+                        id: '',
+                        account: '',
+                        balance: '',
+                        state: '',
+                    },
+                    user: {
+                        id: '',
+                        name: '',
+                        card: '',
+                        email: '',
+                    },
+                    departmentChain: [
+                        {
                             id: '',
                             name: '',
-                            card: '',
-                            email: '',
                         },
-                        departmentChain: [
-                            {
-                                id: '',
-                                name: '',
-                            },
-                        ],
-                    };
-                }
+                    ],
+                };
+            }
 
-                // 几个内容块的id
-                const account_tbody = document.querySelector('#account_tbody');
-                const card_tbody = document.querySelector('#card_tbody');
-                const user_tbody = document.querySelector('#user_tbody');
-                const department_tbody = document.querySelector('#department_tbody');
+            // 几个内容块的id
+            const account_tbody = document.querySelector('#account_tbody');
+            const card_tbody = document.querySelector('#card_tbody');
+            const user_tbody = document.querySelector('#user_tbody');
+            const department_tbody = document.querySelector('#department_tbody');
 
-                const user_block = document.querySelector('#user_block');
-                const card_block = document.querySelector('#card_block');
+            const user_block = document.querySelector('#user_block');
+            const card_block = document.querySelector('#card_block');
 
-                const { account, card, user, departmentChain } = data;
+            const { account, card, user, departmentChain } = data;
 
-                // 账户
-                account_tbody.innerHTML = `<tr>
+            // 账户
+            account_tbody.innerHTML = `<tr>
                         <td>账户ID</td>
                         <td>${account.id}</td>
                     </tr>
                     <tr>
                         <td>账户角色</td>
-                        <td>${
-                            account.role === 'user'
-                                ? '用户'
-                                : account.role === 'admin'
-                                ? '管理员'
-                                : account.role === 'pos'
-                                ? '刷卡机'
-                                : ''
-                        }</td>
+                        <td>${account.role === 'user'
+                    ? '用户'
+                    : account.role === 'admin'
+                        ? '管理员'
+                        : account.role === 'pos'
+                            ? '刷卡机'
+                            : ''
+                }</td>
                     </tr>
                     <tr>
                         <td>账户状态</td>
-                        <td>${
-                            account.state === 'normal'
-                                ? '正常'
-                                : account.state === 'canceled'
-                                ? '注销'
-                                : account.state === 'frozen'
-                                ? '冻结'
-                                : ''
-                        }</td>
+                        <td>${account.state === 'normal'
+                    ? '正常'
+                    : account.state === 'canceled'
+                        ? '注销'
+                        : account.state === 'frozen'
+                            ? '冻结'
+                            : ''
+                }</td>
                     </tr>`;
 
-                // 部门
-                let department_str = '';
-                departmentChain.forEach((department) => {
-                    department_str += department.name + ' > ';
-                });
-                department_tbody.innerHTML = `<tr>
+            // 部门
+            let department_str = '';
+            departmentChain.forEach((department) => {
+                department_str += department.name + ' > ';
+            });
+            department_tbody.innerHTML = `<tr>
                         <td>ID</td>
                         <td>${departmentChain[departmentChain.length - 1].id}</td>
                     </tr>
@@ -514,17 +460,17 @@
                         <td>${department_str.substring(0, department_str.length - 3)}</td>
                     </tr>`;
 
-                // 判断如果不是用户，隐藏用户信息和卡信息
-                if (account.role != 'user') {
-                    user_block.style.display = 'none';
-                    card_block.style.display = 'none';
-                    return;
-                }
-                user_block.style.display = 'block';
-                card_block.style.display = 'block';
+            // 判断如果不是用户，隐藏用户信息和卡信息
+            if (account.role != 'user') {
+                user_block.style.display = 'none';
+                card_block.style.display = 'none';
+                return;
+            }
+            user_block.style.display = 'block';
+            card_block.style.display = 'block';
 
-                // 卡
-                card_tbody.innerHTML = `<tr>
+            // 卡
+            card_tbody.innerHTML = `<tr>
                         <td>卡ID</td>
                         <td>${card.id}</td>
                     </tr>
@@ -538,19 +484,14 @@
                     </tr>
                     <tr>
                         <td>卡状态</td>
-                        <td>${
-                            card.state === 'normal'
-                                ? '正常'
-                                : card.state === 'canceled'
-                                ? '注销'
-                                : card.state === 'loss'
-                                ? '丢失'
-                                : ''
-                        }</td>
+                        <td>${card.state === 'normal' ? '正常' :
+                    card.state === 'canceled' ? '注销' :
+                        card.state === 'loss' ? '挂失' : ''
+                }</td>
                     </tr>`;
 
-                // 用户
-                user_tbody.innerHTML = `<tr>
+            // 用户
+            user_tbody.innerHTML = `<tr>
                         <td>ID</td>
                         <td>${user.id}</td>
                     </tr>
@@ -566,7 +507,62 @@
                         <td>邮件</td>
                         <td>${user.email == null ? '' : user.email}</td>
                     </tr>`;
+        }
+
+        function setButtonState(data) {
+            const { account, card, user, departmentChain } = data;
+            //判断如果不是用户，隐藏用户相关的操作按钮
+            if (account.role === 'user') {
+                document.querySelector('#user_operation').style.display = 'inline';
+            } else {
+                document.querySelector('#user_operation').style.display = 'none';
+                return;
             }
-        </script>
-    </body>
+
+            // 获取按钮
+            const cabceledBtn = document.querySelector('button[lay-filter="cabceled"]');
+            const stateBtn = document.querySelector('button[lay-filter="state"]');
+            const resetPasswordBtn = document.querySelector('button[lay-filter="resetPassword"]');
+            const rechargeBtn = document.querySelector('button[lay-filter="recharge"]');
+
+            //将按钮的禁用和禁用样式去掉
+            cabceledBtn.disabled = false;
+            cabceledBtn.classList.remove('layui-btn-disabled');
+            stateBtn.disabled = false;
+            stateBtn.classList.remove('layui-btn-disabled');
+            resetPasswordBtn.disabled = false;
+            resetPasswordBtn.classList.remove('layui-btn-disabled');
+            rechargeBtn.disabled = false;
+            rechargeBtn.classList.remove('layui-btn-disabled');
+
+
+            //判断如果已经注销，禁用 注销、解挂、挂失 按钮
+
+            if (account.state === 'canceled') {
+                cabceledBtn.disabled = true;
+                cabceledBtn.classList.add('layui-btn-disabled');
+                stateBtn.disabled = true;
+                stateBtn.classList.add('layui-btn-disabled');
+                resetPasswordBtn.disabled = true;
+                resetPasswordBtn.classList.add('layui-btn-disabled');
+                rechargeBtn.disabled = true;
+                rechargeBtn.classList.add('layui-btn-disabled');
+            }
+
+            //如果卡状态不正常，禁用充值按钮
+            if (card.state !== 'normal') {
+                rechargeBtn.disabled = true;
+                rechargeBtn.classList.add('layui-btn-disabled');
+            }
+
+            //如果挂失，显示解挂，如果未挂失，显示挂失
+            if (card.state === 'loss') {
+                stateBtn.innerHTML = '<i class="fa fa-unlock-alt"></i> 解挂';
+            } else {
+                stateBtn.innerHTML = '<i class="fa fa-lock"></i> 挂失';
+            }
+        }
+    </script>
+</body>
+
 </html>
