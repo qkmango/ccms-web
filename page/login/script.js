@@ -1,7 +1,7 @@
 // import common from '/lib/util/common.js';
 let $, layer, auth;
 
-layui.use(['jquery', 'layer'], function () {
+layui.use(function () {
     $ = layui.jquery;
     layer = layui.layer;
     common.ajaxSetup($);
@@ -61,10 +61,10 @@ layui.use(['jquery', 'layer'], function () {
         $.ajax({
             url: common.url('account/login.do'),
             async: false,
+            headers: {},
             data: {
                 id: id.value.trim(),
                 password: password.value.trim(),
-                role: role.value.trim(),
             },
             type: 'post',
             success: function (res) {
@@ -75,16 +75,14 @@ layui.use(['jquery', 'layer'], function () {
                 }
                 layer.msg(res.message, { icon: 2 }, (end) => (isAjax = false));
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                layer.msg(jqXHR.responseJSON.message, { icon: 2 }, (end) => (isAjax = false));
-            },
         });
     }
 
     // 认证，传入认证地址
-    auth = function (platform, purpose, role) {
-        $.get(`../../auth/${platform}/authorize.do?purpose=${purpose}&role=${role}`, (res, status) => {
+    auth = function (platform) {
+        $.get(common.url(`auth/${platform}/authorize.do`), (res, status) => {
             if (res.success) {
+                // console.log(res.data);
                 window.location.href = res.data;
                 return;
             }
