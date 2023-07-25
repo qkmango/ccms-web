@@ -100,13 +100,12 @@
                 font-size: 22px;
             }
         }
-
     </style>
 </head>
 
 <body>
     <div class="header">
-        <img id="type_img" alt="Type Image"><span id="type_title"></span>
+        <img id="type_img" src="/image/logo.svg" alt="Type Image"><span id="type_title"></span>
     </div>
     <div class="message" id="message"></div>
 
@@ -114,34 +113,20 @@
 </body>
 
 </html>
-<script src="/lib/util/utils.js"></script>
+<script src="/lib/util/common.js"></script>
 
 <script>
+
     //认证是否成功
-    let success = utils.getUrlParam("success");
+    let success = JSON.parse(common.getUrlParam("success") || false);
     //认证消息
-    let message = utils.getUrlParam("message") || '';
+    let message = common.getUrlParam("message") || '';
     //认证平台
-    let platform = utils.getUrlParam("platform");
-    //授权用途
-    let purpose = utils.getUrlParam("purpose")
+    let platform = common.getUrlParam("platform");
+    //token
+    let accessCode = common.getUrlParam("accessCode");
 
-    switch (platform) {
-        case 'gitee':
-            document.getElementById('type_img').src = '/images/icon/gitee.svg';
-            document.getElementById('type_title').innerText = 'Gitee 用户认证';
-            break;
-        case 'dingtalk':
-            document.getElementById('type_img').src = '/images/icon/dingtalk.svg';
-            document.getElementById('type_title').innerText = '钉钉 用户认证';
-            break;
-        default:
-            document.getElementById('type_img').src = '/images/logo.svg';
-            break;
-    }
-
-
-    if (success === 'true') {
+    if (success) {
         document.querySelector('#message').innerHTML = `
             <i class="fa fa-check" style="color: var(--green-tint-solid);background-color: var(--green);"></i>
             <p style="color: var(--green);">认证成功</p>
@@ -157,13 +142,17 @@
         `;
     }
 
-
-    setInterval(function () {
-        if (purpose === 'bind') {
-            window.location = '/index.html#/page/common/authentication/open-platform-state.html';
-            return;
-        }
-        window.location = (success === 'true') ? '/index.html' : '../../login/index.html';
-    }, 2000)
+    //信道通信，定时2秒发送消息，关闭窗口
+    const timer = setInterval(function () {
+        let channel = new BroadcastChannel('auth');
+        channel.postMessage({
+            success,
+            message,
+            platform,
+            accessCode
+        });
+        clearInterval(timer);
+        window.close();
+    }, 2000);
 
 </script>

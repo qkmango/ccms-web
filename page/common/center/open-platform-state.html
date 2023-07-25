@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <title>授权平台</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/color.css">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <style>
+        table>thead>tr>th {
+            text-align: center !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+        }
+
+        .layui-btn {
+            margin-left: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+            <div class="layui-bg-gray" style="padding: 30px;">
+                <table class="layui-table" style="text-align: center">
+                    <colgroup>
+                        <col width="auto">
+                        <col width="100">
+                        <col width="100">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>平台</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="app">
+                        <tr>
+                            <td><img src="/image/icon/gitee.svg" style="height: 28px"></td>
+                            <td :style="gitee?'background-color:var(--green-tint);color:var(--green)':
+                                              'background-color:var(--red-tint);color:var(--red)'">
+                                <i class="fa fa-circle"></i>
+                                <span>{{gitee==null?'未绑定':'已绑定'}}</span>
+                            </td>
+                            <td>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green"
+                                    v-show="gitee==null">去绑定</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green"
+                                    v-show="gitee!=null">去解绑</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="/image/icon/dingtalk.svg" style="height: 28px"></td>
+                            <td :style="dingtalk?'background-color:var(--green-tint);color:var(--green)':
+                                               'background-color:var(--red-tint);color:var(--red)'">
+                                <i class="fa fa-circle"></i>
+                                <span>{{dingtalk==null?'未绑定':'已绑定'}}</span>
+                            </td>
+                            <td>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green"
+                                    v-show="dingtalk==null" @click="log">去绑定</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green"
+                                    v-show="dingtalk!=null">去解绑</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="/image/icon/alipay.svg" style="height: 28px"></td>
+                            <td :style="alipay?'background-color:var(--green-tint);color:var(--green)':
+                                             'background-color:var(--red-tint);color:var(--red)'">
+                                <i class="fa fa-circle"></i>
+                                <span>{{alipay==null?'未绑定':'已绑定'}}</span>
+                            </td>
+                            <td>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green"
+                                    v-show="alipay==null">去绑定</a>
+                                <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green"
+                                    v-show="alipay!=null">去解绑</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="/js/lay-config.js" charset="utf-8"></script>
+    <script src="/lib/vue2/vue.js"></script>
+    <script src="/lib/util/layui_verify_config.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script>
+
+        let form, $, auth;
+        const account = common.account();
+        let app = new Vue({
+            el: '#app',
+            data: {
+                gitee: null,
+                dingtalk: null,
+                alipay: null,
+            },
+            methods: {
+                auth: function () {
+                    console.log($.ajax);
+                }
+            }
+        });
+
+        layui.use(function () {
+            $ = layui.jquery;
+            common.ajaxSetup($);
+            $.ajax({
+                url: common.url("open-platform/list/state.do"),
+                // url: 'index.text.json',
+                success: function (res) {
+                    if (res.success) {
+                        //将 list 转换为 map
+                        let map = {};
+                        res.data.forEach(item => {
+                            map[item.type] = item;
+                        });
+
+                        app.gitee = map['gitee'];
+                        app.dingtalk = map['dingtalk'];
+                        app.alipay = map['alipay'];
+
+                        return false;
+                    }
+                    layer.msg(res.message, { icon: 2 });
+                }
+            });
+
+
+
+            // 认证，传入认证地址
+            auth = function (platform, purpose, role) {
+                switch (purpose) {
+                    case 'unbind': {
+                        $.post(`/auth/unbind/${platform}.do`, (res, status) => {
+                            if (res.success) {
+                                layer.msg(res.message, { icon: 1, end: () => location.reload() });
+                                return;
+                            }
+                            layer.msg(res.message, { icon: 2 });
+                        });
+                    }
+                        break;
+
+                    case 'bind': {
+                        $.get(`/auth/${platform}/authorize.do`, (res, status) => {
+                            if (res.success) {
+                                window.open(res.data);
+                                return;
+                            }
+                            layer.msg(res.message, { icon: 2 });
+                        });
+                    }
+                        break;
+                }
+            }
+
+
+        });
+    </script>
+</body>
+
+</html>

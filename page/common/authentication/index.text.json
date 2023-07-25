@@ -1,15 +1,17 @@
 {
     "success": true,
-    "data": {
-        "gitee": {
+    "data": [
+        {
+            "id": 6,
+            "account": 1,
             "type": "gitee",
-            "state": false,
             "uid": "6562299"
         },
-        "dingtalk": {
-            "type": "dingtalk",
-            "state": true,
-            "uid": "VH7YIdCguTarxQ70SIeeGAiEiE"
+        {
+            "id": 8,
+            "account": 1,
+            "type": "alipay",
+            "uid": "2088621993948089"
         }
-    }
+    ]
 }

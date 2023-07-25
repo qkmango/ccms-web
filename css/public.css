@@ -26,13 +26,6 @@ body {
     right: 5px;
 }
 
-.layuimini-form > .layui-form-item > .layui-form-label {
-    /*width: 120px !important;*/
-}
-
-.layuimini-form > .layui-form-item > .layui-input-block {
-    /*margin-left: 150px !important;*/
-}
 
 .layuimini-form > .layui-form-item > .layui-input-block > tip {
     display: inline-block;
@@ -74,7 +67,7 @@ body {
 
 
 /*自定义浅色按钮样式*/
-.layui-btn-tint,
+/* .layui-btn-tint,
 .layui-btn-green-tint {
     border-color: var(--green);
     color: var(--green);
@@ -135,7 +128,7 @@ body {
 .layui-btn-orange-tint:hover {
     color: var(--orange);
     background-color: var(--orange-tint);
-}
+} */
 
 /*自定义背景和字体颜色样式*/
 /*浅色*/
