@@ -10,7 +10,7 @@
     <style>
         body,
         .tip {
-            display: none;
+            /* display: none; */
         }
     </style>
 </head>
@@ -20,25 +20,31 @@
         <div id="locale">
             <img src="/image/language.svg">
             <button id="zh_CN" @click="changeLocale('zh_CN')" :class="locale==='zh_CN'?'this_locale_btn':''">中文</button>
-            <button id="en_US" @click="changeLocale('en_US')" :class="locale==='en_US'?'this_locale_btn':''">English</button>
+            <button id="en_US" @click="changeLocale('en_US')"
+                :class="locale==='en_US'?'this_locale_btn':''">English</button>
         </div>
 
         <div class="header">
             <img src="/image/logo.svg" class="logo_img" alt="logo" />
         </div>
 
-        <h1 class="title" i18n="title">Sign in to System</h1>
+        <h1 class="title" v-text="language[locale].title"></h1>
 
         <div class="main">
             <form class="form">
-                <label for="id"><span i18n="account">账号</span> <span class="tip" i18n="account_tip"></span></label>
-                <input type="text" v-model="id" />
+                <label for="id">
+                    <span v-text="language[locale].account">账号</span>
+                    <span class="tip" v-text="language[locale].account_tip" v-show="tipEnable.id"></span>
+                </label>
+                <input type="text" v-model="account.id" @focus="tipEnable.id = false" @blur="check('id')" />
 
-                <label for="password"><span i18n="password">密码</span><span class="tip"
-                        i18n="password_tip"></span></label>
-                <input type="password" v-model="password" />
+                <label for="password">
+                    <span v-text="language[locale].password">密码</span>
+                    <span class="tip" v-text="language[locale].password_tip" v-show="tipEnable.password"></span>
+                </label>
+                <input type="password" v-model="account.password" @focus="tipEnable.password = false" @blur="check('password')" />
 
-                <input type="button" @click="systemLogin" value="Sign in" i18n="login">
+                <input type="button" @click="systemLogin" value="Sign in" v-text="language[locale].login">
             </form>
             <!-- <div class="label">账号为10位数字<br/>密码为8-16位大小写字母数字特殊字符</div> -->
         </div>
@@ -53,47 +59,6 @@
 
 </html>
 <script src="/lib/layui/layui.js" charset="utf-8"></script>
-<script type="text/javascript" src="/lib/i18n/internationalization.js"></script>
-<script>
-    const language = {
-        zh_CN: {
-            "title": "登陆系统",
-            "account": "账号",
-            "password": "密码",
-            "role": "角色",
-            "login": "登陆",
-            "user": "用户",
-            "admin": "管理员",
-            "pos": "刷卡机",
-            "account_tip": "账号为10位数字",
-            "password_tip": "密码为8-16位大小写字母数字特殊字符",
-        },
-        en_US: {
-            "title": "Sign in to System",
-            "account": "account",
-            "password": "password",
-            "role": "role",
-            "login": "Sign in",
-            "user": "user",
-            "admin": "admin",
-            "pos": "pos",
-            "account_tip": "account is 10 digits",
-            "password_tip": "password is 8-16 digits, including uppercase and lowercase letters, numbers and special characters",
-        }
-    };
-
-    const i18n = new Internationalization({
-        defaultLang: "zh_CN",
-        ignoreEmptyElement: false,
-        increment: true,
-        cookieName: "locale",
-        prop: language,
-        callback: function () {
-            document.querySelector('body').style.display = "block";
-        }
-    })
-    i18n.convert();
-</script>
 <script type="text/javascript" src="/lib/vue2/vue.js"></script>
 <script type="text/javascript" src="/lib/util/layui_verify_config.js"></script>
 <script type="text/javascript" src="/lib/util/js.cookie.min.js"></script>

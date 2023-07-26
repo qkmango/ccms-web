@@ -125,6 +125,8 @@
     let platform = common.getUrlParam("platform");
     //token
     let accessCode = common.getUrlParam("accessCode");
+    //bind
+    let bind = JSON.parse(common.getUrlParam('bind') || false);
 
     if (success) {
         document.querySelector('#message').innerHTML = `
@@ -149,9 +151,11 @@
             success,
             message,
             platform,
-            accessCode
+            accessCode,
+            bind
         });
         clearInterval(timer);
+        channel.close();
         window.close();
     }, 2000);
 

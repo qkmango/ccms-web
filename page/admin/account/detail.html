@@ -30,7 +30,7 @@
                     <label class="layui-form-label">账户ID</label>
                     <div class="layui-input-block">
                         <input type="text" name="account" lay-verify="required" class="layui-input" autocomplete="off"
-                            oninput="app.account = {};" />
+                            oninput="app.detail=null" v-model="id" />
                     </div>
                 </div>
 
@@ -44,22 +44,22 @@
                                         <tbody id="account_tbody">
                                             <tr>
                                                 <td>账户ID</td>
-                                                <td>{{account.account?account.account.id:''}}</td>
+                                                <td>{{detail?detail.account.id:''}}</td>
                                             </tr>
                                             <tr>
                                                 <td>账户角色</td>
-                                                <td>{{account.account?
-                                                    (account.account.role==='user'?'用户':
-                                                    account.account.role==='admin'?'管理员':
-                                                    account.account.role==='pos'?'刷卡机':'未知')
+                                                <td>{{detail?
+                                                    (detail.account.role==='user'?'用户':
+                                                    detail.account.role==='admin'?'管理员':
+                                                    detail.account.role==='pos'?'刷卡机':'未知')
                                                     :''}}</td>
                                             </tr>
                                             <tr>
                                                 <td>账户状态</td>
-                                                <td>{{account.account?
-                                                    (account.account.state==='normal'? '正常':
-                                                    account.account.state==='canceled'? '注销':
-                                                    account.account.state==='frozen'? '冻结':'未知')
+                                                <td>{{detail?
+                                                    (detail.account.state==='normal'? '正常':
+                                                    detail.account.state==='canceled'? '注销':
+                                                    detail.account.state==='frozen'? '冻结':'未知')
                                                     :''}}</td>
                                             </tr>
                                         </tbody>
@@ -68,8 +68,7 @@
                             </div>
                         </div>
 
-                        <div class="layui-col-md6" id="card_block"
-                            v-show="account.account?account.account.role==='user':true">
+                        <div class="layui-col-md6" id="card_block" v-show="detail?detail.account.role==='user':true">
                             <div class="layui-card">
                                 <div class="layui-card-header">卡信息</div>
                                 <div class="layui-card-body">
@@ -77,23 +76,25 @@
                                         <tbody id="card_tbody">
                                             <tr>
                                                 <td>卡ID</td>
-                                                <td>{{account.card?account.card.id:''}}</td>
+                                                <td>{{detail && detail.account.role==='user'? detail.card.id:''}}</td>
                                             </tr>
                                             <tr>
                                                 <td>所属账户</td>
-                                                <td>{{account.card?account.card.account:''}}</td>
+                                                <td>{{detail && detail.account.role==='user'? detail.card.account:''}}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>卡余额</td>
-                                                <td>{{account.card?account.card.balance/100:''}}</td>
+                                                <td>{{detail && detail.account.role==='user'?
+                                                    detail.card.balance/100:''}}</td>
                                             </tr>
                                             <tr>
                                                 <td>卡状态</td>
-                                                <td>{{account.card?
-                                                    (account.card.state==='normal'? '正常':
-                                                    account.card.state==='loss'? '挂失':
-                                                    account.card.state==='canceled'? '注销':'未知')
-                                                    :''}}</td>
+                                                <td>{{detail && detail.account.role==='user'?(
+                                                    detail.card.state==='normal'? '正常':
+                                                    detail.card.state==='loss'? '挂失':
+                                                    detail.card.state==='canceled'? '注销':'未知'
+                                                    ):''}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -101,8 +102,7 @@
                             </div>
                         </div>
 
-                        <div class="layui-col-md6" id="user_block"
-                            v-show="account.account?account.account.role==='user':true">
+                        <div class="layui-col-md6" id="user_block" v-show="detail?detail.account.role==='user':true">
                             <div class="layui-card">
                                 <div class="layui-card-header">用户信息</div>
                                 <div class="layui-card-body">
@@ -110,19 +110,19 @@
                                         <tbody id="user_tbody">
                                             <tr>
                                                 <td>ID</td>
-                                                <td>{{account.user?account.user.id:''}}</td>
+                                                <td>{{detail && detail.account.role==='user'?detail.user.id:''}}</td>
                                             </tr>
                                             <tr>
                                                 <td>姓名</td>
-                                                <td>{{account.user?account.user.name:''}}</td>
+                                                <td>{{detail && detail.account.role==='user'?detail.user.name:''}}</td>
                                             </tr>
                                             <tr>
                                                 <td>拥有卡ID</td>
-                                                <td>{{account.user?account.user.card:''}}</td>
+                                                <td>{{detail && detail.account.role==='user'?detail.user.card:''}}</td>
                                             </tr>
                                             <tr>
                                                 <td>邮件</td>
-                                                <td>{{account.user?account.user.email:''}}</td>
+                                                <td>{{detail && detail.account.role==='user'?detail.user.email:''}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -138,17 +138,17 @@
                                         <tbody id="department_tbody">
                                             <tr>
                                                 <td>ID</td>
-                                                <td>{{account.departmentChain?
-                                                    account.departmentChain[account.departmentChain.length-1].id:''}}
+                                                <td>{{detail?
+                                                    detail.departmentChain[detail.departmentChain.length-1].id:''}}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>部门</td>
                                                 <td>
-                                                    <span v-show="account.departmentChain"
-                                                        v-for="(value, key, index) in account.departmentChain">
+                                                    <span v-show="detail"
+                                                        v-for="(value, key, index) in (detail?detail.departmentChain:[])">
                                                         {{ value.name }}
-                                                        <span v-if="index !== account.departmentChain.length - 1"
+                                                        <span v-if="index !== detail.departmentChain.length - 1"
                                                             class="no"> > </span>
                                                     </span>
                                                 </td>
@@ -163,42 +163,48 @@
 
                 <div class="layui-form-item">
                     <div class="layui-btn-container">
-                        <button type="button" lay-submit lay-filter="cabceled" class="layui-btn layui-btn-danger"
-                            :disabled="account.account?account.account.state==='canceled':false"
-                            :class="account.account?(account.account.state==='canceled'?'layui-btn-disabled':''):''">
+                        <button type="button" lay-submit lay-filter="canceled" class="layui-btn layui-btn-danger"
+                            @click="canceled" :disabled="detail?detail.account.state==='canceled':false"
+                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
                             <i class="fa fa-close"></i> 注销
                         </button>
 
-                        <button type="button" lay-submit lay-filter="resetPassword" class="layui-btn layui-btn-warm"
-                            :disabled="account.account?account.account.state==='canceled':false"
-                            :class="account.account?(account.account.state==='canceled'?'layui-btn-disabled':''):''">
+                        <button type="button" lay-submit @click="resetPassword" class="layui-btn layui-btn-warm"
+                            :disabled="detail?detail.account.state==='canceled':false"
+                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
                             <i class="fa fa-key"></i> 重置密码
                         </button>
 
-                        <button type="button" v-show="account.account?account.account.role==='user':true" lay-submit
-                            lay-filter="state" class="layui-btn layui-btn-danger"
-                            :disabled="account.account?account.account.state==='canceled':false"
-                            :class="account.account?(account.account.state==='canceled'?'layui-btn-disabled':''):''">
-                            <span v-if="account.card?(account.card.state==='canceled'?true:false):true"><i
-                                    class="fa fa-lock"></i> 挂失 / 解挂</span>
-                            <span v-if="account.card?(account.card.state==='normal'?true:false):false"><i
-                                    class="fa fa-lock"></i> 挂失</span>
-                            <span v-if="account.card?(account.card.state==='loss'?true:false):false"><i
-                                    class="fa fa-unlock"></i> 解挂</span>
+                        <button type="button" lay-submit class="layui-btn layui-btn-danger"
+                            v-show="detail?detail.account.role==='user':true" lay-filter="state" @click="state"
+                            :disabled="detail&&detail.account.role==='user'?detail.account.state==='canceled':false"
+                            :class="detail&&detail.account.role==='user'?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
+                            <span v-if="detail&&detail.account.role==='user'?
+                                (detail.card.state==='canceled'?true:false):true">
+                                <i class="fa fa-lock"></i> 挂失 / 解挂
+                            </span>
+                            <span v-if="detail&&detail.account.role==='user'?
+                            (detail.card.state==='normal'?true:false):false">
+                                <i class="fa fa-lock"></i> 挂失
+                            </span>
+                            <span v-if="detail&&detail.account.role==='user'?
+                            (detail.card.state==='loss'?true:false):false">
+                                <i class="fa fa-unlock"></i> 解挂
+                            </span>
                         </button>
 
-                        <button type="button" v-show="account.account?account.account.role==='user':true" lay-submit
-                            lay-filter="consume" class="layui-btn layui-bg-green">
+                        <button type="button" lay-submit lay-filter="consume" class="layui-btn layui-bg-green"
+                            v-show="detail?detail.account.role==='user':true" @click="consume">
                             <i class="fa fa-bar-chart"></i> 消费查询
                         </button>
-                        <button type="button" v-show="account.account?account.account.role==='user':true" lay-submit
-                            lay-filter="recharge" class="layui-btn layui-bg-green"
-                            :disabled="account.account?account.account.state==='canceled':false"
-                            :class="account.account?(account.account.state==='canceled'?'layui-btn-disabled':''):''">
+                        <button type="button" class="layui-btn layui-bg-green" lay-submit @click="recharge"
+                            v-show="detail?detail.account.role==='user':true"
+                            :disabled="detail?detail.account.state==='canceled':false"
+                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
                             <i class="fa fa-jpy"></i> 充值
                         </button>
 
-                        <button class="layui-btn layui-bg-green" lay-submit lay-filter="searchBtn" id="searchBtn">
+                        <button class="layui-btn layui-bg-green" lay-submit id="searchBtn" lay-filter="searchBtn">
                             <i class="fa fa-search"></i> 查询
                         </button>
                     </div>
@@ -213,17 +219,223 @@
     <script src="/lib/util/amount.js"></script>
     <script src="/lib/util/common.js"></script>
     <script>
-        let form,
-            $,
-            layer,
-            miniTab;
+        let form, $, layer, miniTab;
 
 
         let app = new Vue({
             el: '#app',
             data: {
-                message: 'Hello Vue!',
-                account: {}
+                detail: null,
+                id: ''
+            },
+            methods: {
+                resetPassword: function () {
+                    const _this = this;
+                    if (!this.detail) {
+                        layer.msg('请先查询', { icon: 2 });
+                        return false;
+                    }
+
+                    if (this.detail.account.state === 'canceled') {
+                        return false;
+                    }
+
+                    if (this.detail.account.state === 'canceled') {
+                        return false;
+                    }
+
+                    layer.open({
+                        title: '重置密码',
+                        content: '确认重置密码吗?',
+                        btn: ['重置', '取消'],
+                        icon: 3,
+                        shadeClose: true,
+                        btn1: function (index) {
+                            $.ajax({
+                                url: common.url('/account/update/resetPassword.do'),
+                                data: { account: _this.detail.account.id },
+                                type: 'post',
+                                success: function (res) {
+                                    if (res.success) {
+                                        layer.msg(res.message, { icon: 1 });
+                                        return;
+                                    }
+                                    layer.msg(res.message, { icon: 2 });
+                                },
+                            });
+                        },
+                    });
+                    return false;
+                },
+
+                state: function (data) {
+                    const _this = this;
+                    if (!this.detail) {
+                        layer.msg('请先查询', { icon: 2 });
+                        return false;
+                    }
+
+                    if (this.detail.state === 'canceled' || this.detail.card.state === 'canceled') {
+                        return false;
+                    }
+
+                    const account = this.detail.account.id;
+                    let state = this.detail.card.state;
+                    switch (state) {
+                        case 'loss': state = 'normal'; break;
+                        case 'normal': state = 'loss'; break;
+                        default: return false;
+                    }
+
+                    layer.open({
+                        title: '挂失',
+                        content: state === 'normal' ? '确认解挂吗' : '确认挂失吗',
+                        btn: ['确定', '取消'],
+                        icon: 3,
+                        shadeClose: true,
+                        btn1: function (index) {
+
+                            $.ajax({
+                                url: common.url('card/update/state.do'),
+                                data: { account, state },
+                                type: 'post',
+                                success: function (res) {
+                                    if (res.success) {
+                                        layer.msg(res.message, { icon: 1 });
+                                        _this.queryAccount(_this.detail.account.id);
+                                        return;
+                                    }
+                                    layer.msg(res.message, { icon: 2 });
+                                },
+                            });
+                        },
+                    });
+                },
+
+                queryAccount: function (account) {
+                    const _this = this;
+                    $.ajax({
+                        url: common.url('account/one/account-detail.do'),
+                        data: { account },
+                        success: function (res) {
+                            if (!res.success) {
+                                if (window.top.progress) {
+                                    window.top.progress.error();
+                                }
+                                layer.msg(res.message, { icon: 2 });
+                                return;
+                            }
+                            //赋值
+                            _this.detail = res.data;
+                        }
+                    });
+                },
+
+                recharge: function () {
+                    const _this = this;
+                    if (!this.detail) {
+                        layer.msg('请先查询', { icon: 2 });
+                        return false;
+                    }
+
+                    if (this.detail.account.state === 'canceled' || this.detail.card.state === 'canceled') {
+                        return false;
+                    }
+
+                    const account = this.detail.account.id;
+
+                    layer.prompt({ title: '充值', formType: 0 }, function (amount, index) {
+                        //判断是否为金额
+                        if (!Amount.isAmount(amount)) {
+                            layer.msg('不是金额', { icon: 2 });
+                            return false;
+                        }
+
+                        //判断小数位数是否为1或2位
+                        const dl = Amount.decimalLength(amount);
+                        if (!(dl <= 2 && dl >= 0)) {
+                            layer.msg(`小数点后最多两位(${dl})`, { icon: 2 });
+                            return false;
+                        }
+
+                        if (!Amount.inRange(amount, 1, 1000)) {
+                            layer.msg(`充值金额在 1~1000 元(${amount})`, { icon: 2 });
+                            return false;
+                        }
+
+                        $.ajax({
+                            url: common.url('card/update/recharge.do'),
+                            data: { account, amount: Amount.multi(amount, 2) },
+                            type: 'post',
+                            success: function (res) {
+                                if (res.success) {
+                                    layer.msg(res.message, { icon: 1 });
+                                    _this.queryAccount(account);
+                                    return;
+                                }
+                                layer.msg(res.message, { icon: 2 });
+                            }
+                        });
+
+                        layer.close(index);
+                    });
+                },
+
+                canceled: function () {
+                    if (!this.detail) {
+                        layer.msg('请先查询', { icon: 2 });
+                        return false;
+                    }
+
+
+                    if (this.detail.account.state === 'canceled') {
+                        return false;
+                    }
+
+                    const _this = this;
+                    const account = this.detail.account.id;
+
+                    layer.open({
+                        title: '注销',
+                        content: '确认注销吗?',
+                        btn: ['注销', '取消'],
+                        icon: 3,
+                        shadeClose: true,
+                        btn1: function (index) {
+                            $.ajax({
+                                url: common.url('/account/update/canceled.do'),
+                                data: { account },
+                                type: 'post',
+                                success: function (res) {
+                                    if (res.success) {
+                                        layer.msg(res.message, { icon: 1 });
+                                        _this.queryAccount(account);
+                                    }
+
+                                    layer.msg(res.message, { icon: 2 });
+                                },
+                            });
+                        },
+                    });
+                },
+
+                consume: function () {
+                    //关闭之前打开的详情页
+                    const tabCloseBtn = window.top.document.querySelector(
+                        'li[lay-id="page/admin/consume/index.html"]>i'
+                    );
+                    if (tabCloseBtn != null) {
+                        tabCloseBtn.click();
+                    }
+
+                    //消费记录页面
+                    sessionStorage.setItem('page/admin/consume/index.html', this.id);
+                    miniTab.openNewTabByIframe({
+                        href: 'page/admin/consume/index.html',
+                        title: '消费列表',
+                    });
+                }
+
             }
         })
 
@@ -243,287 +455,26 @@
             sessionStorage.removeItem(window.top.location.hash);
 
             //给表单赋值
+            app.id = accountId;
             form.val('detail', {
                 account: accountId,
             });
 
             // 搜索
             form.on('submit(searchBtn)', function (data) {
-                queryAccount(data.field.account);
+                app.queryAccount(accountId);
                 return false;
-            });
-
-            // 重置密码
-            form.on('submit(resetPassword)', function (data) {
-                if (!app.account.account) {
-                    layer.msg('请先查询', { icon: 2 });
-                    return false;
-                }
-
-                if (app.account.state === 'canceled') {
-                    return false;
-                }
-
-                if (app.account.state === 'canceled') {
-                    return false;
-                }
-
-                layer.open({
-                    title: '重置密码',
-                    content: '确认重置密码吗?',
-                    btn: ['重置', '取消'],
-                    icon: 3,
-                    shadeClose: true,
-                    btn1: function (index) {
-                        $.ajax({
-                            url: common.url('/account/update/resetPassword.do'),
-                            data: { account: data.field.account },
-                            type: 'post',
-                            success: function (res) {
-                                if (res.success) {
-                                    layer.msg(res.message, { icon: 1 });
-                                    return;
-                                }
-                                layer.msg(res.message, { icon: 2 });
-                            },
-                        });
-                    },
-                });
-                return false;
-            });
-
-            //挂失/解挂
-            form.on('submit(state)', function (data) {
-                if (!app.account.account) {
-                    layer.msg('请先查询', { icon: 2 });
-                    return false;
-                }
-
-                if (app.account.state === 'canceled' || app.account.card.state === 'canceled') {
-                    return false;
-                }
-
-                const account = app.account.account.id;
-                let state = app.account.card.state;
-                switch (state) {
-                    case 'loss': state = 'normal'; break;
-                    case 'normal': state = 'loss'; break;
-                    default: return false;
-                }
-
-                layer.open({
-                    title: '挂失',
-                    content: state === 'normal' ? '确认解挂吗' : '确认挂失吗',
-                    btn: ['确定', '取消'],
-                    icon: 3,
-                    shadeClose: true,
-                    btn1: function (index) {
-                        updateCardState(account, state, function (res) {
-                            //重新查询
-                            if (res.success) {
-                                queryAccount(app.account.account.id);
-                            }
-                        });
-                    },
-                });
-            });
-
-            //注销
-            form.on('submit(cabceled)', function (data) {
-                if (!app.account.account) {
-                    layer.msg('请先查询', { icon: 2 });
-                    return false;
-                }
-
-                if (app.account.state === 'canceled') {
-                    return false;
-                }
-
-                layer.open({
-                    title: '注销',
-                    content: '确认注销吗?',
-                    btn: ['注销', '取消'],
-                    icon: 3,
-                    shadeClose: true,
-                    btn1: function (index) {
-                        cabceled(data.field.account, function (res) {
-                            //重新查询
-                            if (res.success) {
-                                queryAccount(data.field.account);
-                            }
-                        });
-                    },
-                });
-            });
-
-            //充值
-            form.on('submit(recharge)', function (data) {
-                if (!app.account.account) {
-                    layer.msg('请先查询', { icon: 2 });
-                    return false;
-                }
-
-                if (app.account.state === 'canceled' || app.account.card.state === 'canceled') {
-                    return false;
-                }
-
-                const account = data.field.account;
-
-                layer.prompt({ title: '充值', formType: 0 }, function (amount, index) {
-                    //判断是否为金额
-                    if (!Amount.isAmount(amount)) {
-                        layer.msg('不是金额', { icon: 2 });
-                        return false;
-                    }
-
-                    //判断小数位数是否为1或2位
-                    const dl = Amount.decimalLength(amount);
-                    if (!(dl <= 2 && dl >= 0)) {
-                        layer.msg(`小数点后最多两位(${dl})`, { icon: 2 });
-                        return false;
-                    }
-
-                    if (!Amount.inRange(amount, 1, 1000)) {
-                        layer.msg(`充值金额在 1~1000 元(${amount})`, { icon: 2 });
-                        return false;
-                    }
-                    recharge(account, Amount.multi(amount, 2), function (res) {
-                        //重新查询
-                        if (res.success) {
-                            queryAccount(app.account.account.id);
-                        }
-                    });
-                    layer.close(index);
-                });
-            });
-
-            form.on('submit(consume)', function (data) {
-                //关闭之前打开的详情页
-                const tabCloseBtn = window.top.document.querySelector(
-                    'li[lay-id="page/admin/consume/index.html"]>i'
-                );
-                if (tabCloseBtn != null) {
-                    tabCloseBtn.click();
-                }
-                //消费记录页面
-                sessionStorage.setItem('page/admin/consume/index.html', data.field.id.toString());
-                miniTab.openNewTabByIframe({
-                    href: 'page/admin/consume/index.html',
-                    title: '消费列表',
-                });
             });
 
             //如果获取到账号，则自动查询
             if (accountId != null) {
-                document.querySelector('#searchBtn').click();
+                app.queryAccount(accountId);
             }
             return false;
         });
 
 
-        /**
-         * 
-         */
-        function queryAccount(account) {
-            $.ajax({
-                url: common.url('account/one/account-detail.do'),
-                data: { account },
-                success: function (res) {
-                    if (!res.success) {
-                        if (window.top.progress) {
-                            window.top.progress.error();
-                        }
-                        layer.msg(res.message, { icon: 2 });
-                        return;
-                    }
-                    //赋值
-                    app.account = res.data;
-                }
-            });
-        }
 
-
-        /**
-         * 挂失/解挂
-         * @param account
-         * @param toLockStatus 将要设置卡的状态 true去挂失，false解挂
-         */
-        function updateCardState(account, state, success) {
-            $.ajax({
-                url: common.url('card/update/state.do'),
-                data: { account, state },
-                type: 'post',
-                success: function (res) {
-                    if (res.success) {
-                        layer.msg(res.message, { icon: 1 });
-                    }
-
-                    if (success) {
-                        success(res);
-                    }
-
-                    if (res.success) {
-                        return;
-                    }
-
-                    layer.msg(res.message, { icon: 2 });
-                },
-            });
-        }
-
-        /**
-         * 注销
-         * @param account 账号
-         */
-        function cabceled(account, success) {
-            $.ajax({
-                url: common.url('/account/update/canceled.do'),
-                data: { account },
-                type: 'post',
-                success: function (res) {
-                    if (res.success) {
-                        layer.msg(res.message, { icon: 1 });
-                    }
-
-                    if (success) {
-                        success(res);
-                    }
-
-                    if (res.success) {
-                        return;
-                    }
-
-                    layer.msg(res.message, { icon: 2 });
-                },
-            });
-        }
-
-        /**
-         * 充值
-         * @param account 账号
-         * @param amount 充值金额
-         */
-        function recharge(account, amount, success) {
-            $.ajax({
-                url: common.url('card/update/recharge.do'),
-                data: { account, amount },
-                type: 'post',
-                success: function (res) {
-                    if (res.success) {
-                        layer.msg(res.message, { icon: 1 });
-                    }
-                    if (success) {
-                        success(res);
-                    }
-
-                    if (res.success) {
-                        return;
-                    }
-
-                    layer.msg(res.message, { icon: 2 });
-                }
-            });
-        }
 
     </script>
 </body>

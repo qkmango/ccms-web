@@ -1,23 +1,58 @@
-// import common from '/lib/util/common.js';
 let $, layer;
 
 let app = new Vue({
     el: '#app',
     data: {
         locale: Cookies.get('locale') || 'zh_CN',
-        id: '1',
-        password: '1',
+        account: {
+            id: '1',
+            password: '1',
+        },
+        tipEnable: {
+            id: false,
+            password: false,
+        },
+        language: {
+            zh_CN: {
+                title: '登陆系统',
+                account: '账号',
+                password: '密码',
+                role: '角色',
+                login: '登陆',
+                user: '用户',
+                admi: '管理员',
+                pos: '刷卡机',
+                account_tip: '账号为10位数字',
+                password_tip: '密码为8-16位大小写字母数字特殊字符',
+            },
+            en_US: {
+                title: 'Sign in to System',
+                account: 'account',
+                password: 'password',
+                role: 'role',
+                login: 'Sign in',
+                user: 'user',
+                admin: 'admin',
+                pos: 'pos',
+                account_tip: 'account is 10 digits',
+                password_tip: 'password is 8-16 digits, including uppercase and lowercase letters, numbers and special characters',
+            },
+        },
     },
     methods: {
         changeLocale: function (locale) {
             Cookies.set('locale', locale, { expires: 7 });
-            window.location.reload();
+            this.locale = locale;
         },
         systemLogin: function () {
-            const { id, password } = this;
+            layer.msg('登陆中', {
+                icon: 16,
+                shade: 0.01,
+            });
+
+            const { id, password } = this.account;
             $.ajax({
                 url: common.url('account/system-login.do'),
-                // async: false,
                 headers: {},
                 data: { id, password },
                 type: 'post',
@@ -27,11 +62,17 @@ let app = new Vue({
                         layer.msg(res.message, { icon: 1 }, (end) => (window.location.href = '/index.html'));
                         return;
                     }
+                    layer.closeAll();
                     layer.msg(res.message, { icon: 2 }, (end) => (isAjax = false));
                 },
             });
         },
         accessLogin: function (accessCode) {
+            layer.msg('登陆中', {
+                icon: 16,
+                shade: 0.01,
+            });
+
             $.ajax({
                 url: common.url('account/access-login.do'),
                 headers: {},
@@ -43,6 +84,7 @@ let app = new Vue({
                         layer.msg(res.message, { icon: 1 }, (end) => (window.location.href = '/index.html'));
                         return;
                     }
+                    layer.closeAll();
                     layer.msg(res.message, { icon: 2 }, (end) => (isAjax = false));
                 },
             });
@@ -55,6 +97,16 @@ let app = new Vue({
                 }
                 layer.msg(res.message, { icon: 2 });
             });
+        },
+        check: function (item) {
+            const { id, password } = this.account;
+            if (item == 'id') {
+                this.tipEnable.id = !/^\d{10}$/.test(id);
+            }
+
+            if (item == 'password') {
+                this.tipEnable.password = !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/.test(password);
+            }
         },
     },
 });
