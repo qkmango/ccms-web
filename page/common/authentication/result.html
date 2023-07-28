@@ -123,6 +123,10 @@
         accessCode,//授权码
         bind//第三方账号是否绑定本站账号
     } = common.urlLocation().search;
+    success = JSON.parse(success || false);
+    bind = bind ? JSON.parse(bind) : null;
+
+    console.log(success);
 
     if (success) {
         document.querySelector('#message').innerHTML = `
@@ -144,11 +148,11 @@
     const timer = setInterval(function () {
         let channel = new BroadcastChannel('auth');
         channel.postMessage({
-            success: JSON.parse(success),
+            success,
             message,
             platform,
             accessCode,
-            bind: JSON.parse(bind)
+            bind
         });
         clearInterval(timer);
         channel.close();
