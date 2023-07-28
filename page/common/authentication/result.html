@@ -116,17 +116,13 @@
 <script src="/lib/util/common.js"></script>
 
 <script>
-
-    //认证是否成功
-    let success = JSON.parse(common.getUrlParam("success") || false);
-    //认证消息
-    let message = common.getUrlParam("message") || '';
-    //认证平台
-    let platform = common.getUrlParam("platform");
-    //token
-    let accessCode = common.getUrlParam("accessCode");
-    //bind
-    let bind = JSON.parse(common.getUrlParam('bind') || false);
+    let {
+        success,//认证是否成功
+        message,//认证消息
+        platform,//认证平台
+        accessCode,//授权码
+        bind//第三方账号是否绑定本站账号
+    } = common.urlLocation().search;
 
     if (success) {
         document.querySelector('#message').innerHTML = `
@@ -148,11 +144,11 @@
     const timer = setInterval(function () {
         let channel = new BroadcastChannel('auth');
         channel.postMessage({
-            success,
+            success: JSON.parse(success),
             message,
             platform,
             accessCode,
-            bind
+            bind: JSON.parse(bind)
         });
         clearInterval(timer);
         channel.close();

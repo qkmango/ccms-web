@@ -35,13 +35,6 @@
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">内容</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" name="content" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
                                 <button type="submit" class="layui-btn layui-btn-primary" lay-submit
                                     lay-filter="data-search-btn"><i class="fa fa-search"></i> 搜索</button>
                             </div>
@@ -56,24 +49,22 @@
     </div>
 
     <script src="/lib/layui/layui.js" charset="utf-8"></script>
-    <script src="/js/lay-module/layuimini/miniTab.js"></script>
-    <script src="/lib/util/datetime.js"></script>
+    <script src="/lib/util/common.js"></script>
     <script>
 
         let $;
         let form;
         let table;
-        let miniTab;
 
-        layui.use(['form', 'table'], function () {
+        layui.use(function () {
             $ = layui.jquery;
             form = layui.form;
             table = layui.table;
-            miniTab = layui.miniTab;
+            common.ajaxSetup($);
 
             const cardTable = table.render({
                 elem: '#currentTableId',
-                url: '/notice/pagination/list.do',
+                url: common.url('/notice/pagination/list.do'),
                 // url: './index.test.json',
                 method: 'post',
                 toolbar: '#toolbarDemo',
@@ -82,9 +73,9 @@
                     { field: 'id', width: 120, title: 'ID',fixed:'left', sort: true},
                     { field: 'title',title: '标题'},
                     { field: 'content', title: '内容'},
-                    { field: 'author', width:80,title: '作者'},
+                    { field: 'author', width:80,title: '作者ID'},
                     { field: 'createTime', title: '创建时间',templet:d=> {
-                        return timestampToTime(d.createTime);
+                        return layui.util.toDateString(d.createTime);
                         } },
 
                     { title: '操作', width: 150,align:'center',fixed:'right', templet: d=> {
@@ -134,7 +125,7 @@
                         area: ['50%', '100%'],
                         shade: 0.2,
                         shadeClose: true,
-                        content: '../../common/notice-detail.html?id=' + obj.data.id,
+                        content: './sub/notice-record.html?id=' + obj.data.id,
                     });
                 }
 
@@ -145,10 +136,9 @@
                         btn: ['删除','取消'], icon:3, shadeClose:true,
                         btn1:function (index) {
                             $.ajax({
-                                url: '/notice/one/delete.do',
+                                url: common.url('notice/one/delete.do'),
                                 data: { 'id': obj.data.id },
                                 type: 'post',
-                                dataType: 'json',
                                 success: function (res) {
                                     if (res.success) {
                                         layer.msg(res.message, {icon: 1});
@@ -156,9 +146,6 @@
                                         return;
                                     }
                                     layer.msg(res.message, {icon: 2});
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    layer.msg(jqXHR.status+'', {icon: 2});
                                 }
                             })
                         },
