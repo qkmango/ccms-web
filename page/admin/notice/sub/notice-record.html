@@ -77,7 +77,7 @@
             methods: {
                 getRecord: function (id) {
                     $.ajax({
-                        url: common.url('notice/one/detail.do?id=' + id),
+                        url: common.url('notice/one/record.do?id=' + id),
                         success: function (res) {
                             if (res.success) {
                                 res.data.createTime = layui.util.toDateString(res.data.createTime);

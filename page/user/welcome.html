@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
     <meta charset="utf-8">
     <title>欢迎</title>
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="/css/custom_layer_skin.css" media="all">
     <style>
         .layui-card {
             border: 1px solid #f2f2f2;
@@ -75,7 +77,7 @@
             color: inherit
         }
 
-        .main_btn > p {
+        .main_btn>p {
             height: 40px;
         }
 
@@ -119,202 +121,293 @@
         }
     </style>
 </head>
-<body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
-        <div class="layui-row layui-col-space15">
-            <div class="layui-col-md8">
-                <div class="layui-row layui-col-space15">
-                    <div class="layui-col-md6">
-                        <div class="layui-card">
-                            <div class="layui-card-header layui-bg-green-tint"><i class="fa fa-calendar icon"></i> 本月消费情况</div>
-                            <div class="layui-card-body">
-                                <div class="welcome-module">
-                                    <div class="layui-row layui-col-space10">
-                                        <div class="layui-col-xs6">
-                                            <div class="panel layui-bg-number">
-                                                <div class="panel-body">
-                                                    <div class="panel-title">
-                                                        <h5><i class="fa fa-bar-chart"></i> 消费次数</h5>
-                                                    </div>
-                                                    <div class="panel-content">
-                                                        <h1 class="no-margins currMonthConsumeInfo"></h1>
-                                                        <small>这个月刷了多少次卡呀</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="layui-col-xs6">
-                                            <div class="panel layui-bg-number">
-                                                <div class="panel-body">
-                                                    <div class="panel-title">
-                                                        <h5><i class="fa fa-jpy"></i> 消费金额</h5>
-                                                    </div>
-                                                    <div class="panel-content">
-                                                        <h1 class="no-margins currMonthConsumeInfo"></h1>
-                                                        <small>这个月花了多少钱呢</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="layui-col-xs6">
-                                            <div class="panel layui-bg-number">
-                                                <div class="panel-body">
-                                                    <div class="panel-title">
-                                                        <h5><i class="fa fa-jpy"></i> 平均每次金额</h5>
-                                                    </div>
-                                                    <div class="panel-content">
-                                                        <h1 class="no-margins currMonthConsumeInfo"></h1>
-                                                        <small>每刷一次卡都要损失</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="layui-col-xs6">
-                                            <div class="panel layui-bg-number">
-                                                <div class="panel-body">
-                                                    <div class="panel-title">
-                                                        <h5><i class="fa fa-bolt"></i> 最大消费</h5>
-                                                    </div>
-                                                    <div class="panel-content">
-                                                        <h1 class="no-margins currMonthConsumeInfo"></h1>
-                                                        <small>这次花了那么多做了什么呀</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-col-md6">
-                        <div class="layui-card">
-                            <div class="layui-card-header layui-bg-green-tint"><i class="fa fa-rocket icon"></i>快捷入口
-                            </div>
-                            <div class="layui-card-body">
-                                <div class="welcome-module">
-                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/user/consume.html"
-                                               data-title="消费信息" data-icon="fa fa-window-maximize">
-                                                <i class="fa fa-bar-chart"></i>
-                                                <cite>消费信息</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/user/details.html"
-                                               data-title="一卡通信息" data-icon="fa fa-credit-card">
-                                                <i class="fa fa-credit-card"></i>
-                                                <cite>一卡通信息</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/user/message/index.html"
-                                               data-title="留言" data-icon="fa fa-comments-o">
-                                                <i class="fa fa-comments-o"></i>
-                                                <cite>留言</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/user/payment.html"
-                                               data-title="我的缴费" data-icon="fa fa-paypal">
-                                                <i class="fa fa-paypal"></i>
-                                                <cite>我的缴费</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;"
-                                               layuimini-content-href="page/common/update-password.html"
-                                               data-title="修改密码" data-icon="fa fa-key">
-                                                <i class="fa fa-key"></i>
-                                                <cite>修改密码</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;"
-                                               layuimini-content-href="page/common/update-email.html"
-                                               data-title="修改邮箱" data-icon="fa fa-envelope-o">
-                                                <i class="fa fa-envelope-o"></i>
-                                                <cite>修改邮箱</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/user/account-info.html"
-                                               data-title="基本资料" data-icon="fa fa-id-card-o">
-                                                <i class="fa fa-id-card-o"></i>
-                                                <cite>基本资料</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/user/classmate.html"
-                                               data-title="同组成员" data-icon="fa fa-address-book-o">
-                                                <i class="fa fa-address-book-o"></i>
-                                                <cite>同组成员</cite>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
-                    <div class="layui-col-md12">
-                        <div class="layui-card">
-                            <div class="layui-card-header layui-bg-green-tint"><i class="fa fa-pie-chart icon"></i>消费类别</div>
-                            <div class="layui-card-body">
-                                <div id="echarts-records" style="width: 100%;min-height:450px"></div>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <div class="layui-row layui-col-space15" id="app">
+                <div class="layui-col-md8">
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-header layui-bg-green-tint"><i class="fa fa-calendar icon"></i>
+                                    本月消费情况</div>
+                                <div class="layui-card-body">
+                                    <div class="welcome-module">
+                                        <div class="layui-row layui-col-space10">
+                                            <div class="layui-col-xs6">
+                                                <div class="panel layui-bg-number">
+                                                    <div class="panel-body">
+                                                        <div class="panel-title">
+                                                            <h5><i class="fa fa-bar-chart"></i> 消费次数</h5>
+                                                        </div>
+                                                        <div class="panel-content">
+                                                            <h1 class="no-margins currMonthConsumeInfo"></h1>
+                                                            <small>这个月刷了多少次卡呀</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs6">
+                                                <div class="panel layui-bg-number">
+                                                    <div class="panel-body">
+                                                        <div class="panel-title">
+                                                            <h5><i class="fa fa-jpy"></i> 消费金额</h5>
+                                                        </div>
+                                                        <div class="panel-content">
+                                                            <h1 class="no-margins currMonthConsumeInfo"></h1>
+                                                            <small>这个月花了多少钱呢</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs6">
+                                                <div class="panel layui-bg-number">
+                                                    <div class="panel-body">
+                                                        <div class="panel-title">
+                                                            <h5><i class="fa fa-jpy"></i> 平均每次金额</h5>
+                                                        </div>
+                                                        <div class="panel-content">
+                                                            <h1 class="no-margins currMonthConsumeInfo"></h1>
+                                                            <small>每刷一次卡都要损失</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs6">
+                                                <div class="panel layui-bg-number">
+                                                    <div class="panel-body">
+                                                        <div class="panel-title">
+                                                            <h5><i class="fa fa-bolt"></i> 最大消费</h5>
+                                                        </div>
+                                                        <div class="panel-content">
+                                                            <h1 class="no-margins currMonthConsumeInfo"></h1>
+                                                            <small>这次花了那么多做了什么呀</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-header layui-bg-green-tint"><i class="fa fa-rocket icon"></i>快捷入口
+                                </div>
+                                <div class="layui-card-body">
+                                    <div class="welcome-module">
+                                        <div class="layui-row layui-col-space10 layuimini-qiuck">
+                                            <div class="layui-col-xs3 layuimini-qiuck-module">
+                                                <a href="javascript:;" layuimini-content-href="page/user/consume.html"
+                                                    data-title="消费信息" data-icon="fa fa-window-maximize">
+                                                    <i class="fa fa-bar-chart"></i>
+                                                    <cite>消费信息</cite>
+                                                </a>
+                                            </div>
+                                            <div class="layui-col-xs3 layuimini-qiuck-module">
+                                                <a href="javascript:;" layuimini-content-href="page/user/details.html"
+                                                    data-title="一卡通信息" data-icon="fa fa-credit-card">
+                                                    <i class="fa fa-credit-card"></i>
+                                                    <cite>一卡通信息</cite>
+                                                </a>
+                                            </div>
+                                            <div class="layui-col-xs3 layuimini-qiuck-module">
+                                                <a href="javascript:;"
+                                                    layuimini-content-href="page/user/message/index.html"
+                                                    data-title="留言" data-icon="fa fa-comments-o">
+                                                    <i class="fa fa-comments-o"></i>
+                                                    <cite>留言</cite>
+                                                </a>
+                                            </div>
+                                            <div class="layui-col-xs3 layuimini-qiuck-module">
+                                                <a href="javascript:;" layuimini-content-href="page/user/payment.html"
+                                                    data-title="我的缴费" data-icon="fa fa-paypal">
+                                                    <i class="fa fa-paypal"></i>
+                                                    <cite>我的缴费</cite>
+                                                </a>
+                                            </div>
+                                            <div class="layui-col-xs3 layuimini-qiuck-module">
+                                                <a href="javascript:;"
+                                                    layuimini-content-href="page/common/update-password.html"
+                                                    data-title="修改密码" data-icon="fa fa-key">
+                                                    <i class="fa fa-key"></i>
+                                                    <cite>修改密码</cite>
+                                                </a>
+                                            </div>
+                                            <div class="layui-col-xs3 layuimini-qiuck-module">
+                                                <a href="javascript:;"
+                                                    layuimini-content-href="page/common/update-email.html"
+                                                    data-title="修改邮箱" data-icon="fa fa-envelope-o">
+                                                    <i class="fa fa-envelope-o"></i>
+                                                    <cite>修改邮箱</cite>
+                                                </a>
+                                            </div>
+                                            <div class="layui-col-xs3 layuimini-qiuck-module">
+                                                <a href="javascript:;"
+                                                    layuimini-content-href="page/user/account-info.html"
+                                                    data-title="基本资料" data-icon="fa fa-id-card-o">
+                                                    <i class="fa fa-id-card-o"></i>
+                                                    <cite>基本资料</cite>
+                                                </a>
+                                            </div>
+                                            <div class="layui-col-xs3 layuimini-qiuck-module">
+                                                <a href="javascript:;" layuimini-content-href="page/user/classmate.html"
+                                                    data-title="同组成员" data-icon="fa fa-address-book-o">
+                                                    <i class="fa fa-address-book-o"></i>
+                                                    <cite>同组成员</cite>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-card">
+                                <div class="layui-card-header layui-bg-green-tint"><i
+                                        class="fa fa-pie-chart icon"></i>消费类别</div>
+                                <div class="layui-card-body">
+                                    <div id="echarts-records" style="width: 100%;min-height:450px"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="layui-col-md4">
+                <div class="layui-col-md4">
 
-                <div class="layui-card">
-                    <div class="layui-card-header layui-bg-green-tint"><i class="fa fa-bullhorn icon"></i>系统公告</div>
-                    <div class="layui-card-body layui-text notice-list-box"></div>
+                    <div class="layui-card">
+                        <div class="layui-card-header layui-bg-green-tint"><i class="fa fa-bullhorn icon"></i>系统公告</div>
+                        <div class="layui-card-body layui-text">
+                            <div class="layuimini-notice" v-for="item in noticeList" :key="item.id"
+                                @click="showNotice(item.id)">
+                                <div class="layuimini-notice-title">{{item.title}}</div>
+                                <div class="layuimini-notice-extra">{{item.content}}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script src="/lib/layui/layui.js" charset="utf-8"></script>
-<script src="/lib/util/datetime.js"></script>
-<script src="/lib/util/fieldMapping.js"></script>
-<script src="/js/lay-config.js" charset="utf-8"></script>
-<script src="/lib/echarts/echarts.min.js"></script>
-<script>
-    layui.use(['layer', 'miniTab'], function () {
-        let $ = layui.jquery,
-            layer = layui.layer,
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="/lib/vue2/vue.js"></script>
+    <script src="/lib/util/datetime.js"></script>
+    <script src="/lib/util/fieldMapping.js"></script>
+    <script src="/js/lay-config.js" charset="utf-8"></script>
+    <script src="/lib/echarts/echarts.min.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script>
+
+        let $, layer, miniTab, util;
+
+        let app = new Vue({
+            el: '#app',
+            data: {
+                noticeList: [],
+                noticeLayerConfCacheList: {}
+            },
+            methods: {
+                getNoticeList() {
+                    const _this = this;
+                    $.ajax({
+                        url: common.url('notice/pagination/list.do'),
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({
+                            page: 1,
+                            limit: 5,
+                        }),
+                        success: function (res) {
+                            if (res.success) {
+                                _this.noticeList = res.data;
+                                return
+                            }
+                            layer.msg(res.message, { icon: 2 });
+                        },
+                    })
+                },
+
+                //应该单独打开一个页面，并且是使用markdown语法
+                showNotice(id) {
+                    const _this = this;
+
+                    //如果有缓存则不再请求
+                    const cacheNoticeConf = this.noticeLayerConfCacheList[id];
+                    if (cacheNoticeConf) {
+                        layer.open(cacheNoticeConf);
+                        return;
+                    }
+                    $.ajax({
+                        url: common.url('notice/one/record.do?id=' + id),
+                        success: function (res) {
+                            if (res.success) {
+                                res.data.createTime = util.toDateString(res.data.createTime);
+                                const conf = _this.creathNoticeLayer(res.data);
+                                //将获取的 notice 渲染好的 layer 配置对象缓存起来
+                                _this.noticeLayerConfCacheList[res.data.id] = conf;
+                                layer.open(conf);
+                                return;
+                            }
+                        }
+                    })
+                },
+                creathNoticeLayer(notice) {
+                    let html =
+                        `<div style="text-align: center;font-size: 16px;font-weight: bold">${notice.title}</div>
+                            <div style="font-size: 14px;line-height: 2">${notice.content}</div>`;
+                    return {
+                        type: 1,
+                        title: `<i class="fa fa-bullhorn"></i><span style="float: right;right: 1px;font-style: italic;font-weight: normal;font-size: 14px">${notice.createTime}</span>`,
+                        area: '400px;',
+                        shade: 0.8,
+                        btnAlign: 'c',
+                        offset: '100px',
+                        moveType: 1,
+                        shadeClose: true,
+                        skin: 'layui-layer-green-tint',
+                        content: html
+                    };
+                }
+            },
+        });
+
+        layui.use(['miniTab'], function () {
+            $ = layui.jquery
+            layer = layui.layer
             miniTab = layui.miniTab;
+            util = layui.util;
 
-        miniTab.listen();
-        // echarts 窗口缩放自适应
-        window.onresize = function () {
-            echartsRecords.resize();
-        }
+            common.ajaxSetup($);
+            app.getNoticeList();
 
-        /**
-         * 消费类别
-         */
-        let echartsRecords = echarts.init(document.getElementById('echarts-records'), 'walden');
-        let optionRecords = {
-            tooltip: {
-                trigger: 'item'
-            },
-            legend: {
-                top: '5%',
-                left: 'center'
-            },
-            series: {
+            miniTab.listen();
+            // echarts 窗口缩放自适应
+            window.onresize = function () {
+                echartsRecords.resize();
+            }
+
+            /**
+             * 消费类别
+             */
+            let echartsRecords = echarts.init(document.getElementById('echarts-records'), 'walden');
+            let optionRecords = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    top: '5%',
+                    left: 'center'
+                },
+                series: {
                     name: '消费类别饼图',
                     type: 'pie',
                     radius: ['40%', '70%'],
                     avoidLabelOverlap: false,
-                    color: ['#00965e','#0969da','#FFB800','#ff5722'],
+                    color: ['#00965e', '#0969da', '#FFB800', '#ff5722'],
                     label: {
                         position: 'inside',
                         fontSize: '16'
@@ -329,87 +422,83 @@
                         show: false
                     },
                     data: [
-                        {value: 1048, name: '食费'},
-                        {value: 735, name: '住宿费'},
-                        {value: 580, name: '水费'},
-                        {value: 484, name: '电费'},
-                        {value: 300, name: '充值'}
+                        { value: 1048, name: '食费' },
+                        { value: 735, name: '住宿费' },
+                        { value: 580, name: '水费' },
+                        { value: 484, name: '电费' },
+                        { value: 300, name: '充值' }
                     ]
                 }
-        };
+            };
 
-        //获取主界面的聚合数据
-        /*
-        $.ajax({
-            url: '/aggregation/user/welcome.do',
-            type: 'get',
-            dataType: 'json',
-            success: function (res) {
-                if (res.success) {
-                    //当月消费信息
-                    let consumeInfo = res.data.consumeInfo;
-                    let infoList = document.querySelectorAll('.currMonthConsumeInfo');
-                    const nodata = '<span style="color: #e2e2e2;font-size:18px;"><i class="fa f"></i>暂无消费哦</span>';
-                    infoList[0].innerHTML = consumeInfo.count === 0 ? nodata : consumeInfo.count;
-                    infoList[1].innerHTML = consumeInfo.sum == null ? nodata : consumeInfo.sum / 100;
-                    infoList[2].innerHTML = consumeInfo.avg == null ? nodata : consumeInfo.avg / 100;
-                    infoList[3].innerHTML = consumeInfo.max == null ? nodata : consumeInfo.max / 100;
 
-                    //最新公告
-                    let noticeListBox = document.querySelector('.notice-list-box');
-                    let noticeListHtml = '';
-                    for (let e of res.data.notices) {
-                        noticeListHtml +=
-                            `<div class="layuimini-notice">
-                                <div class="layuimini-notice-title">${e.title}</div>
-                                <div class="layuimini-notice-extra">${timestampToTime(e.createTime)}</div>
-                                <div class="layuimini-notice-content layui-hide">${e.content}</div>
-                                <div class="layuimini-notice-author layui-hide">${e.author}</div>
-                            </div>`
-                    }
-                    noticeListBox.innerHTML = noticeListHtml;
 
-                    //每月消费类别金额饼图
-                    let data = [];
-                    res.data.consumeTypePrice.forEach(e => {
-                        data.push({value: e.price / 100, name: FieldMapping.consume.type(e.type)});
-                    });
-                    optionRecords.series.data = data;
-                    echartsRecords.setOption(optionRecords);
-                }
-            }
-        })
+            //最新公告
+            // let noticeListBox = document.querySelector('.notice-list-box');
+            //             let noticeListHtml = '';
+            //             for (let e of res.data.notices) {
+            //                 noticeListHtml +=
+            //                     `<div class="layuimini-notice">
+            //                         <div class="layuimini-notice-title">${e.title}</div>
+            //                         <div class="layuimini-notice-extra">${timestampToTime(e.createTime)}</div>
+            //                         <div class="layuimini-notice-content layui-hide">${e.content}</div>
+            //                         <div class="layuimini-notice-author layui-hide">${e.author}</div>
+            //                     </div>`
+            //             }
+            //             noticeListBox.innerHTML = noticeListHtml;
 
-        */
-        /**
-         * 查看公告信息
-         **/
-        $('body').on('click', '.layuimini-notice', function () {
-            let title = $(this).children('.layuimini-notice-title').text(),
-                noticeTime = $(this).children('.layuimini-notice-extra').text(),
-                content = $(this).children('.layuimini-notice-content').html(),
-                author = $(this).children('.layuimini-notice-author').text();
 
-            let html =
-                `<div style="padding:15px 20px; text-align:justify; line-height: 22px;border-bottom:1px solid #e2e2e2;">
-                    <div style="text-align: center;font-size: 16px;font-weight: bold">${title}</div>
-                    <div style="font-size: 14px;line-height: 2">${content}</div>
-                </div>`;
-            layer.open({
-                type: 1,
-                title: `<i class="fa fa-bullhorn"></i> ${author}<span style="float: right;right: 1px;font-style: italic;font-weight: normal;font-size: 14px">${noticeTime}</span>`,
-                area: '400px;',
-                shade: 0.8,
-                btnAlign: 'c',
-                offset: '100px',
-                moveType: 1,
-                shadeClose: true,
-                skin: 'layui-layer-green-tint',
-                content:html
-            });
+
+            //获取主界面的聚合数据
+
+            // $.ajax({
+            //     url: '/aggregation/user/welcome.do',
+            //     type: 'get',
+            //     dataType: 'json',
+            //     success: function (res) {
+            //         if (res.success) {
+            //             //当月消费信息
+            //             let consumeInfo = res.data.consumeInfo;
+            //             let infoList = document.querySelectorAll('.currMonthConsumeInfo');
+            //             const nodata = '<span style="color: #e2e2e2;font-size:18px;"><i class="fa f"></i>暂无消费哦</span>';
+            //             infoList[0].innerHTML = consumeInfo.count === 0 ? nodata : consumeInfo.count;
+            //             infoList[1].innerHTML = consumeInfo.sum == null ? nodata : consumeInfo.sum / 100;
+            //             infoList[2].innerHTML = consumeInfo.avg == null ? nodata : consumeInfo.avg / 100;
+            //             infoList[3].innerHTML = consumeInfo.max == null ? nodata : consumeInfo.max / 100;
+
+            //             //最新公告
+            //             let noticeListBox = document.querySelector('.notice-list-box');
+            //             let noticeListHtml = '';
+            //             for (let e of res.data.notices) {
+            //                 noticeListHtml +=
+            //                     `<div class="layuimini-notice">
+            //                         <div class="layuimini-notice-title">${e.title}</div>
+            //                         <div class="layuimini-notice-extra">${timestampToTime(e.createTime)}</div>
+            //                         <div class="layuimini-notice-content layui-hide">${e.content}</div>
+            //                         <div class="layuimini-notice-author layui-hide">${e.author}</div>
+            //                     </div>`
+            //             }
+            //             noticeListBox.innerHTML = noticeListHtml;
+
+            //             //每月消费类别金额饼图
+            //             let data = [];
+            //             res.data.consumeTypePrice.forEach(e => {
+            //                 data.push({value: e.price / 100, name: FieldMapping.consume.type(e.type)});
+            //             });
+            //             optionRecords.series.data = data;
+            //             echartsRecords.setOption(optionRecords);
+            //         }
+            //     }
+            // })
+
+
+            /**
+             * 查看公告信息
+             **/
+
+
         });
-
-    });
-</script>
+    </script>
 </body>
+
 </html>

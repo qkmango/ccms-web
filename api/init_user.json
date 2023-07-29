@@ -16,12 +16,6 @@
             "target": "_self"
         },
         {
-            "title": "账户详情",
-            "icon": "fa fa-credit-card",
-            "href": "page/user/detail.html",
-            "target": "_self"
-        },
-        {
             "title": "留言",
             "icon": "fa fa-comments",
             "href": "page/user/message/index.html",
@@ -45,7 +39,7 @@
             "target": "_self",
             "child": [
                 {
-                    "title": "基本资料",
+                    "title": "账户详情",
                     "icon": "fa fa-id-card-o",
                     "href": "page/common/center/account-detail.html",
                     "target": "_self"

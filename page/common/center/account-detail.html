@@ -11,9 +11,8 @@
     <link rel="stylesheet" href="/css/public.css" media="all" />
     <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
     <style>
-        #searchBtn {
-            position: absolute;
-            right: 18px;
+        span:last-child .no {
+            display: none;
         }
     </style>
 </head>
@@ -21,7 +20,7 @@
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
-            <form class="layui-form layui-form-pane" action="" lay-filter="detail">
+            <form class="layui-form layui-form-pane" lay-filter="detail" id="app">
                 <div class="layui-bg-gray" style="margin-bottom: 15px">
                     <div class="layui-row layui-col-space15">
                         <div class="layui-col-md6">
@@ -29,29 +28,88 @@
                                 <div class="layui-card-header">账户信息</div>
                                 <div class="layui-card-body">
                                     <table class="layui-table" lay-skin="nob">
-                                        <tbody id="account_tbody"></tbody>
+                                        <tbody id="account_tbody">
+                                            <tr>
+                                                <td>账户ID</td>
+                                                <td>{{detail?detail.account.id:''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>账户角色</td>
+                                                <td>{{detail?
+                                                    (detail.account.role==='user'?'用户':
+                                                    detail.account.role==='admin'?'管理员':
+                                                    detail.account.role==='pos'?'刷卡机':'未知')
+                                                    :''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>账户状态</td>
+                                                <td>{{detail?
+                                                    (detail.account.state==='normal'? '正常':
+                                                    detail.account.state==='canceled'? '注销':
+                                                    detail.account.state==='frozen'? '冻结':'未知')
+                                                    :''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>邮箱</td>
+                                                <td>{{detail?detail.account.email:''}}</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="layui-col-md6" id="card_block">
+                        <div class="layui-col-md6" id="card_block" v-show="detail?detail.account.role==='user':true">
                             <div class="layui-card">
                                 <div class="layui-card-header">卡信息</div>
                                 <div class="layui-card-body">
                                     <table class="layui-table" lay-skin="nob">
-                                        <tbody id="card_tbody"></tbody>
+                                        <tbody id="card_tbody">
+                                            <tr>
+                                                <td>卡ID</td>
+                                                <td>{{detail&&detail.card?detail.card.id:''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>所属账户</td>
+                                                <td>{{detail&&detail.card?detail.card.account:''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>卡余额</td>
+                                                <td>{{detail&&detail.card?detail.card.balance/100:''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>卡状态</td>
+                                                <td>{{detail&&detail.card?
+                                                    (detail.card.state==='normal'? '正常':
+                                                    detail.card.state==='loss'? '挂失':
+                                                    detail.card.state==='canceled'? '注销':'未知')
+                                                    :''}}</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="layui-col-md6" id="user_block">
+                        <div class="layui-col-md6" id="user_block" v-show="detail?detail.account.role==='user':true">
                             <div class="layui-card">
                                 <div class="layui-card-header">用户信息</div>
                                 <div class="layui-card-body">
                                     <table class="layui-table" lay-skin="nob">
-                                        <tbody id="user_tbody"></tbody>
+                                        <tbody id="user_tbody">
+                                            <tr>
+                                                <td>ID</td>
+                                                <td>{{detail&&detail.user?detail.user.id:''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>姓名</td>
+                                                <td>{{detail&&detail.user?detail.user.name:''}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>拥有卡ID</td>
+                                                <td>{{detail&&detail.user?detail.user.card:''}}</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -62,183 +120,204 @@
                                 <div class="layui-card-header">部门信息</div>
                                 <div class="layui-card-body">
                                     <table class="layui-table" lay-skin="nob">
-                                        <tbody id="department_tbody"></tbody>
+                                        <tbody id="department_tbody">
+                                            <tr>
+                                                <td>ID</td>
+                                                <td>{{detail?
+                                                    detail.departmentChain[detail.departmentChain.length-1].id:''}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>部门</td>
+                                                <td>
+                                                    <span v-show="detail"
+                                                        v-for="(value, key, index) in (detail?detail.departmentChain:[])">
+                                                        {{ value.name }}
+                                                        <span v-if="index !== detail.departmentChain.length - 1"
+                                                            class="no"> > </span>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-btn-container">
+                        <button type="button" lay-filter="state" class="layui-btn layui-btn-danger" @click="state"
+                            v-show="detail?detail.account.role==='user':true"
+                            :disabled="detail?detail.account.state==='canceled':false"
+                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
+                            <span v-if="detail && detail.card?(detail.card.state==='canceled'?true:false):true">
+                                <i class="fa fa-lock"></i> 挂失 / 解挂</span>
+                            <span v-if="detail && detail.card?(detail.card.state==='normal'?true:false):false">
+                                <i class="fa fa-lock"></i> 挂失</span>
+                            <span v-if="detail && detail.card?(detail.card.state==='loss'?true:false):false">
+                                <i class="fa fa-unlock"></i> 解挂</span>
+                        </button>
+
+                        <button type="button" v-show="detail?detail.account.role==='user':true" lay-submit
+                            lay-filter="recharge" class="layui-btn layui-bg-green"
+                            :disabled="detail?detail.account.state==='canceled':false"
+                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
+                            <i class="fa fa-jpy"></i> 充值
+                        </button>
+
+                    </div>
+                </div>
             </form>
         </div>
     </div>
     <script src="/lib/layui/layui.js"></script>
+    <script src="/lib/vue2/vue.js"></script>
+    <script src="/js/lay-module/layuimini/miniTab.js"></script>
+    <script src="/lib/util/amount.js"></script>
     <script src="/lib/util/common.js"></script>
     <script>
-        let form,
-            $,
-            layer;
+        let form, $, layer, miniTab;
+
+        let app = new Vue({
+            el: '#app',
+            data: {
+                detail: null
+            },
+            methods: {
+                queryAccount: function () {
+                    $.ajax({
+                        url: common.url('account/one/current-account-detail.do'),
+                        success: function (res) {
+                            if (!res.success) {
+                                if (window.top.progress) {
+                                    window.top.progress.error();
+                                }
+                                layer.msg(res.message, { icon: 2 });
+                                return;
+                            }
+                            //赋值
+                            app.detail = res.data;
+                        }
+                    });
+                },
+                state: function () {
+                    const _this = this;
+                    if (!this.detail) {
+                        return false;
+                    }
+                    if (this.detail.account.state === 'canceled' || this.detail.card.state === 'canceled') {
+                        return false;
+                    }
+
+                    const account = this.detail.account.id;
+                    let state = this.detail.card.state;
+                    switch (state) {
+                        case 'loss': state = 'normal'; break;
+                        case 'normal': state = 'loss'; break;
+                        default: return false;
+                    }
+
+                    layer.open({
+                        title: '挂失',
+                        content: state === 'normal' ? '确认解挂吗' : '确认挂失吗',
+                        btn: ['确定', '取消'],
+                        icon: 3,
+                        shadeClose: true,
+                        btn1: function (index) {
+                            $.ajax({
+                                url: common.url('card/update/current-state.do'),
+                                data: { state },
+                                type: 'post',
+                                success: function (res) {
+                                    if (res.success) {
+                                        layer.msg(res.message, { icon: 1 });
+                                        //重新查询
+                                        _this.queryAccount(app.detail.account.id);
+                                        return;
+                                    }
+                                    layer.msg(res.message, { icon: 2 });
+                                },
+                            });
+
+                        },
+                    });
+                },
+            },
+            recharge: function (data) {
+
+                //目前充值权限只有管理员可以
+                return;
+
+                const _this = this;
+                if (!this.detail) {
+                    return false;
+                }
+
+                if (this.detail.account.state === 'canceled' || this.detail.card.state === 'canceled') {
+                    return false;
+                }
+
+                layer.prompt({ title: '充值', formType: 0 }, function (amount, index) {
+                    //判断是否为金额
+                    if (!Amount.isAmount(amount)) {
+                        layer.msg('不是金额', { icon: 2 });
+                        return false;
+                    }
+
+                    //判断小数位数是否为1或2位
+                    const dl = Amount.decimalLength(amount);
+                    if (!(dl <= 2 && dl >= 0)) {
+                        layer.msg(`小数点后最多两位(${dl})`, { icon: 2 });
+                        return false;
+                    }
+
+                    if (!Amount.inRange(amount, 1, 1000)) {
+                        layer.msg(`充值金额在 1~1000 元(${amount})`, { icon: 2 });
+                        return false;
+                    }
+
+                    // 充值
+                    $.ajax({
+                        url: common.url('card/update/recharge.do'),
+                        data: { account: _this.detail.account.id, amount },
+                        type: 'post',
+                        success: function (res) {
+                            if (res.success) {
+                                layer.msg(res.message, { icon: 1 });
+                            }
+                            if (success) {
+                                success(res);
+                            }
+
+                            if (res.success) {
+                                return;
+                            }
+
+                            layer.msg(res.message, { icon: 2 });
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        })
 
         layui.use(['form'], function () {
             layer = layui.layer;
             $ = layui.$;
             form = layui.form;
+            miniTab = layui.miniTab;
 
             // ajax全局配置
             common.ajaxSetup($);
 
-            $.ajax({
-                url: common.url('account/one/current-account-detail.do'),
-                success: function (res) {
-                    if (!res.success) {
-                        window.top.progress.error();
-                        layer.msg(res.message, { icon: 2 });
-                        return;
-                    }
-                    //赋值
-                    setData(res.data);
-                }
-            });
+            // 搜索
+            app.queryAccount();
+            return false;
         });
 
-        /**
-         * 设置值
-         * @param data 数据, 为null或不传时时清空
-         */
-        function setData(data) {
-            if (data == null || data == undefined) {
-                data = {
-                    account: {
-                        id: '',
-                        role: '',
-                        state: '',
-                    },
-                    card: {
-                        id: '',
-                        account: '',
-                        balance: '',
-                        state: '',
-                    },
-                    user: {
-                        id: '',
-                        name: '',
-                        card: '',
-                        email: '',
-                    },
-                    departmentChain: [
-                        {
-                            id: '',
-                            name: '',
-                        },
-                    ],
-                };
-            }
 
-            // 几个内容块的id
-            const account_tbody = document.querySelector('#account_tbody');
-            const card_tbody = document.querySelector('#card_tbody');
-            const user_tbody = document.querySelector('#user_tbody');
-            const department_tbody = document.querySelector('#department_tbody');
-
-            const user_block = document.querySelector('#user_block');
-            const card_block = document.querySelector('#card_block');
-
-            const { account, card, user, departmentChain } = data;
-
-            // 账户
-            account_tbody.innerHTML = `<tr>
-                        <td>账户ID</td>
-                        <td>${account.id}</td>
-                    </tr>
-                    <tr>
-                        <td>账户角色</td>
-                        <td>${account.role === 'user'
-                    ? '用户'
-                    : account.role === 'admin'
-                        ? '管理员'
-                        : account.role === 'pos'
-                            ? '刷卡机'
-                            : ''
-                }</td>
-                    </tr>
-                    <tr>
-                        <td>账户状态</td>
-                        <td>${account.state === 'normal'
-                    ? '正常'
-                    : account.state === 'canceled'
-                        ? '注销'
-                        : account.state === 'frozen'
-                            ? '冻结'
-                            : ''
-                }</td>
-                    </tr>`;
-
-            // 部门
-            let department_str = '';
-            departmentChain.forEach((department) => {
-                department_str += department.name + ' > ';
-            });
-            department_tbody.innerHTML = `<tr>
-                        <td>ID</td>
-                        <td>${departmentChain[departmentChain.length - 1].id}</td>
-                    </tr>
-                    <tr>
-                        <td>部门</td>
-                        <td>${department_str.substring(0, department_str.length - 3)}</td>
-                    </tr>`;
-
-            // 判断如果不是用户，隐藏用户信息和卡信息
-            if (account.role != 'user') {
-                user_block.style.display = 'none';
-                card_block.style.display = 'none';
-                return;
-            }
-            user_block.style.display = 'block';
-            card_block.style.display = 'block';
-
-            // 卡
-            card_tbody.innerHTML = `<tr>
-                        <td>卡ID</td>
-                        <td>${card.id}</td>
-                    </tr>
-                    <tr>
-                        <td>所属账户</td>
-                        <td>${card.account}</td>
-                    </tr>
-                    <tr>
-                        <td>卡余额</td>
-                        <td>${card.balance === '' ? '' : card.balance / 100}</td>
-                    </tr>
-                    <tr>
-                        <td>卡状态</td>
-                        <td>${card.state === 'normal'
-                    ? '正常'
-                    : card.state === 'canceled'
-                        ? '注销'
-                        : card.state === 'loss'
-                            ? '丢失'
-                            : ''
-                }</td>
-                    </tr>`;
-
-            // 用户
-            user_tbody.innerHTML = `<tr>
-                        <td>ID</td>
-                        <td>${user.id}</td>
-                    </tr>
-                    <tr>
-                        <td>姓名</td>
-                        <td>${user.name}</td>
-                    </tr>
-                    <tr>
-                        <td>拥有卡ID</td>
-                        <td>${user.card}</td>
-                    </tr>
-                    <tr>
-                        <td>邮件</td>
-                        <td>${user.email == null ? '' : user.email}</td>
-                    </tr>`;
-        }
     </script>
 </body>
 

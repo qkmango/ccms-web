@@ -232,7 +232,7 @@
             "target": "_self",
             "child": [
                 {
-                    "title": "基本资料",
+                    "title": "账户详情",
                     "icon": "fa fa-id-card-o",
                     "href": "page/common/center/account-detail.html",
                     "target": "_self"

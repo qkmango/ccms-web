@@ -97,7 +97,7 @@
     <script src="/lib/util/common.js"></script>
     <script>
 
-        let form, $, auth;
+        let $, layer;
 
 
         const account = common.account();
@@ -119,18 +119,28 @@
                     });
                 },
                 unbind: function (platform) {
-                    $.post(
-                        common.url(`open-platform/update/unbind.do?platform=${platform}`),
-                        { type: platform },
-                        (res, status) => {
-                            if (res.success) {
-                                this[platform] = null;
-                                layer.msg(res.message, { icon: 1 });
-                                return;
-                            }
-                            layer.msg(res.message, { icon: 2 });
+                    const _this = this;
+                    layer.open({
+                        title: "解绑",
+                        content: `确认解绑 ${platform} 吗?`,
+                        btn: ['解绑', '取消'], icon: 3, shadeClose: true,
+                        btn1: function (index) {
+                            $.post(
+                                common.url(`open-platform/update/unbind.do?platform=${platform}`),
+                                { type: platform },
+                                (res, status) => {
+                                    if (res.success) {
+                                        _this[platform] = null;
+                                        layer.msg(res.message, { icon: 1 });
+                                        return;
+                                    }
+                                    layer.msg(res.message, { icon: 2 });
+                                }
+                            );
                         }
-                    );
+                    })
+
+
                 },
                 bind: function (platform) {
                     let channel = new BroadcastChannel('auth');
@@ -139,15 +149,12 @@
 
                     //监听授权结果
                     channel.onmessage = (e) => {
-                        console.log(e.data);
                         channel.close();
                         if (e.data.success && !e.data.bind) {
                             $.post(
                                 common.url('open-platform/update/bind.do'),
                                 { accessCode: e.data.accessCode },
                                 (res, status) => {
-
-                                    console.log(">>>", res.data);
                                     if (res.success) {
                                         this[e.data.platform] = true;
                                         layer.msg(res.message, { icon: 1 });
@@ -182,9 +189,9 @@
 
         layui.use(function () {
             $ = layui.jquery;
+            layer = layui.layer;
             common.ajaxSetup($);
             app.state();
-
         });
     </script>
 </body>

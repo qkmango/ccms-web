@@ -62,6 +62,10 @@
                                                     detail.account.state==='frozen'? '冻结':'未知')
                                                     :''}}</td>
                                             </tr>
+                                            <tr>
+                                                <td>邮箱</td>
+                                                <td>{{detail?detail.account.email:''}}</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -119,10 +123,6 @@
                                             <tr>
                                                 <td>拥有卡ID</td>
                                                 <td>{{detail && detail.account.role==='user'?detail.user.card:''}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>邮件</td>
-                                                <td>{{detail && detail.account.role==='user'?detail.user.email:''}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -302,7 +302,7 @@
                                 success: function (res) {
                                     if (res.success) {
                                         layer.msg(res.message, { icon: 1 });
-                                        _this.queryAccount(_this.detail.account.id);
+                                        _this.queryAccount(_this.id);
                                         return;
                                     }
                                     layer.msg(res.message, { icon: 2 });
@@ -313,6 +313,9 @@
                 },
 
                 queryAccount: function (account) {
+                    if (!account) {
+                        account = this.id;
+                    }
                     const _this = this;
                     $.ajax({
                         url: common.url('account/one/account-detail.do'),
@@ -342,7 +345,7 @@
                         return false;
                     }
 
-                    const account = this.detail.account.id;
+                    const account = this.id;
 
                     layer.prompt({ title: '充值', formType: 0 }, function (amount, index) {
                         //判断是否为金额
@@ -393,7 +396,7 @@
                     }
 
                     const _this = this;
-                    const account = this.detail.account.id;
+                    const account = this.id;
 
                     layer.open({
                         title: '注销',
@@ -462,7 +465,7 @@
 
             // 搜索
             form.on('submit(searchBtn)', function (data) {
-                app.queryAccount(accountId);
+                app.queryAccount();
                 return false;
             });
 
