@@ -1,0 +1,9 @@
+{
+    "success": true,
+    "user": {
+        "id": 1,
+        "password": null,
+        "name": "芒果小洛",
+        "role": "student"
+    }
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/lib/cherry-markdown/cherry-markdown.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/color.css">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .header {
+            background-color: var(--green);
+            color: var(--green-tint-solid);
+            line-height: 2;
+            font-size: 32px;
+            font-weight: 700;
+            padding: 0 15px;
+            height: 64px;
+        }
+
+        #title {
+            text-align: center;
+        }
+
+        .header>img {
+            width: 200px;
+            left: 0;
+            top: 0;
+            position: absolute;
+            height: 64px;
+            padding-left: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="header">
+        <div id="title"></div>
+        <img src="/image/logo.svg">
+    </div>
+
+    <div id="markdown" style="height: calc(100% - 64px);"></div>
+    <script src="/lib/layui/layui.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script src="/lib/cherry-markdown/cherry-markdown.min.js"></script>
+    <script>
+
+        let { $, layer } = layui;
+        common.ajaxSetup($);
+
+        const id = common.urlLocation().search.id;
+
+        render(id);
+        function render(id) {
+            if (!id) {
+                layer.msg('参数错误');
+                return;
+            }
+            $.ajax({
+                url: 'api/notice/one/record.do?id=' + id,
+                // url: 'md.test.md',
+                // dataType: 'text',
+
+                success: function (res) {
+                    $('#title').html(res.data.title);
+                    // document.querySelector('#title').innerText = res.data.title;
+                    let md = new Cherry({
+                        id: 'markdown',
+                        value: res.data.content,
+                        isPreviewOnly: true,
+                    });
+                }
+            })
+        }
+
+
+        // let md = new Cherry({
+        //     id: 'markdown',
+        //     // value: '# welcome to cherry editor!',
+        //     isPreviewOnly: true,
+        // });
+    </script>
+</body>
+
+</html>

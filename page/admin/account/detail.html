@@ -252,7 +252,7 @@
                         shadeClose: true,
                         btn1: function (index) {
                             $.ajax({
-                                url: '/account/update/resetPassword.do',
+                                url: 'api/account/update/resetPassword.do',
                                 data: { account: _this.detail.account.id },
                                 type: 'post',
                                 success: function (res) {
@@ -296,7 +296,7 @@
                         btn1: function (index) {
 
                             $.ajax({
-                                url: 'card/update/state.do',
+                                url: 'api/card/update/state.do',
                                 data: { account, state },
                                 type: 'post',
                                 success: function (res) {
@@ -318,7 +318,7 @@
                     }
                     const _this = this;
                     $.ajax({
-                        url: 'account/one/account-detail.do',
+                        url: 'api/account/one/account-detail.do',
                         data: { account },
                         success: function (res) {
                             if (!res.success) {
@@ -367,7 +367,7 @@
                         }
 
                         $.ajax({
-                            url: 'card/update/recharge.do',
+                            url: 'api/card/update/recharge.do',
                             data: { account, amount: Amount.multi(amount, 2) },
                             type: 'post',
                             success: function (res) {
@@ -406,7 +406,7 @@
                         shadeClose: true,
                         btn1: function (index) {
                             $.ajax({
-                                url: '/account/update/canceled.do',
+                                url: 'api/account/update/canceled.do',
                                 data: { account },
                                 type: 'post',
                                 success: function (res) {

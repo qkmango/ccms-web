@@ -77,7 +77,7 @@
                     const _this = this;
 
                     $.ajax({
-                        url: 'sender/captcha/update-email.do',
+                        url: 'api/sender/captcha/update-email.do',
                         data: {
                             email: this.email,
                         },
@@ -94,7 +94,7 @@
                 },
                 update() {
                     $.ajax({
-                        url: '/account/update/email.do',
+                        url: 'api/account/update/email.do',
                         data: {
                             email: this.email,
                             captcha: this.captcha,

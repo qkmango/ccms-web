@@ -110,7 +110,7 @@
             },
             methods: {
                 authorize: function (platform) {
-                    $.get(`auth/${platform}/authorize.do`, (res, status) => {
+                    $.get(`api/auth/${platform}/authorize.do`, (res, status) => {
                         if (res.success) {
                             window.open(res.data);
                             return;
@@ -126,7 +126,7 @@
                         btn: ['解绑', '取消'], icon: 3, shadeClose: true,
                         btn1: function (index) {
                             $.post(
-                                `open-platform/update/unbind.do?platform=${platform}`,
+                                `api/open-platform/update/unbind.do?platform=${platform}`,
                                 { type: platform },
                                 (res, status) => {
                                     if (res.success) {
@@ -152,7 +152,7 @@
                         channel.close();
                         if (e.data.success && !e.data.bind) {
                             $.post(
-                                'open-platform/update/bind.do',
+                                'api/open-platform/update/bind.do',
                                 { accessCode: e.data.accessCode },
                                 (res, status) => {
                                     if (res.success) {
@@ -171,7 +171,7 @@
                 //获取平台状态
                 state: function () {
                     $.ajax({
-                        url: "open-platform/list/state.do",
+                        url: "api/open-platform/list/state.do",
                         success: function (res) {
                             if (res.success) {
                                 res.data.forEach(item => {

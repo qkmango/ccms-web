@@ -61,7 +61,7 @@
         let currentTable = cardTable.render({
             elem: '#currentTableId',
             // url: './index.test.json',
-            url: '/message/pagination/list.do',
+            url: 'api/message/pagination/list.do',
             toolbar:'toolbarDemo',
             elemClass: 'layui-anim layui-anim-scale',
             method: 'post',
@@ -86,7 +86,7 @@
             //点击详情按钮时ajax获取留言详细信息
             clickEvent: function(item) {
                 $.ajax({
-                    url:'/message/one/detail.do',
+                    url:'api/message/one/detail.do',
                     // url:'detail.test.json',
                     data:{id:item.id},
                     dataType:'json',

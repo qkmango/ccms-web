@@ -73,7 +73,7 @@
         }
 
         $.ajax({
-            url: '/message/one/detail.do?id='+id,
+            url: 'api/message/one/detail.do?id='+id,
             dataType: 'json',
             success: function (res) {
                 if (res.success) {

@@ -83,7 +83,7 @@
 
             const cardTable = table.render({
                 elem: '#currentTableId',
-                url: 'card/pagination/list.do',
+                url: 'api/card/pagination/list.do',
                 method: 'post',
                 toolbar: '#toolbarDemo',
                 defaultToolbar: ['filter', 'exports', 'print'],
@@ -144,7 +144,7 @@
                         shadeClose:true,
                         btn1:function (index) {
                             $.ajax({
-                                url: '/card/update/state.do',
+                                url: 'api/card/update/state.do',
                                 data: { 'user': data.user.id, 'lock': !data.card.lock },
                                 type: 'post',
                                 dataType: 'json',

@@ -54,7 +54,7 @@ let app = new Vue({
 
             const { id, password } = this.account;
             $.ajax({
-                url: 'account/system-login.do',
+                url: 'api/account/system-login.do',
                 headers: {},
                 data: { id, password },
                 type: 'post',
@@ -76,7 +76,7 @@ let app = new Vue({
             });
 
             $.ajax({
-                url: 'account/access-login.do',
+                url: 'api/account/access-login.do',
                 headers: {},
                 data: { accessCode },
                 type: 'post',

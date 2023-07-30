@@ -314,7 +314,7 @@
                 getNoticeList() {
                     const _this = this;
                     $.ajax({
-                        url: 'notice/pagination/list.do',
+                        url: 'api/notice/pagination/list.do',
                         type: 'post',
                         contentType: 'application/json; charset=utf-8',
                         data: JSON.stringify({
@@ -342,7 +342,7 @@
                         return;
                     }
                     $.ajax({
-                        url: 'notice/one/record.do?id=' + id,
+                        url: 'api/notice/one/record.do?id=' + id,
                         success: function (res) {
                             if (res.success) {
                                 res.data.createTime = util.toDateString(res.data.createTime);

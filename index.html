@@ -256,7 +256,7 @@
 
         $.ajax({
             // url:"test/testLogin.json",
-            url: "account/one/current-account-info.do",
+            url: "api/account/one/current-account-info.do",
             success: function (res) {
                 if (!res.success) {
                     window.location.href = 'page/login/index.html';
@@ -265,7 +265,7 @@
                 // progress.success();
                 common.account(res.data);
                 document.querySelector('#name').innerText = res.data.id;
-                const iniUrl = `/api/init_${res.data.role}.json`;
+                const iniUrl = `/apis/init_${res.data.role}.json`;
 
                 miniAdmin.render({
                     iniUrl: iniUrl,    // 初始化接口
