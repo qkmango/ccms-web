@@ -24,6 +24,7 @@ let app = new Vue({
                 pos: '刷卡机',
                 account_tip: '账号为10位数字',
                 password_tip: '密码为8-16位大小写字母数字特殊字符',
+                logining: '登陆中',
             },
             en_US: {
                 title: 'Sign in to System',
@@ -36,16 +37,17 @@ let app = new Vue({
                 pos: 'pos',
                 account_tip: 'account is 10 digits',
                 password_tip: 'password is 8-16 digits, including uppercase and lowercase letters, numbers and special characters',
+                logining: 'signing in',
             },
         },
     },
     methods: {
-        changeLocale: function (locale) {
+        changeLocale(locale) {
             Cookies.set('locale', locale, { expires: 7 });
             this.locale = locale;
         },
-        systemLogin: function () {
-            layer.msg('登陆中', {
+        systemLogin() {
+            layer.msg(this.language[this.locale].logining, {
                 icon: 16,
                 shade: 0.01,
             });
@@ -67,8 +69,8 @@ let app = new Vue({
                 },
             });
         },
-        accessLogin: function (accessCode) {
-            layer.msg('登陆中', {
+        accessLogin(accessCode) {
+            layer.msg(this.language[this.locale].logining, {
                 icon: 16,
                 shade: 0.01,
             });
@@ -89,7 +91,7 @@ let app = new Vue({
                 },
             });
         },
-        authorize: function (platform) {
+        authorize(platform) {
             $.get(common.url(`auth/${platform}/authorize.do`), (res, status) => {
                 if (res.success) {
                     window.open(res.data);
@@ -98,7 +100,7 @@ let app = new Vue({
                 layer.msg(res.message, { icon: 2 });
             });
         },
-        check: function (item) {
+        check(item) {
             const { id, password } = this.account;
             if (item == 'id') {
                 this.tipEnable.id = !/^\d{10}$/.test(id);

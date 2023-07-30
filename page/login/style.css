@@ -4,10 +4,15 @@ body {
     color: #0969da;
     line-height: 1.5;
     min-width: 308px;
+    padding-top: 20px;
 }
 
 #locale {
-    float: right;
+    /* float: right; */
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 15px;
 }
 
 #locale > * {
@@ -32,11 +37,11 @@ body {
     box-sizing: border-box;
 }
 
-#locale>button {
+#locale > button {
     border: 1px solid transparent;
 }
-#locale>button:hover {
-    box-shadow: 0 0 0 3px rgba(3, 102, 214, .3);
+#locale > button:hover {
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3);
     border-color: #0969da;
     outline: none;
 }
@@ -48,15 +53,18 @@ body {
 
 .header {
     margin: 32px auto;
-    width: 300px;
-    position: relative;
+    /* width: 300px; */
+    /* position: relative; */
+    display: flex;
     left: 0;
     right: 0;
     font-size: 0;
+    padding-top: 26px;
 }
 
 .logo_img {
     width: 100%;
+    margin: auto;
 }
 
 .title {
@@ -67,6 +75,9 @@ body {
     font-weight: bold;
 }
 
+.main {
+    display: flex;
+}
 
 .form {
     margin: 16px auto 0 auto;
@@ -74,7 +85,7 @@ body {
     border: 1px solid #eaecef;
     border-radius: 6px;
     background-color: #f6f8fa;
-    width: 266px;
+    /* width: 266px; */
 }
 
 .login_field {
@@ -97,25 +108,28 @@ label {
     color: #444d56;
 }
 
-input[type="text"],
-input[type="password"] {
+input[type='text'],
+input[type='password'] {
     border: 1px solid #eaecef;
-    width: 240px;
-    height: 20px;
+    /* width: 240px; */
+    width: 100%;
+    box-sizing: border-box;
+    /* height: 20px; */
+    height: 31.8px;
     padding: 5px 12px;
     margin: 5px 0 15px 0;
     border-radius: 6px;
     transition: all 0.1s;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
-    box-shadow: 0 0 0 3px rgba(3, 102, 214, .3);
+input[type='text']:focus,
+input[type='password']:focus {
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3);
     border-color: #0969da;
     outline: none;
 }
 
-input[type="button"] {
+input[type='button'] {
     border: 1px solid #2b9148;
     background-color: #2ea44f;
     color: #fff;
@@ -129,26 +143,22 @@ input[type="button"] {
     line-height: 20px;
     cursor: pointer;
     border-radius: 6px;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
     transition: all 0.4s;
     outline: none;
 }
 
-input[type="button"]:hover {
+input[type='button']:hover {
     background-color: #22863a;
 }
 
-
 .label {
-    margin: 16px auto 0 auto;
     padding: 15px 20px;
     border: 1px solid #eaecef;
     border-radius: 6px;
-    width: 266px;
     font-size: 12px;
     text-align: center;
 }
-
 
 /* 更改select样式 */
 /* select {
@@ -160,8 +170,13 @@ input[type="button"]:hover {
     background-position: 245px;
 } */
 
-
 /*其他登陆方式*/
+
+.authentication-box {
+    display: flex;
+    margin: 16px auto 0 auto;
+}
+
 .authentication.label {
     font-size: 0;
     border: 1px solid #eaecef;
@@ -171,7 +186,7 @@ input[type="button"]:hover {
     display: inline-block;
     text-align: center;
     border-radius: 6px;
-    transition: all .4s;
+    transition: all 0.4s;
     border: 1px solid transparent;
 }
 
@@ -179,7 +194,7 @@ input[type="button"]:hover {
     display: inline-block;
     text-align: center;
     border-radius: 6px;
-    transition: all .4s;
+    transition: all 0.4s;
     box-shadow: 0 0 0 3px rgb(3 102 214 / 30%);
     border-color: #0969da;
     outline: none;
@@ -195,9 +210,9 @@ input[type="button"]:hover {
     margin: 4px 3px;
 }
 
-.authentication.label > a > img:hover {
-    background-color: #0B7500;
-}
+/* .authentication.label > a > img:hover {
+    background-color: #0b7500;
+} */
 
 /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
 /* select::-ms-expand {
