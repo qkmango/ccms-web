@@ -120,7 +120,7 @@
                             // 默认根节点的 parent 为0，查询根节点
                             const id = node.value ? node.value : 0;
                             $.ajax({
-                                url: common.url('/department/child-list.do?id=' + id),
+                                url: '/department/child-list.do?id=' + id,
                                 success: function (res) {
                                     if (res.success) {
                                             let converData = [];
@@ -143,7 +143,7 @@
                 form.on('submit(saveBtn)', function (data) {
                     console.log(data.field);
                     $.ajax({
-                        url: common.url('account/one/insert.do'),
+                        url: 'account/one/insert.do',
                         data: JSON.stringify(data.field),
                         type: 'post',
                         dataType: 'json',

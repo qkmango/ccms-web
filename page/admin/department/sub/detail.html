@@ -98,7 +98,7 @@
                 getRecord: function () {
                     const _this = this;
                     $.ajax({
-                        url: common.url('/department/one/record.do?id=' + id),
+                        url: '/department/one/record.do?id=' + id),
                         success: function (res) {
                             if (res.success) {
                                 _this.record = res.data;
@@ -112,7 +112,7 @@
                 getChain: function () {
                     const _this = this;
                     $.ajax({
-                        url: common.url('/department/one/chain.do?id=' + id),
+                        url: '/department/one/chain.do?id=' + id,
                         success: function (res) {
                             if (res.success) {
                                 console.log(res.data);

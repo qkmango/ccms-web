@@ -54,7 +54,7 @@ let app = new Vue({
 
             const { id, password } = this.account;
             $.ajax({
-                url: common.url('account/system-login.do'),
+                url: 'account/system-login.do',
                 headers: {},
                 data: { id, password },
                 type: 'post',
@@ -76,7 +76,7 @@ let app = new Vue({
             });
 
             $.ajax({
-                url: common.url('account/access-login.do'),
+                url: 'account/access-login.do',
                 headers: {},
                 data: { accessCode },
                 type: 'post',
@@ -92,7 +92,7 @@ let app = new Vue({
             });
         },
         authorize(platform) {
-            $.get(common.url(`auth/${platform}/authorize.do`), (res, status) => {
+            $.get(`auth/${platform}/authorize.do`, (res, status) => {
                 if (res.success) {
                     window.open(res.data);
                     return;

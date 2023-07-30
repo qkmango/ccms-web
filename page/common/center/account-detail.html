@@ -188,7 +188,7 @@
             methods: {
                 queryAccount: function () {
                     $.ajax({
-                        url: common.url('account/one/current-account-detail.do'),
+                        url: 'account/one/current-account-detail.do',
                         success: function (res) {
                             if (!res.success) {
                                 if (window.top.progress) {
@@ -227,7 +227,7 @@
                         shadeClose: true,
                         btn1: function (index) {
                             $.ajax({
-                                url: common.url('card/update/current-state.do'),
+                                url: 'card/update/current-state.do',
                                 data: { state },
                                 type: 'post',
                                 success: function (res) {
@@ -280,7 +280,7 @@
 
                     // 充值
                     $.ajax({
-                        url: common.url('card/update/recharge.do'),
+                        url: 'card/update/recharge.do',
                         data: { account: _this.detail.account.id, amount },
                         type: 'post',
                         success: function (res) {
