@@ -31,7 +31,7 @@
             "title": "同组成员",
             "icon": "fa fa-address-book",
             "target": "_self",
-            "href": "page/user/group-user.html"
+            "href": "page/user/department-user.html"
         },
         {
             "title": "个人中心",

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
     <meta charset="utf-8">
     <title>layui</title>
@@ -13,71 +14,72 @@
         body {
             background-color: #ffffff;
         }
+
         textarea[name="content"] {
             width: 100%;
             height: 200px;
             resize: none;
-            font-size: 18px;
+            /* font-size: 18px; */
             line-height: 1.6;
             padding: 10px;
         }
     </style>
 </head>
+
 <body>
-<div class="layui-form layui-form-pane" id="addRoomForm" lay-filter="addRoomForm">
+    <div class="layui-form layui-form-pane" id="addRoomForm" lay-filter="addRoomForm">
 
-    <div class="layui-form-item">
-        <textarea name="content" class="layui-input" maxlength="20" placeholder="请输入留言内容哦" lay-verify="required|messageContent"></textarea>
-    </div>
+        <div class="layui-form-item">
+            <textarea name="content" class="layui-input" maxlength="20" placeholder="请输入留言内容哦"
+                lay-verify="required|messageContent"></textarea>
+        </div>
 
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn layui-layout-right layui-bg-green" lay-submit lay-filter="saveBtn">
-                <i class="fa fa-check"></i> 提交</button>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-layout-right layui-bg-green" lay-submit lay-filter="saveBtn">
+                    <i class="fa fa-check"></i> 提交</button>
+            </div>
         </div>
     </div>
-</div>
-<script src="/lib/layui/layui.js"></script>
-<script src="/lib/util/layui_verify_config.js"></script>
-<script src="/lib/util/utils.js"></script>
-<script>
+    <script src="/lib/layui/layui.js"></script>
+    <script src="/lib/util/layui_verify_config.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script>
 
-    layui.use(['form'], function () {
-        const form = layui.form;
-        const $ = layui.$;
-        form.verify(layui_verify_config)
+        layui.use(function () {
+            const form = layui.form;
+            const $ = layui.$;
+            common.ajaxSetup($);
+            form.verify(layui_verify_config)
 
-        const tableReloadKey = utils.getUrlParam('tableReloadKey');
-        if (tableReloadKey === null) {
-            return;
-        }
-
-        //监听提交
-        form.on('submit(saveBtn)', function (data) {
-			$.ajax({
-				url:'api/message/one/insert.do',
-				data:data.field,
-				type:'post',
-				dataType:'json',
-				success:function(res) {
-                    if (res.success) {
-                        sessionStorage.setItem(tableReloadKey, 'true');
-                        const iframeIndex = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(iframeIndex);
-                        window.top.layer.msg(res.message, {icon: 1});
-                        return;
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                $.ajax({
+                    url: 'api/message/one/insert.do',
+                    data: data.field,
+                    type: 'post',
+                    success: function (res) {
+                        if (res.success) {
+                            window.parent.success = true;
+                            const iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(iframeIndex);
+                            window.parent.layer.msg(res.message, { icon: 1 });
+                            return;
+                        }
+                        window.parent.success = false;
+                        parent.parent.layer.msg(res.message, { icon: 2 });
+                    },
+                    error: function (res) {
+                        window.parent.success = false;
+                        parent.parent.layer.msg(res.message || '', { icon: 2 });
                     }
-                    parent.layer.msg(res.message, {icon: 2});
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-                    window.top.layer.msg(jqXHR.status+'', {icon: 2});
-				}
-			})
-        });
+                })
+            });
 
-        return false;
-    });
-</script>
+            return false;
+        });
+    </script>
 
 </body>
+
 </html>

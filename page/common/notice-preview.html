@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/lib/layui/css/layui.css">
     <link rel="stylesheet" type="text/css" href="/lib/cherry-markdown/cherry-markdown.min.css">
     <link rel="stylesheet" type="text/css" href="/css/color.css">
     <title>Document</title>
@@ -58,7 +59,6 @@
         common.ajaxSetup($);
 
         const id = common.urlLocation().search.id;
-
         render(id);
         function render(id) {
             if (!id) {
@@ -67,9 +67,6 @@
             }
             $.ajax({
                 url: 'api/notice/one/record.do?id=' + id,
-                // url: 'md.test.md',
-                // dataType: 'text',
-
                 success: function (res) {
                     $('#title').html(res.data.title);
                     // document.querySelector('#title').innerText = res.data.title;
@@ -81,13 +78,6 @@
                 }
             })
         }
-
-
-        // let md = new Cherry({
-        //     id: 'markdown',
-        //     // value: '# welcome to cherry editor!',
-        //     isPreviewOnly: true,
-        // });
     </script>
 </body>
 
