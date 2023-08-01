@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>组织架构</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/css/public.css" media="all" />
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
+    <link rel="stylesheet" href="/js/lay-module/dtree/dtree.css" media="all" />
+    <link rel="stylesheet" href="/js/lay-module/dtree/font/dtreefont.css" media="all" />
+    <style>
+        /* 设置文字无法选中 */
+        #tree {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+            <form class="layui-form layui-form-pane" lay-filter="insertForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" class="layui-input" />
+                        <div class="layui-form-mid layui-text-em">搜索已加载结点</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-bg-green layui-layout-right" lay-submit lay-filter="saveBtn">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="tree"></div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+<script src="/lib/layui/layui.js" charset="utf-8"></script>
+<script src="/js/lay-config.js"></script>
+<script src="/lib/util/common.js"></script>
+
+<script>
+    layui.use(['dtree'], function () {
+
+        const $ = layui.jquery;
+        const form = layui.form;
+        common.ajaxSetup($);
+
+        const dtree = layui.dtree;
+        let tree = dtree.render({
+            elem: "#tree",
+            method: "get",
+            type: 'load',
+            dataStyle: "layuiStyle", //使用layui风格的数据格式
+            response: { statusCode: true, statusName: 'success', rootName: 'data' },
+            url: 'api/department/child-list.do',
+            defaultRequest: { nodeId: "id" },
+            accordion: true,
+            icon: ["0", "2"],
+            menubar: true,
+            toolbar: true,
+            beforeSend() {
+                if (window.top.progress) {
+                    window.top.progress.start();
+                }
+                return true;
+            },
+            success: function (res, $obj, first) {
+                if (window.top.progress) {
+                    window.top.progress.success();
+                }
+            },
+            formatter: {
+                title: function (data) {
+                    return data.name + ' <span style="color:#00965e;">' + data.id + '</span>';
+                },
+                parentId: function (data) {
+                    return data.parent;
+                },
+                treeId: function (data) {
+                    return data.id;
+                },
+                last: function (data) {
+                    console.log(data);;
+                },
+            }
+        });
+
+
+        let clickTimeout;
+        let clickCount = 0;
+
+        dtree.on("node(tree)", function (obj) {
+            clickCount++;
+            // 单击事件
+            if (clickCount === 1) {
+                clickTimeout = setTimeout(function () {
+                    // 单击事件执行的代码
+                    const index = layer.open({
+                        title: '部门信息',
+                        type: 2,
+                        offset: 'rb',
+                        anim: 'slideLeft',
+                        area: ['50%', '100%'],
+                        shade: 0.2,
+                        shadeClose: true,
+                        content: 'sub/detail.html?id=' + obj.param.id,
+                    });
+                    // 重置点击计数器
+                    clickCount = 0;
+                }, 300); // 等待300ms以判断是否为单击事件
+            }
+
+            // 双击事件
+            else if (clickCount === 2) {
+                clearTimeout(clickTimeout);
+
+                // 双击事件执行的代码
+                //调用内置函数展开节点
+                if (!obj.param.leaf) {
+                    tree.clickSpread(obj.dom);
+                }
+
+                // 重置点击计数器
+                clickCount = 0;
+            }
+        });
+
+
+        //搜索结点
+        form.on('submit(saveBtn)', function (data) {
+            tree.fuzzySearch(data.field.name);
+                return false;
+            });
+
+    });
+</script>

@@ -11,134 +11,198 @@
     <link rel="stylesheet" href="/css/public.css" media="all">
     <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <style>
-        .timeago{
+        .timeago {
             font-size: 12px;
             float: right;
+        }
+        i.fa.fa-commenting-o {
+            cursor:pointer
         }
     </style>
 </head>
 
 <body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
+    <div class="layuimini-container">
+        <div class="layuimini-main">
 
-        <div style="padding: 15px 0 0 15px">
-            <button class="layui-btn layui-btn-primary" id="addMessage"><i class="fa fa-commenting-o"></i> 留言</button>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" lay-filter="queryParams" id="queryParams">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">开始时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="startCreateTime" id="startCreateTime"
+                                    placeholder=" - ">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">结束时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="endCreateTime" id="endCreateTime"
+                                    placeholder=" - ">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                lay-filter="data-search-btn">
+                                <i class="fa fa-search"></i> 搜索
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div style="padding: 15px 0 0 15px">
+                <button class="layui-btn layui-btn-primary" lay-submit lay-filter="add-message"><i
+                        class="fa fa-commenting-o"></i>留言</button>
+            </div>
+            <div id="flow" style="padding: 15px" class="layui-bg-gray layui-row layui-col-space15"></div>
         </div>
-        <div id="currentTableId" style="padding: 15px" lay-filter="currentTableFilter" class="layui-bg-gray"></div>
-
     </div>
-</div>
 
-<script src="/lib/layui/layui.js" charset="utf-8"></script>
-<script src="/js/lay-module/layuimini/miniTab.js"></script>
-<script src="/lib/util/datetime.js"></script>
-<script src="/lib/util/utils.js"></script>
-<script>
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="/lib/util/datetime.js"></script>
+    <script src="/lib/util/utils.js"></script>
+    <script src="/js/lay-config.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script>
 
-    let $;
-    let form;
-    let table;
-    let miniTab;
-    let laydate;
-    let timeago;
-    let cardTable;
-    const tableReloadKey = window.location.hash+':tableReload';
+        let $;
+        let table;
+        let laydate;
+        let timeago;
+        let flow;
+        //记录最后一条留言的id
+        let last = null;
+        //记录留言是否成功
+        let success = false;
 
-    layui.extend({
-        timeago: '/js/lay-module/timeago/timeago',
-        cardTable:'/js/lay-module/cardTable/cardTable',
-    })
-    layui.use(['form', 'table','laydate','timeago','cardTable'], function () {
-        $ = layui.jquery;
-        form = layui.form;
-        table = layui.table;
-        miniTab = layui.miniTab;
-        laydate = layui.laydate;
-        timeago = layui.timeago;
-        cardTable = layui.cardTable;
 
-        let currentTable = cardTable.render({
-            elem: '#currentTableId',
-            // url: './index.test.json',
-            url: 'api/message/pagination/list.do',
-            toolbar:'toolbarDemo',
-            elemClass: 'layui-anim layui-anim-scale',
-            method: 'post',
-            request:{
-                // 标题名称 默认：title
-                // 时间名称 默认：time
-                titleName: 'authorName',
-                timeName: 'createTime'
-            },
-            response:{
-                statusName: 'success',
-                statusCode: true,
-                msgName: 'message',
-                countName: 'count',
-                dataName: 'data'
-            },
-            // 完成函数
-            done: function () {
-                //将时间渲染成 xx前
-                timeago.render(document.querySelectorAll('.timeago'));
-            },
-            //点击详情按钮时ajax获取留言详细信息
-            clickEvent: function(item) {
-                $.ajax({
-                    url:'api/message/one/detail.do',
-                    // url:'detail.test.json',
-                    data:{id:item.id},
-                    dataType:'json',
-                    success:function(res) {
-                        const data = res.data;
-                        if(res.success) {
-                            let html =
-                            `<div style="">${data.content}</div>`;
-                            layer.open({
-                                type: 1,
-                                title: `<i class="fa fa-commenting-o"></i> ${data.authorName}<span style="float: right;right: 1px;font-style: italic;font-weight: initial;font-size:14px;">${layui.util.toDateString(data.createTime, 'yyyy-MM-dd HH:mm:ss')}</span>`,
-                                area: '400px;',
-                                shade: 0.8,
-                                btnAlign: 'c',
-                                offset: '100px',
-                                moveType: 1,
-                                shadeClose: true,
-                                skin: 'layui-layer-green-tint',
-                                content:html
-                            });
-                            return;
+        layui.use('timeago', function () {
+            $ = layui.jquery;
+            form = layui.form;
+            table = layui.table;
+            flow = layui.flow;
+            laydate = layui.laydate;
+            laydate.render({
+                elem: '#startCreateTime',
+                type: 'datetime',
+                fullPanel: true
+            });
+            laydate.render({
+                elem: '#endCreateTime',
+                type: 'datetime',
+                fullPanel: true
+            });
+            timeago = layui.util.timeAgo;
+            common.ajaxSetup($);
+            // 流加载实例
+            flow.load({
+                elem: '#flow', // 流加载容器
+                isAuto: false,
+                isLazyimg: true,
+                done: function (page, next) { // 加载下一页
+                    render(next, {
+                        last
+                    });
+                }
+            });
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', search);
+
+            //添加留言
+            form.on('submit(add-message)', addMessage);
+        });
+
+
+        //data 为搜索表单数据
+        function search(data) {
+            last = null;
+            // 清空流加载容器
+            $('#flow').html('');
+            flow.load({
+                elem: '#flow', // 流加载容器
+                isAuto: false,
+                isLazyimg: true,
+                done: function (page, next) {
+                    render(next, {
+                        last,
+                        param: {
+                            startCreateTime: Date.parse(data.field.startCreateTime),
+                            endCreateTime: Date.parse(data.field.endCreateTime)
                         }
-                        layer.msg(res.message);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        layer.msg(jqXHR.status+'');
-                    }
-                })
-            },
-        })
+                    });
+                }
+            });
+            return false;
+        }
 
-        //添加按钮
-        document.querySelector('#addMessage').addEventListener('click', function () {
+        function render(next, param) {
+            $.ajax({
+                url: '/api/message/flow/list.do',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(param),
+                success: function (res) {
+                    if (res.success) {
+                        let html = '';
+                        res.data.forEach(function (item) {
+                            last = item.id;
+                            html +=
+                                `<div class="layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                    <div class="layui-card layui-row">
+                                        <div class="layui-card-header layui-bg-sf-green-dark layui-bg-green-tint">
+                                            <i class="fa fa-commenting-o" onclick='record(${item.id})'></i>
+                                            ${item.id}
+                                            <span class="timeago">${timeago(item.createTime)}</span>
+                                        </div>
+                                        <div class="layui-card-body">${item.content}<br></div>
+                                    </div>
+                                </div>`;
+                        });
+                        next(html, res.data.length > 0);
+                    }
+
+                }
+            })
+        }
+
+        function addMessage() {
             const index = layer.open({
                 title: '留言',
+                type: 2,
+                offset: 'rb',
+                anim: 'slideLeft',
+                area: ['100%', '100%'],
+                // area: 'auto',
+                shade: 0.2,
+                shadeClose: true,
+                content: 'insert.html',
+                // hideOnClose: true,
+                // maxmin: 'auto'
+                // end: function () {
+                //     window.top.layer.msg(res.message, { icon: 1 });
+                // }
+            });
+        }
+
+        function record(id) {
+            const index = layer.open({
+                title: '留言详情',
                 type: 2,
                 offset: 'rb',
                 anim: 'slideLeft',
                 area: ['50%', '100%'],
                 shade: 0.2,
                 shadeClose: true,
-                content: 'insert.html?tableReloadKey='+tableReloadKey,
-                end:function() {
-                    if (sessionStorage.hasOwnProperty(tableReloadKey)) {
-                        sessionStorage.removeItem(tableReloadKey);
-                        currentTable.reload();
-                    }
-                }
+                content: 'sub/message-record.html?id=' + id
             });
-        })
-    });
-</script>
+        }
+
+
+    </script>
 </body>
 
 </html>

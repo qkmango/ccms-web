@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all" />
     <link rel="stylesheet" href="/css/public.css" media="all" />
     <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
-    <link rel="stylesheet" href="/js/lay-module/dtree/dtree.css" media="all" />
-    <link rel="stylesheet" href="/js/lay-module/dtree/font/dtreefont.css" media="all" />
+    <!-- <link rel="stylesheet" href="/js/lay-module/dtree/dtree.css" media="all" /> -->
+    <!-- <link rel="stylesheet" href="/js/lay-module/dtree/font/dtreefont.css" media="all" /> -->
     <style>
         /* 设置文字无法选中 */
-        #tree {
+        .layui-table-view {
             -moz-user-select: none;
             -webkit-user-select: none;
             -ms-user-select: none;
@@ -26,25 +26,15 @@
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
-
-            <form class="layui-form layui-form-pane" lay-filter="insertForm">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="name" class="layui-input" />
-                        <div class="layui-form-mid layui-text-em">搜索已加载结点</div>
-                    </div>
+            <table class="layui-hide" id="treeTable"></table>
+            <script type="text/html" id="treeTable-toolbar">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm" lay-event="getChecked">获取选中数据</button>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn layui-bg-green layui-layout-right" lay-submit lay-filter="saveBtn">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <div id="tree"></div>
+            </script>
+            <script type="text/html" id="table-tools">
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="info">详情</a>
+            </script>
         </div>
     </div>
 </body>
@@ -53,103 +43,160 @@
 
 
 <script src="/lib/layui/layui.js" charset="utf-8"></script>
-<script src="/js/lay-config.js"></script>
 <script src="/lib/util/common.js"></script>
 
 <script>
-    layui.use(['dtree'], function () {
-
+    layui.use(function () {
         const $ = layui.jquery;
         const form = layui.form;
         common.ajaxSetup($);
-
-        const dtree = layui.dtree;
-        let tree = dtree.render({
-            elem: "#tree",
-            method: "get",
-            type: 'load',
-            dataStyle: "layuiStyle", //使用layui风格的数据格式
-            response: { statusCode: true, statusName: 'success', rootName: 'data' },
-            url: 'api/department/child-list.do',
-            defaultRequest: { nodeId: "id" },
-            accordion: true,
-            icon: ["0", "2"],
-            menubar: true,
-            toolbar: true,
-            beforeSend() {
-                if (window.top.progress) {
-                    window.top.progress.start();
-                }
-                return true;
-            },
-            success: function (res, $obj, first) {
-                if (window.top.progress) {
-                    window.top.progress.success();
+        var treeTable = layui.treeTable;
+        var layer = layui.layer;
+        var dropdown = layui.dropdown;
+        // 渲染
+        var inst = treeTable.render({
+            elem: '#treeTable',
+            url: 'api/department/child-list.do?id=0',
+            tree: {
+                // 异步加载子节点
+                async: {
+                    enable: true,
+                    url: 'api/department/child-list.do',
+                    autoParam: ["id=id"]
                 }
             },
-            formatter: {
-                title: function (data) {
-                    return data.name + ' <span style="color:#00965e;">' + data.id + '</span>';
+            toolbar: '#treeTable-toolbar',
+            customName: {
+                // id: 'id',
+                // pid: 'parent',
+                // name: 'name',
+                // type: 'type',
+            },
+            view: {
+                indent: 28
+            },
+            cols: [[
+                { type: 'checkbox', fixed: 'left' },
+                { field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left' },
+                { field: 'name', title: '名称', fixed: 'left' },
+                { field: 'parent', title: '父ID', width: 80, sort: true },
+                {
+                    field: 'type', title: '类型', width: 100, templet: (d) => {
+                        switch (d.type) {
+                            case 'root':
+                                return '根节点';
+                            case 'middle':
+                                return '中间结点';
+                            case 'leaf':
+                                return '叶子结点';
+                            default:
+                                return '未知';
+                        }
+                    },
                 },
-                parentId: function (data) {
-                    return data.parent;
-                },
-                treeId: function (data) {
-                    return data.id;
-                },
-                last: function (data) {
-                    console.log(data);;
-                },
+                { fixed: "right", title: "操作", width: 181, align: "center", toolbar: "#table-tools" }
+            ]],
+            // page: true,
+            parseData: function (res) {
+                let data = res.data;
+                data.forEach((item) => {
+                    item.isParent = item.type === 'leaf' ? false : true;
+                });
+                return {
+                    code: res.success ? 0 : -1,
+                    msg: res.message,
+                    count: res.count,
+                    data: data,
+                };
+            },
+        });
+        // 表头工具栏工具事件
+        treeTable.on("toolbar(treeTable)", function (obj) {
+            var config = obj.config;
+            var tableId = config.id;
+            var status = treeTable.checkStatus(tableId);
+            // 获取选中行
+            if (obj.event === "getChecked") {
+                if (!status.data.length) return layer.msg('无选中数据');
+                console.log(status);
+                layer.alert("当前数据选中已经输出到控制台，<br>您可按 F12 从控制台中查看结果。");
+            }
+        });
 
+        // 单元格工具事件
+        treeTable.on('tool(treeTable)', function (obj) {
+            var layEvent = obj.event; // 获得 lay-event 对应的值
+            var trElem = obj.tr;
+            var trData = obj.data;
+            var tableId = obj.config.id;
+
+            if (layEvent === "info") {
+                const index = layer.open({
+                    title: '部门信息',
+                    type: 2,
+                    offset: 'rb',
+                    anim: 'slideLeft',
+                    area: ['50%', '100%'],
+                    shade: 0.2,
+                    shadeClose: true,
+                    content: 'sub/detail.html?id=' + obj.data.id,
+                });
+            }
+
+            else if (layEvent === "addChild") {
+                var data = { id: Date.now(), name: "新节点" };
+                var newNode2 = treeTable.addNodes(tableId, {
+                    parentIndex: trData["LAY_DATA_INDEX"],
+                    index: -1,
+                    data: data
+                });
+            }
+
+            else if (layEvent === "more") {
+                // 下拉菜单
+                dropdown.render({
+                    elem: this, // 触发事件的 DOM 对象
+                    show: true, // 外部事件触发即显示
+                    align: "right", // 右对齐弹出
+                    data: [
+                        {
+                            title: "修改积分",
+                            id: "edit"
+                        },
+                        {
+                            title: "删除",
+                            id: "del"
+                        }
+                    ],
+                    click: function (menudata) {
+                        if (menudata.id === "del") {
+                            layer.confirm("真的删除行么", function (index) {
+                                obj.del(); // 等效如下
+                                // treeTable.removeNode(tableId, trElem.attr('data-index'))
+                                layer.close(index);
+                            });
+                        } else if (menudata.id === "edit") {
+                            layer.prompt({
+                                value: trData.experience,
+                                title: "输入新的积分"
+                            }, function (value, index) {
+                                obj.update({ experience: value }); // 等效如下
+                                // treeTable.updateNode(tableId, trElem.attr('data-index'), {experience: value});
+                                layer.close(index);
+                            });
+                        }
+                    }
+                });
             }
         });
 
 
-        let clickTimeout;
-        let clickCount = 0;
-
-        dtree.on("node(tree)", function (obj) {
-            clickCount++;
-            // 单击事件
-            if (clickCount === 1) {
-                clickTimeout = setTimeout(function () {
-                    // 单击事件执行的代码
-                    const index = layer.open({
-                        title: '部门信息',
-                        type: 2,
-                        offset: 'rb',
-                        anim: 'slideLeft',
-                        area: ['50%', '100%'],
-                        shade: 0.2,
-                        shadeClose: true,
-                        content: 'sub/detail.html?id=' + obj.param.id,
-                    });
-                    // 重置点击计数器
-                    clickCount = 0;
-                }, 300); // 等待300ms以判断是否为单击事件
-            }
-
-            // 双击事件
-            else if (clickCount === 2) {
-                clearTimeout(clickTimeout);
-
-                // 双击事件执行的代码
-                //调用内置函数展开节点
-                if (!obj.param.leaf) {
-                    tree.clickSpread(obj.dom);
-                }
-
-                // 重置点击计数器
-                clickCount = 0;
-            }
-        });
-
-
-        //搜索结点
-        form.on('submit(saveBtn)', function (data) {
-            tree.fuzzySearch(data.field.name);
-                return false;
-            });
 
     });
+</script>
+
+<script>
+
+
+
 </script>

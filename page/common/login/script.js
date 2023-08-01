@@ -61,7 +61,7 @@ let app = new Vue({
                 success: function (res) {
                     if (res.success) {
                         common.token(res.data);
-                        layer.msg(res.message, { icon: 1 }, (end) => (window.location.href = '/index.html'));
+                        layer.msg(res.message, { icon: 1, time: 1000 }, (end) => (window.location.href = '/index.html'));
                         return;
                     }
                     layer.closeAll();
@@ -83,7 +83,7 @@ let app = new Vue({
                 success: function (res) {
                     if (res.success) {
                         common.token(res.data);
-                        layer.msg(res.message, { icon: 1 }, (end) => (window.location.href = '/index.html'));
+                        layer.msg(res.message, { icon: 1, time: 1000 }, (end) => (window.location.href = '/index.html'));
                         return;
                     }
                     layer.closeAll();
@@ -92,7 +92,7 @@ let app = new Vue({
             });
         },
         authorize(platform) {
-            $.get(`auth/${platform}/authorize.do`, (res, status) => {
+            $.get(`/api/auth/${platform}/authorize.do`, (res, status) => {
                 if (res.success) {
                     window.open(res.data);
                     return;

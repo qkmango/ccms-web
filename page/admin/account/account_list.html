@@ -77,6 +77,10 @@
             </div>
         </div>
 
+        <script type="text/html" id="table-tools">
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="info">详情</a>
+        </script>
+
         <script src="/lib/layui/layui.js" charset="utf-8"></script>
         <script src="/js/lay-module/layuimini/miniTab.js"></script>
         <script src="/lib/util/utils.js"></script>
@@ -137,16 +141,7 @@
                                     }
                                 },
                             },
-
-                            {
-                                title: '操作',
-                                width: 150,
-                                align: 'center',
-                                fixed: 'right',
-                                templet: (d) => {
-                                    return `<a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green" lay-event="info"><i class="fa fa-info-circle"></i> 详情</a>`;
-                                },
-                            },
+                            { fixed: "right", title: "操作", width: 150, align: "center", toolbar: "#table-tools" }
                         ],
                     ],
                     limits: [20, 40, 60, 80, 100],

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>公告详情</title>
+    <title>留言信息</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -26,23 +26,19 @@
         <tbody>
             <tr>
                 <td>ID</td>
-                <td id="id"></td>
-            </tr>
-            <tr>
-                <td>标题</td>
-                <td id="title"></td>
+                <td v-text="record.id" id="id"></td>
             </tr>
             <tr>
                 <td>发布者ID</td>
-                <td id="author"></td>
+                <td v-text="record.author" id="author"></td>
             </tr>
             <tr>
                 <td>创建时间</td>
-                <td id="createTime"></td>
+                <td v-text="record.createTime" id="createTime"></td>
             </tr>
             <tr>
                 <td>内容</td>
-                <td id="content"></td>
+                <td v-text="record.content" id="content"></td>
             </tr>
         </tbody>
     </table>
@@ -62,14 +58,12 @@
             getRecord(id);
         });
 
-
         function getRecord(id) {
             $.ajax({
-                url: 'api/notice/one/record.do?id=' + id,
+                url: 'api/message/one/record.do?id=' + id,
                 success: function (res) {
                     if (res.success) {
                         res.data.createTime = layui.util.toDateString(res.data.createTime);
-                        // app.record = res.data;
                         for (key in res.data) {
                             document.querySelector('#' + key).innerText = res.data[key];
                         }
@@ -78,6 +72,7 @@
                 }
             })
         }
+
 
     </script>
 </body>
