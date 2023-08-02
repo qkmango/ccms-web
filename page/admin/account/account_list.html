@@ -83,7 +83,6 @@
 
         <script src="/lib/layui/layui.js" charset="utf-8"></script>
         <script src="/js/lay-module/layuimini/miniTab.js"></script>
-        <script src="/lib/util/utils.js"></script>
         <script src="/lib/util/common.js"></script>
         <script>
             let $;
@@ -181,13 +180,11 @@
 
                 table.on('tool(currentTableFilter)', function (obj) {
                     let data = obj.data;
-                    console.log(data);
                     if (obj.event === 'info') {
                         //关闭之前打开的详情页
                         const tabCloseBtn = window.top.document.querySelector(
                             'li[lay-id="page/admin/account/detail.html"]>i'
                         );
-                        console.log(tabCloseBtn);
                         if (tabCloseBtn != null) {
                             tabCloseBtn.click();
                         }

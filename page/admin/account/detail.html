@@ -30,7 +30,7 @@
                     <label class="layui-form-label">账户ID</label>
                     <div class="layui-input-block">
                         <input type="text" name="account" lay-verify="required" class="layui-input" autocomplete="off"
-                            oninput="app.detail=null" v-model="id" />
+                             v-model="id" />
                     </div>
                 </div>
 
@@ -72,7 +72,7 @@
                             </div>
                         </div>
 
-                        <div class="layui-col-md6" id="card_block" v-show="detail?detail.account.role==='user':true">
+                        <div class="layui-col-md6" v-show="showCardinfo">
                             <div class="layui-card">
                                 <div class="layui-card-header">卡信息</div>
                                 <div class="layui-card-body">
@@ -106,7 +106,7 @@
                             </div>
                         </div>
 
-                        <div class="layui-col-md6" id="user_block" v-show="detail?detail.account.role==='user':true">
+                        <div class="layui-col-md6" v-show="showUserinfo">
                             <div class="layui-card">
                                 <div class="layui-card-header">用户信息</div>
                                 <div class="layui-card-body">
@@ -164,43 +164,30 @@
                 <div class="layui-form-item">
                     <div class="layui-btn-container">
                         <button type="button" lay-submit lay-filter="canceled" class="layui-btn layui-btn-danger"
-                            @click="canceled" :disabled="detail?detail.account.state==='canceled':false"
-                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
+                            @click="canceled" :disabled="canceledBtnDisabled"
+                            :class="canceledBtnDisabled?'layui-btn-disabled':''">
                             <i class="fa fa-close"></i> 注销
                         </button>
 
                         <button type="button" lay-submit @click="resetPassword" class="layui-btn layui-btn-warm"
-                            :disabled="detail?detail.account.state==='canceled':false"
-                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
+                            :disabled="resetPasswordBtnDisabled"
+                            :class="resetPasswordBtnDisabled?'layui-btn-disabled':''">
                             <i class="fa fa-key"></i> 重置密码
                         </button>
 
-                        <button type="button" lay-submit class="layui-btn layui-btn-danger"
-                            v-show="detail?detail.account.role==='user':true" lay-filter="state" @click="state"
-                            :disabled="detail&&detail.account.role==='user'?detail.account.state==='canceled':false"
-                            :class="detail&&detail.account.role==='user'?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
-                            <span v-if="detail&&detail.account.role==='user'?
-                                (detail.card.state==='canceled'?true:false):true">
-                                <i class="fa fa-lock"></i> 挂失 / 解挂
-                            </span>
-                            <span v-if="detail&&detail.account.role==='user'?
-                            (detail.card.state==='normal'?true:false):false">
-                                <i class="fa fa-lock"></i> 挂失
-                            </span>
-                            <span v-if="detail&&detail.account.role==='user'?
-                            (detail.card.state==='loss'?true:false):false">
-                                <i class="fa fa-unlock"></i> 解挂
-                            </span>
+                        <button type="button" lay-submit class="layui-btn layui-btn-danger" lay-filter="state"
+                            v-show="showStateBtn" @click="state" :disabled="stateBtnDisabled"
+                            :class="stateBtnDisabled?'layui-btn-disabled':''" v-html="stateBtnHtml">
                         </button>
 
                         <button type="button" lay-submit lay-filter="consume" class="layui-btn layui-bg-green"
-                            v-show="detail?detail.account.role==='user':true" @click="consume">
+                            v-show="showConsumeBtn" @click="consume">
                             <i class="fa fa-bar-chart"></i> 消费查询
                         </button>
+
                         <button type="button" class="layui-btn layui-bg-green" lay-submit @click="recharge"
-                            v-show="detail?detail.account.role==='user':true"
-                            :disabled="detail?detail.account.state==='canceled':false"
-                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
+                            v-show="showRechargeBtn" :disabled="rechargeBtnDisabled"
+                            :class="rechargeBtnDisabled?'layui-btn-disabled':''">
                             <i class="fa fa-jpy"></i> 充值
                         </button>
 
@@ -227,6 +214,68 @@
             data: {
                 detail: null,
                 id: ''
+            },
+            watch: {
+                id: {
+                    handler: function (val, oldVal) {
+                        this.detail = null;
+                    }
+                }
+            },
+            computed: {
+                canceledBtnDisabled() {
+                    let disabled = false;
+                    if (this.detail) {
+                        disabled = this.detail.account.state === 'canceled';
+                    }
+                    return disabled;
+                },
+                resetPasswordBtnDisabled() {
+                    let disabled = false;
+                    if (this.detail) {
+                        disabled = this.detail.account.state === 'canceled';
+                    }
+                    return disabled;
+                },
+                stateBtnDisabled() {
+                    return this.detail && this.detail.account.role === 'user' ? this.detail.account.state === 'canceled' : false
+                },
+                showStateBtn() {
+                    if (this.detail) {
+                        return this.detail.account.role === 'user';
+                    }
+                    return true;
+                },
+                stateBtnHtml() {
+                    if (this.detail && this.detail.account.role === 'user' ?
+                        (this.detail.card.state === 'canceled' ? true : false) : true) {
+                        return '<i class="fa fa-lock"></i> 挂失 / 解挂';
+                    }
+                    if (this.detail && this.detail.account.role === 'user' ?
+                        (this.detail.card.state === 'normal' ? true : false) : false) {
+                        return '<i class="fa fa-lock"></i> 挂失';
+                    }
+                    if (this.detail && this.detail.account.role === 'user' ?
+                        (this.detail.card.state === 'loss' ? true : false) : false) {
+                        return '<i class="fa fa-unlock"></i> 解挂';
+                    }
+                },
+                showConsumeBtn() {
+                    return this.detail ? this.detail.account.role === 'user' : true
+                },
+                rechargeBtnDisabled() {
+                    return this.detail ? this.detail.account.state === 'canceled' : false
+                },
+                showRechargeBtn() {
+                    return this.detail ? this.detail.account.role === 'user' : true
+                },
+                showUserinfo() {
+                    return this.detail ? this.detail.account.role === 'user' : true;
+                },
+                showCardinfo() {
+                    return this.detail ? this.detail.account.role === 'user' : true;
+                }
+
             },
             methods: {
                 resetPassword: function () {

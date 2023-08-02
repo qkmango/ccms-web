@@ -59,7 +59,7 @@
                             </div>
                         </div>
 
-                        <div class="layui-col-md6" id="card_block" v-show="detail?detail.account.role==='user':true">
+                        <div class="layui-col-md6" v-show="showCardinfo">
                             <div class="layui-card">
                                 <div class="layui-card-header">卡信息</div>
                                 <div class="layui-card-body">
@@ -91,7 +91,7 @@
                             </div>
                         </div>
 
-                        <div class="layui-col-md6" id="user_block" v-show="detail?detail.account.role==='user':true">
+                        <div class="layui-col-md6" v-show="showUserinfo">
                             <div class="layui-card">
                                 <div class="layui-card-header">用户信息</div>
                                 <div class="layui-card-body">
@@ -149,21 +149,18 @@
                 <div class="layui-form-item">
                     <div class="layui-btn-container">
                         <button type="button" lay-filter="state" class="layui-btn layui-btn-danger" @click="state"
-                            v-show="detail?detail.account.role==='user':true"
-                            :disabled="detail?detail.account.state==='canceled':false"
-                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
-                            <span v-if="detail && detail.card?(detail.card.state==='canceled'?true:false):true">
-                                <i class="fa fa-lock"></i> 挂失 / 解挂</span>
-                            <span v-if="detail && detail.card?(detail.card.state==='normal'?true:false):false">
-                                <i class="fa fa-lock"></i> 挂失</span>
-                            <span v-if="detail && detail.card?(detail.card.state==='loss'?true:false):false">
-                                <i class="fa fa-unlock"></i> 解挂</span>
+                            v-show="showStateBtn"
+                            :disabled="stateBtnDisabled"
+                            :class="stateBtnDisabled?'layui-btn-disabled':''"
+                            v-html="stateBtnHtml">
+                            >
+                            
                         </button>
 
-                        <button type="button" v-show="detail?detail.account.role==='user':true" lay-submit
+                        <button type="button" v-show="showRechargeBtn" lay-submit
                             lay-filter="recharge" class="layui-btn layui-bg-green"
-                            :disabled="detail?detail.account.state==='canceled':false"
-                            :class="detail?(detail.account.state==='canceled'?'layui-btn-disabled':''):''">
+                            :disabled="rechargeBtnDisabled"
+                            :class="rechargeBtnDisabled?'layui-btn-disabled':''">
                             <i class="fa fa-jpy"></i> 充值
                         </button>
 
@@ -244,63 +241,104 @@
                         },
                     });
                 },
-            },
-            recharge: function (data) {
+                recharge: function (data) {
 
-                //目前充值权限只有管理员可以
-                return;
+                    //目前充值权限只有管理员可以
+                    return;
 
-                const _this = this;
-                if (!this.detail) {
-                    return false;
-                }
-
-                if (this.detail.account.state === 'canceled' || this.detail.card.state === 'canceled') {
-                    return false;
-                }
-
-                layer.prompt({ title: '充值', formType: 0 }, function (amount, index) {
-                    //判断是否为金额
-                    if (!Amount.isAmount(amount)) {
-                        layer.msg('不是金额', { icon: 2 });
+                    const _this = this;
+                    if (!this.detail) {
                         return false;
                     }
 
-                    //判断小数位数是否为1或2位
-                    const dl = Amount.decimalLength(amount);
-                    if (!(dl <= 2 && dl >= 0)) {
-                        layer.msg(`小数点后最多两位(${dl})`, { icon: 2 });
+                    if (this.detail.account.state === 'canceled' || this.detail.card.state === 'canceled') {
                         return false;
                     }
 
-                    if (!Amount.inRange(amount, 1, 1000)) {
-                        layer.msg(`充值金额在 1~1000 元(${amount})`, { icon: 2 });
-                        return false;
-                    }
-
-                    // 充值
-                    $.ajax({
-                        url: 'api/card/update/recharge.do',
-                        data: { account: _this.detail.account.id, amount },
-                        type: 'post',
-                        success: function (res) {
-                            if (res.success) {
-                                layer.msg(res.message, { icon: 1 });
-                            }
-                            if (success) {
-                                success(res);
-                            }
-
-                            if (res.success) {
-                                return;
-                            }
-
-                            layer.msg(res.message, { icon: 2 });
+                    layer.prompt({ title: '充值', formType: 0 }, function (amount, index) {
+                        //判断是否为金额
+                        if (!Amount.isAmount(amount)) {
+                            layer.msg('不是金额', { icon: 2 });
+                            return false;
                         }
+
+                        //判断小数位数是否为1或2位
+                        const dl = Amount.decimalLength(amount);
+                        if (!(dl <= 2 && dl >= 0)) {
+                            layer.msg(`小数点后最多两位(${dl})`, { icon: 2 });
+                            return false;
+                        }
+
+                        if (!Amount.inRange(amount, 1, 1000)) {
+                            layer.msg(`充值金额在 1~1000 元(${amount})`, { icon: 2 });
+                            return false;
+                        }
+
+                        // 充值
+                        $.ajax({
+                            url: 'api/card/update/recharge.do',
+                            data: { account: _this.detail.account.id, amount },
+                            type: 'post',
+                            success: function (res) {
+                                if (res.success) {
+                                    layer.msg(res.message, { icon: 1 });
+                                }
+                                if (success) {
+                                    success(res);
+                                }
+
+                                if (res.success) {
+                                    return;
+                                }
+
+                                layer.msg(res.message, { icon: 2 });
+                            }
+                        });
+                        layer.close(index);
                     });
-                    layer.close(index);
-                });
-            }
+                }
+            },
+            computed: {
+                
+                stateBtnDisabled() {
+                    return this.detail && this.detail.account.role === 'user' ? this.detail.account.state === 'canceled' : false
+                },
+                showStateBtn() {
+                    if (this.detail) {
+                        return this.detail.account.role === 'user';
+                    }
+                    return true;
+                },
+                stateBtnHtml() {
+                    if (this.detail && this.detail.account.role === 'user' ?
+                        (this.detail.card.state === 'canceled' ? true : false) : true) {
+                        return '<i class="fa fa-lock"></i> 挂失 / 解挂';
+                    }
+                    if (this.detail && this.detail.account.role === 'user' ?
+                        (this.detail.card.state === 'normal' ? true : false) : false) {
+                        return '<i class="fa fa-lock"></i> 挂失';
+                    }
+                    if (this.detail && this.detail.account.role === 'user' ?
+                        (this.detail.card.state === 'loss' ? true : false) : false) {
+                        return '<i class="fa fa-unlock"></i> 解挂';
+                    }
+                },
+                
+                rechargeBtnDisabled() {
+                    return this.detail ? this.detail.account.state === 'canceled' : false
+                },
+                showRechargeBtn() {
+                    return this.detail ? this.detail.account.role === 'user' : true
+                },
+                showUserinfo() {
+                    return this.detail ? this.detail.account.role === 'user' : true;
+                },
+                showCardinfo() {
+                    return this.detail ? this.detail.account.role === 'user' : true;
+                }
+
+            },
+
         })
 
         layui.use(['form'], function () {
