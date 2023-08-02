@@ -114,15 +114,6 @@
                         },
                         { field: 'description', title: '描述' },
                         { field: 'addition', title: '其他信息' },
-                        // {
-                        //     title: '操作',
-                        //     width: 150,
-                        //     align: 'center',
-                        //     fixed: 'right',
-                        //     templet: (d) => {
-                        //         return `<a class="layui-btn layui-btn-primary layui-btn-xs layui-border-green" lay-event="info"><i class="fa fa-info-circle"></i> 详情</a>`;
-                        //     },
-                        // },
                         { fixed: "right", title: "操作", width: 181, align: "center", toolbar: "#table-tools" }
                     ],
                 ],
@@ -133,10 +124,10 @@
                 contentType: 'application/json; charset=utf-8',
                 parseData: function (res) {
                     return {
-                        code: res.success ? 0 : -1,
-                        msg: res.message,
-                        count: res.count,
-                        data: res.data,
+                        "code": res.code,
+                        "msg": res.message,
+                        "count": res.data.count,
+                        "data": res.data.list
                     };
                 },
             });

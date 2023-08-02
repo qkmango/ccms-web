@@ -95,10 +95,10 @@
                 contentType: 'application/json; charset=utf-8',
                 parseData: function (res) {
                     return {
-                        "code": res.success ? 0 : -1,
+                        "code": res.code,
                         "msg": res.message,
-                        "count": res.count,
-                        "data": res.data
+                        "count": res.data.count,
+                        "data": res.data.list
                     };
                 }
             });
