@@ -1,0 +1,41 @@
+#flash-toggle {
+    display: none;
+}
+
+#qr-area {
+    width: 100%;
+}
+
+#qr-view-area {
+}
+#qr-view-area > * {
+}
+#qr-result-area {
+    text-align: center;
+    color: var(--green);
+}
+.title {
+    font-size: 56px;
+    font-weight: bold;
+}
+
+
+
+#qr-video {
+    width: 100% !important;
+}
+#qr-canvas {
+    width: 100%;
+}
+#qr-canvas > canvas {
+    width: 100% !important;
+    height: auto !important;
+    width: 100% !important;
+}
+
+/*  */
+/* .fa {
+    padding: 20px;
+    border-radius: 50%;
+    font-size: 100px;
+} */

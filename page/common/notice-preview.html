@@ -68,6 +68,9 @@
             $.ajax({
                 url: 'api/notice/one/record.do?id=' + id,
                 success: function (res) {
+                    if (!res.success) {
+                        return;
+                    }
                     $('#title').html(res.data.title);
                     // document.querySelector('#title').innerText = res.data.title;
                     let md = new Cherry({

@@ -69,7 +69,6 @@
                 success: function (res) {
                     if (res.success) {
                         res.data.createTime = layui.util.toDateString(res.data.createTime);
-                        // app.record = res.data;
                         for (key in res.data) {
                             document.querySelector('#' + key).innerText = res.data[key];
                         }

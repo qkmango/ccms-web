@@ -1,180 +1,161 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="utf-8" />
-        <title>添加账户</title>
-        <meta name="renderer" content="webkit" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all" />
-        <link rel="stylesheet" href="/css/public.css" media="all" />
-        <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
-    </head>
-    <body>
-        <div class="layuimini-container">
-            <div class="layuimini-main">
-                <form class="layui-form layui-form-pane" lay-filter="insertForm">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">账号</label>
-                        <div class="layui-input-block">
-                            <input
-                                type="text"
-                                name="id"
-                                lay-verify="required|id"
-                                class="layui-input"
-                                value="1932101149"
-                            />
-                        </div>
-                    </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">姓名</label>
-                        <div class="layui-input-block">
-                            <input
-                                type="text"
-                                name="name"
-                                lay-verify="required"
-                                class="layui-input"
-                                value="芒果小洛2"
-                            />
-                        </div>
-                    </div>
+<head>
+    <meta charset="utf-8" />
+    <title>添加账户</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/css/public.css" media="all" />
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
+</head>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">角色</label>
-                        <div class="layui-input-block">
-                            <select name="role" id="role" lay-verify="required" lay-filter="role">
-                                <option></option>
-                                <option value="user">用户</option>
-                                <option value="admin">管理员</option>
-                                <option value="pos">刷卡机</option>
-                            </select>
-                        </div>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <form class="layui-form layui-form-pane" lay-filter="insertForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="id" lay-verify="required|id" class="layui-input" value="1932101149" />
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">账户状态</label>
-                        <div class="layui-input-block">
-                            <select name="accountState" lay-verify="required">
-                                <option value="normal" selected>正常</option>
-                                <option value="frozen">冻结</option>
-                                <option value="canceled">注销</option>
-                            </select>
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" lay-verify="required" class="layui-input" value="芒果小洛2" />
                     </div>
+                </div>
 
-                    <div class="layui-form-item" id="card_state_box">
-                        <label class="layui-form-label">卡状态</label>
-                        <div class="layui-input-block">
-                            <select name="cardState" lay-verify="required">
-                                <option value="normal" selected>正常</option>
-                                <option value="loss">丢失</option>
-                                <option value="canceled">注销</option>
-                            </select>
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色</label>
+                    <div class="layui-input-block">
+                        <select name="role" id="role" lay-verify="required" lay-filter="role">
+                            <option></option>
+                            <option value="user">用户</option>
+                            <option value="admin">管理员</option>
+                            <option value="pos">刷卡机</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">部门</label>
-                        <div class="layui-input-block">
-                            <input
-                                type="text"
-                                id="department"
-                                name="department"
-                                class="layui-input"
-                                lay-verify="required"
-                            />
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账户状态</label>
+                    <div class="layui-input-block">
+                        <select name="accountState" lay-verify="required">
+                            <option value="normal" selected>正常</option>
+                            <option value="frozen">冻结</option>
+                            <option value="canceled">注销</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <button class="layui-btn layui-bg-green layui-layout-right" lay-submit lay-filter="saveBtn">
-                                <i class="fa fa-check"></i> 提交
-                            </button>
-                        </div>
+                <div class="layui-form-item" id="card_state_box">
+                    <label class="layui-form-label">卡状态</label>
+                    <div class="layui-input-block">
+                        <select name="cardState" lay-verify="required">
+                            <option value="normal" selected>正常</option>
+                            <option value="loss">丢失</option>
+                            <option value="canceled">注销</option>
+                        </select>
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="department" name="department" class="layui-input"
+                            lay-verify="required" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-bg-green layui-layout-right" lay-submit lay-filter="saveBtn">
+                            <i class="fa fa-check"></i> 提交
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <script src="/lib/layui/layui.js"></script>
-        <script src="/lib/util/layui_verify_config.js"></script>
-        <script src="/js/lay-config.js"></script>
-        <script src="/lib/util/common.js"></script>
-        <script>
-            layui.use(['form', 'cascader'], function () {
-                const form = layui.form;
-                const layer = layui.layer;
-                const $ = layui.$;
-                const cascader = layui.cascader;
-                form.verify(layui_verify_config);
+    </div>
+    <script src="/lib/layui/layui.js"></script>
+    <script src="/lib/util/layui_verify_config.js"></script>
+    <script src="/js/lay-config.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script>
+        layui.use(['cascader'], function () {
+            const { $, form, layer, cascader } = layui;
+            form.verify(layui_verify_config);
+            common.ajaxSetup($);
 
-                common.ajaxSetup($);
+            let tree = cascader({
+                elem: '#department',
+                clearable: true,
+                props: {
+                    lazy: true,
+                    lazyLoad: function (node, resolve) {
+                        // 默认根节点的 parent 为0，查询根节点
+                        const id = node.value ? node.value : 0;
+                        $.ajax({
+                            url: 'api/department/child-list.do?id=' + id,
+                            success: function (res) {
+                                if (res.success) {
+                                    let converData = [];
+                                    for (let i = 0; i < res.data.length; i++) {
+                                        converData.push({
+                                            value: res.data[i].id,
+                                            label: res.data[i].name,
+                                            leaf: res.data[i].type === 'leaf' ? true : false,
+                                        });
+                                    }
+                                    resolve(converData);
+                                }
+                            },
+                        });
+                    },
+                },
+            });
 
-                let tree = cascader({
-                    elem: '#department',
-                    clearable: true,
-                    props: {
-                        lazy: true,
-                        lazyLoad: function (node, resolve) {
-                            // 默认根节点的 parent 为0，查询根节点
-                            const id = node.value ? node.value : 0;
-                            $.ajax({
-                                url: 'api/department/child-list.do?id=' + id,
-                                success: function (res) {
-                                    if (res.success) {
-                                            let converData = [];
-                                            for (let i = 0; i < res.data.length; i++) {
-                                                converData.push({
-                                                    value: res.data[i].id,
-                                                    label: res.data[i].name,
-                                                    leaf: res.data[i].type === 'leaf' ? true : false,
-                                                });
-                                            }
-                                            resolve(converData);
-                                        }
-                                },
-                            });
-                        },
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                $.ajax({
+                    url: 'api/account/one/insert.do',
+                    data: JSON.stringify(data.field),
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    xhrFields: {
+                        withCredentials: true,
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            layer.msg(res.message, { icon: 1, });
+                            return;
+                        }
+                        layer.msg(res.message, { icon: 2 });
                     },
                 });
-
-                //监听提交
-                form.on('submit(saveBtn)', function (data) {
-                    console.log(data.field);
-                    $.ajax({
-                        url: 'api/account/one/insert.do',
-                        data: JSON.stringify(data.field),
-                        type: 'post',
-                        dataType: 'json',
-                        contentType: 'application/json; charset=utf-8',
-                        xhrFields: {
-                            withCredentials: true,
-                        },
-                        success: function (res) {
-                            if (res.success) {
-                                layer.msg(res.message, {icon: 1,});
-                                return;
-                            }
-                            layer.msg(res.message, { icon: 2 });
-                        },
-                    });
-                    return false;
-                });
-
-                // 监听角色选择，如果是user则显示卡状态，否则去除卡状态
-                form.on('select(role)', function (data) {
-                    let card_state_box = document.querySelector('#card_state_box');
-                    if (data.value === 'user') {
-                        card_state_box.style.display = 'block';
-                    } else {
-                        card_state_box.style.display = 'none';
-                    }
-                    form.render('select');
-                });
-
                 return false;
             });
-        </script>
-    </body>
+
+            // 监听角色选择，如果是user则显示卡状态，否则去除卡状态
+            form.on('select(role)', function (data) {
+                let card_state_box = document.querySelector('#card_state_box');
+                if (data.value === 'user') {
+                    card_state_box.style.display = 'block';
+                } else {
+                    card_state_box.style.display = 'none';
+                }
+                form.render('select');
+            });
+
+            return false;
+        });
+    </script>
+</body>
+
 </html>

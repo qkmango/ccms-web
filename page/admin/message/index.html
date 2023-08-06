@@ -78,25 +78,12 @@
 
 
     <script src="/lib/layui/layui.js" charset="utf-8"></script>
-    <script src="/js/lay-module/layuimini/miniTab.js"></script>
-    <!-- <script src="/lib/util/datetime.js"></script> -->
     <script src="/lib/util/utils.js"></script>
     <script src="/lib/util/common.js"></script>
 
     <script>
-
-        let $;
-        let form;
-        let table;
-        let laydate;
-        let util;
-
         layui.use(['laydate'], function () {
-            $ = layui.jquery;
-            form = layui.form;
-            table = layui.table;
-            laydate = layui.laydate;
-            util = layui.util;
+            const { $, form, table, laydate, util } = layui;
 
             // ajax 全局配置
             common.ajaxSetup($);
@@ -164,7 +151,8 @@
 
             table.on('tool(currentTableFilter)', function (obj) {
                 let data = obj.data;
-                console.log(data)
+
+                //删除
                 if (obj.event === 'delete') {
                     layer.open({
                         title: "删除", content: "确认删除吗?",

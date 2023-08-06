@@ -47,12 +47,9 @@
 
 <script>
     layui.use(function () {
-        const $ = layui.jquery;
-        const form = layui.form;
+        const {$,form,treeTable,layer,dropdown} = layui;
         common.ajaxSetup($);
-        var treeTable = layui.treeTable;
-        var layer = layui.layer;
-        var dropdown = layui.dropdown;
+
         // 渲染
         var inst = treeTable.render({
             elem: '#treeTable',
@@ -94,7 +91,7 @@
                         }
                     },
                 },
-                { fixed: "right", title: "操作", width: 181, align: "center", toolbar: "#table-tools" }
+                { fixed: "right", title: "操作", width: 75, align: "center", toolbar: "#table-tools" }
             ]],
             // page: true,
             parseData: function (res) {

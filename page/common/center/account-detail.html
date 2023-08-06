@@ -149,17 +149,14 @@
                 <div class="layui-form-item">
                     <div class="layui-btn-container">
                         <button type="button" lay-filter="state" class="layui-btn layui-btn-danger" @click="state"
-                            v-show="showStateBtn"
-                            :disabled="stateBtnDisabled"
-                            :class="stateBtnDisabled?'layui-btn-disabled':''"
-                            v-html="stateBtnHtml">
+                            v-show="showStateBtn" :disabled="stateBtnDisabled"
+                            :class="stateBtnDisabled?'layui-btn-disabled':''" v-html="stateBtnHtml">
                             >
-                            
+
                         </button>
 
-                        <button type="button" v-show="showRechargeBtn" lay-submit
-                            lay-filter="recharge" class="layui-btn layui-bg-green"
-                            :disabled="rechargeBtnDisabled"
+                        <button type="button" v-show="showRechargeBtn" lay-submit lay-filter="recharge"
+                            class="layui-btn layui-bg-green" :disabled="rechargeBtnDisabled"
                             :class="rechargeBtnDisabled?'layui-btn-disabled':''">
                             <i class="fa fa-jpy"></i> 充值
                         </button>
@@ -171,11 +168,10 @@
     </div>
     <script src="/lib/layui/layui.js"></script>
     <script src="/lib/vue2/vue.js"></script>
-    <script src="/js/lay-module/layuimini/miniTab.js"></script>
     <script src="/lib/util/amount.js"></script>
     <script src="/lib/util/common.js"></script>
     <script>
-        let form, $, layer, miniTab;
+        let $, layer;
 
         let app = new Vue({
             el: '#app',
@@ -299,7 +295,7 @@
                 }
             },
             computed: {
-                
+
                 stateBtnDisabled() {
                     return this.detail && this.detail.account.role === 'user' ? this.detail.account.state === 'canceled' : false
                 },
@@ -323,7 +319,7 @@
                         return '<i class="fa fa-unlock"></i> 解挂';
                     }
                 },
-                
+
                 rechargeBtnDisabled() {
                     return this.detail ? this.detail.account.state === 'canceled' : false
                 },
@@ -341,12 +337,9 @@
 
         })
 
-        layui.use(['form'], function () {
+        layui.use(function () {
             layer = layui.layer;
             $ = layui.$;
-            form = layui.form;
-            miniTab = layui.miniTab;
-
             // ajax全局配置
             common.ajaxSetup($);
 
@@ -354,8 +347,6 @@
             app.queryAccount();
             return false;
         });
-
-
     </script>
 </body>
 

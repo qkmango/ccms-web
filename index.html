@@ -244,42 +244,33 @@
         }
     }
 
+
     layui.use(['jquery', 'layer', 'miniAdmin'], function () {
-        const $ = layui.jquery;
-        const layer = layui.layer;
-        const miniAdmin = layui.miniAdmin;
+        // const $ = layui.jquery;
+        // const layer = layui.layer;
+        // const miniAdmin = layui.miniAdmin;
+
+        const { $, layer, miniAdmin } = layui;
+
         element = layui.element;
         element.render('progress', 'request-progress');
 
         // ajax全局配置
         common.ajaxSetup($);
 
-        $.ajax({
-            // url:"test/testLogin.json",
-            url: "api/account/one/current-account-info.do",
-            success: function (res) {
-                if (!res.success) {
-                    window.location.href = 'page/login/index.html';
-                    return;
-                }
-                // progress.success();
-                common.account(res.data);
-                document.querySelector('#name').innerText = res.data.id;
-                const iniUrl = `/apis/init_${res.data.role}.json`;
 
-                miniAdmin.render({
-                    iniUrl: iniUrl,    // 初始化接口
-                    // clearUrl: "api/clear.json", // 缓存清理接口
-                    urlHashLocation: true,      // 是否打开hash定位
-                    bgColorDefault: false,      // 主题默认配置
-                    // multiModule: true,          // 是否开启多模块
-                    menuChildOpen: false,       // 是否默认展开菜单
-                    loadingTime: 0,             // 初始化加载时间
-                    pageAnim: true,             // iframe窗口动画
-                    maxTabNum: 20,              // 最大的tab打开数量
-                });
-            }
-        })
+        //先获取本地存储的账户信息，如果没有则请求接口获取
+        let localAccountData = common.account();
+        if (localAccountData) {
+            miniAdminRender(localAccountData);
+        } else {
+            getAccountInfo()
+                .then(account => {
+                    common.account(account);
+                    return miniAdminRender(account);
+                })
+        }
+
 
         //退出
         document.querySelector('#logout').addEventListener('click', function () {
@@ -291,4 +282,45 @@
         });
 
     });
+
+
+    // 获取账户信息
+    function getAccountInfo() {
+        return new Promise((resolve, reject) => {
+            layui.jquery.ajax({
+                url: "api/account/one/current-account-info.do",
+                success: function (res) {
+                    if (!res.success) {
+                        // window.location.href = 'page/common/login/index.html';
+                        return;
+                    }
+                    resolve(res.data);
+                }
+            })
+        })
+    }
+
+    /**
+     * 渲染 miniAdmin
+     * @param {Object} account
+     */
+    function miniAdminRender(account) {
+        return new Promise((resolve, reject) => {
+            document.querySelector('#name').innerText = account.id;
+            const iniUrl = `/apis/init_${account.role}.json`;
+
+            layui.miniAdmin.render({
+                iniUrl: iniUrl,    // 初始化接口
+                // clearUrl: "api/clear.json", // 缓存清理接口
+                urlHashLocation: true,      // 是否打开hash定位
+                bgColorDefault: false,      // 主题默认配置
+                // multiModule: true,          // 是否开启多模块
+                menuChildOpen: false,       // 是否默认展开菜单
+                loadingTime: 0,             // 初始化加载时间
+                pageAnim: true,             // iframe窗口动画
+                maxTabNum: 20,              // 最大的tab打开数量
+            });
+        })
+    }
+
 </script>

@@ -1,0 +1,78 @@
+@import url('/css/color.css');
+
+html,
+body {
+    width: 100%;
+    background-color: var(--green-tint-solid);
+}
+
+#paying,
+#result-ok,
+#result-fail,
+#loading {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#paying .fa,
+#result-ok .fa,
+#result-fail .fa,
+#loading .fa {
+    aspect-ratio: 1/1;
+    width: 140px;
+    padding: 20px;
+    border-radius: 50%;
+    font-size: 100px;
+}
+
+.button {
+    border: 1px solid #2b9148;
+    background-color: var(--green);
+    color: var(--green-tint-solid);
+    width: 80%;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    padding: 5px 32px;
+    line-height: 2;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.4s;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.button:active {
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    color: #fff;
+    top: 4px;
+}
+
+.amount {
+    font-size: 56px;
+    font-weight: bold;
+    color: var(--green-tint-solid);
+    line-height: 2;
+    background-color: var(--green);
+    text-align: center;
+}
+
+#menu {
+    font-size: 0;
+}
+#menu > div {
+    text-align: center;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+}
+#menu button {
+    /* width: 50vw; */
+    height: 80%;
+    /* display: inline-block; */
+}

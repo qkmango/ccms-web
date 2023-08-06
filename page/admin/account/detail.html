@@ -30,7 +30,7 @@
                     <label class="layui-form-label">账户ID</label>
                     <div class="layui-input-block">
                         <input type="text" name="account" lay-verify="required" class="layui-input" autocomplete="off"
-                             v-model="id" />
+                            v-model="id" />
                     </div>
                 </div>
 
@@ -201,14 +201,13 @@
     </div>
     <script src="/lib/layui/layui.js"></script>
     <script src="/lib/vue2/vue.js"></script>
-    <script src="/js/lay-module/layuimini/miniTab.js"></script>
+    <script src="/js/lay-config.js"></script>
     <script src="/lib/util/layui_verify_config.js"></script>
     <script src="/lib/util/amount.js"></script>
     <script src="/lib/util/common.js"></script>
+    <script src="/lib/util/constant.js"></script>
     <script>
         let form, $, layer, miniTab;
-
-
         let app = new Vue({
             el: '#app',
             data: {
@@ -343,7 +342,6 @@
                         icon: 3,
                         shadeClose: true,
                         btn1: function (index) {
-
                             $.ajax({
                                 url: 'api/card/update/state.do',
                                 data: { account, state },
@@ -491,26 +489,15 @@
             }
         })
 
-        layui.use(['form'], function () {
-            layer = layui.layer;
+        layui.use(['form', 'miniTab'], function () {
             $ = layui.$;
             form = layui.form;
+            layer = layui.layer;
             miniTab = layui.miniTab;
-
             // ajax全局配置
             common.ajaxSetup($);
-
             //配置layui表单验证配置
             form.verify(layui_verify_config);
-
-            const accountId = sessionStorage.getItem(window.top.location.hash);
-            sessionStorage.removeItem(window.top.location.hash);
-
-            //给表单赋值
-            app.id = accountId;
-            form.val('detail', {
-                account: accountId,
-            });
 
             // 搜索
             form.on('submit(searchBtn)', function (data) {
@@ -518,16 +505,49 @@
                 return false;
             });
 
+            //给表单赋值
+            app.id = getSessionStorageAccountId();
+            form.val('detail', {
+                account: app.id,
+            });
+
             //如果获取到账号，则自动查询
-            if (accountId != null) {
-                app.queryAccount(accountId);
+            if (app.id) {
+                app.queryAccount(app.id);
             }
             return false;
         });
 
 
+        /**
+         * 监听hash变化,hash变化说明切换了页面
+         * 如果是从账户列表或者是卡列表跳转过来的，则自动查询
+         */
+        window.top.onhashchange = function (e) {
+            const oldHash = e.oldURL.split('#/')[1];
+            const newHash = e.newURL.split('#/')[1];
+            const accoutListPage = constant.page.admin.account.account_list;
+            const cardListPage = constant.page.admin.account.card_list;
+            const currPage = constant.page.admin.account.detail;
 
+            //判断是否来源于账户列表或者是卡列表，并且当前页面是此页面
+            if ((oldHash === accoutListPage || oldHash === cardListPage)
+                && newHash === currPage) {
+                const id = getSessionStorageAccountId();
+                if (id) {
+                    app.id = id;
+                    app.queryAccount(id);
+                }
+            }
+        }
 
+        //从 Storage 中获取页面发送的账户ID
+        function getSessionStorageAccountId() {
+            const currPage = constant.page.admin.account.detail;
+            const id = sessionStorage.getItem(currPage);
+            sessionStorage.removeItem(currPage);
+            return id;
+        }
     </script>
 </body>
 
