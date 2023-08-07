@@ -11,12 +11,12 @@ const flashState = document.getElementById('flash-state');
 scanner = new QrScanner(
     video,
     (result) => {
-        app.camQrResult = result;
+        app.qrcode = result;
         console.log('扫描到二维码: ' + result);
         app.toPayingPage();
     },
     (error) => {
-        app.camQrResult = error;
+        app.qrcode = error;
     }
 );
 

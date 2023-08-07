@@ -9,9 +9,13 @@ layui.use('layer', function () {
 let app = new Vue({
     el: '#app',
     data: {
-        camQrResult: undefined,
+        // qrcode: undefined,
+        qrcode: {
+            code: '1234567890',
+            account: '1234567890',
+        },
         //界面状态 0:收银 1:扫描二维码 2:支付中 3:支付成功 4:支付失败 5:加载中 6:菜单
-        state: 0,
+        state: 2,
         //金额字符串
         amount: '0',
         deviceAccount: '567890',

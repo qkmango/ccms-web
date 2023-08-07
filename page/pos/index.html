@@ -77,7 +77,7 @@
                 style="border-left: 3px solid var(--green);">
                 <p class="amount" style="height: 20vh;line-height:20vh;">{{amount}}</p>
                 <p class="title" style="height:50vh;display:flex; align-items: center;justify-content: center;">请扫码</p>
-                <p style="height: 10vh;">侦测到的二维码: {{camQrResult}}</p>
+                <p style="height: 10vh;">侦测到的二维码: {{qrcode}}</p>
                 <div style="height: 20vh;">
                     <button class="button" @click="toCashierPage">取消</button>
                 </div>
@@ -89,6 +89,7 @@
             <div style="text-align:center;">
                 <i class="fa fa-circle-o-notch layui-anim-rotate layui-anim-loop" style="color: var(--green);"></i>
                 <p style="color: var(--green);line-height: 2;">支付中</p>
+                <p style="font-size: 18px;font-family: 'Courier New', Courier, monospace;">{{qrcode}}</p>
             </div>
         </div>
 
