@@ -60,8 +60,22 @@ let app = new Vue({
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
-                        common.token(res.data);
-                        layer.msg(res.message, { icon: 1, time: 1000 }, (end) => (window.location.href = '/index.html'));
+                        const { token, account } = res.data;
+                        common.token(token);
+                        common.account(account);
+                        layer.msg(res.message, { icon: 1, time: 1000 }, (end) => {
+                            switch (account.role) {
+                                case 'user':
+                                case 'admin':
+                                    window.location.href = '/index.html';
+                                    break;
+                                case 'pos':
+                                    window.location.href = '/page/pos/index.html';
+                                    break;
+                                default:
+                                    break;
+                            }
+                        });
                         return;
                     }
                     layer.closeAll();
@@ -82,8 +96,22 @@ let app = new Vue({
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
-                        common.token(res.data);
-                        layer.msg(res.message, { icon: 1, time: 1000 }, (end) => (window.location.href = '/index.html'));
+                        const { token, account } = res.data;
+                        common.token(token);
+                        common.account(account);
+                        layer.msg(res.message, { icon: 1, time: 1000 }, (end) => {
+                            switch (account.role) {
+                                case 'user':
+                                case 'admin':
+                                    window.location.href = '/index.html';
+                                    break;
+                                case 'pos':
+                                    window.location.href = '/page/pos/index.html';
+                                    break;
+                                default:
+                                    break;
+                            }
+                        });
                         return;
                     }
                     layer.closeAll();
@@ -100,6 +128,7 @@ let app = new Vue({
                 layer.msg(res.message, { icon: 2 });
             });
         },
+
         check(item) {
             const { id, password } = this.account;
             if (item == 'id') {

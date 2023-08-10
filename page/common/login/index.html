@@ -26,13 +26,13 @@
         </div>
 
         <div class="header layui-row">
-            <img src="/image/logo.svg" class="logo_img layui-col-md3 layui-col-sm6 layui-col-xs10" alt="logo" />
+            <img src="/image/logo.svg" class="logo_img layui-col-md4 layui-col-sm6 layui-col-xs10" alt="logo" />
         </div>
 
         <h1 class="title layui-row" v-text="language[locale].title"></h1>
 
         <div class="main layui-row">
-            <form class="form layui-col-md3 layui-col-sm6 layui-col-xs10">
+            <form class="form layui-col-md4 layui-col-sm6 layui-col-xs10">
                 <label for="id">
                     <span v-text="language[locale].account">账号</span>
                     <span class="tip" v-text="language[locale].account_tip" v-show="tipEnable.id"></span>
@@ -52,7 +52,7 @@
         </div>
 
         <div class=" layui-row authentication-box">
-            <div class="authentication label layui-col-md3 layui-col-sm6 layui-col-xs10" style="margin: auto;">
+            <div class="authentication label layui-col-md4 layui-col-sm6 layui-col-xs10" style="margin: auto;">
                 <div @click="authorize('gitee')"><img src="/image/icon/gitee.svg" /></div>
                 <div @click="authorize('dingtalk')"><img src="/image/icon/dingtalk.svg" /></div>
                 <div @click="authorize('alipay')"><img src="/image/icon/alipay.svg" /></div>

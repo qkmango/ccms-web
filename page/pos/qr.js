@@ -24,5 +24,5 @@ window.scanner = scanner;
 //添加canvas扫描区域
 document.querySelector('#qr-canvas').appendChild(scanner.$canvas);
 
-// 开始扫描
-scanner.start();
+// 开始扫描，页面初始化加载时不调用
+// scanner.start();

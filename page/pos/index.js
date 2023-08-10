@@ -9,20 +9,23 @@ layui.use('layer', function () {
 let app = new Vue({
     el: '#app',
     data: {
-        // qrcode: undefined,
         qrcode: {
             code: '1234567890',
             account: '1234567890',
         },
         //界面状态 0:收银 1:扫描二维码 2:支付中 3:支付成功 4:支付失败 5:加载中 6:菜单
-        state: 2,
+        state: 6,
         //金额字符串
         amount: '0',
-        deviceAccount: '567890',
+        account: null,
     },
     computed: {
         amountNum() {
             return Number.parseInt(Amount.multi(this.amount, 2));
+        },
+        deviceAccount() {
+            console.log(this.account);
+            return this.account ? this.account.id : '未登录';
         },
     },
     methods: {
@@ -77,5 +80,11 @@ let app = new Vue({
         exitSystem() {},
         //支付记录
         trade() {},
+    },
+    beforeMount() {
+        this.account = common.account();
+        if(!this.account) {
+            window.location.href = '/page/common/login/index.html';
+        }
     },
 });
