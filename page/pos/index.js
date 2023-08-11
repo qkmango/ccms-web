@@ -1,9 +1,11 @@
-let layer;
+let layer, $;
 //扫码器
 let scanner;
 
 layui.use('layer', function () {
     layer = layui.layer;
+    $ = layui.jquery;
+    common.ajaxSetup($);
 });
 
 let app = new Vue({
@@ -18,8 +20,11 @@ let app = new Vue({
         //金额字符串
         amount: '0',
         account: null,
+        // 支付结果消息
+        message: null,
     },
     computed: {
+        //金额数字,单位分
         amountNum() {
             return Number.parseInt(Amount.multi(this.amount, 2));
         },
@@ -54,6 +59,7 @@ let app = new Vue({
         toPayingPage() {
             scanner.stop();
             this.state = 2;
+            this.consumeByQrcode();
         },
         //到扫码成功界面
         toQrSuccessPage() {
@@ -76,6 +82,31 @@ let app = new Vue({
             this.state = 6;
             this.amount = 0;
         },
+        consumeByQrcode() {
+            const _this = this;
+            const qrcode = JSON.parse(_this.qrcode);
+            $.ajax({
+                url: '/api/pay/consume-by-qrcode.do',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    code: qrcode.code,
+                    account: qrcode.account,
+                    amount: _this.amountNum,
+                }),
+                success: function (res) {
+                    _this.message = res.message;
+                    if (res.success) {
+                        _this.toQrSuccessPage();
+                    } else {
+                        _this.toQrFailPage();
+                    }
+                },
+                error: function (err) {
+                    _this.toQrFailPage();
+                },
+            });
+        },
         //退出系统
         exitSystem() {},
         //支付记录
@@ -83,7 +114,7 @@ let app = new Vue({
     },
     beforeMount() {
         this.account = common.account();
-        if(!this.account) {
+        if (!this.account) {
             window.location.href = '/page/common/login/index.html';
         }
     },
