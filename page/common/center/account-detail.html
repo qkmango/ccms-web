@@ -148,7 +148,7 @@
 
                 <div class="layui-form-item">
                     <div class="layui-btn-container">
-                        <button type="button" lay-filter="state" class="layui-btn layui-btn-danger" @click="state"
+                        <button type="button" lay-filter="state" class="layui-btn layui-btn-danger" @click="updateState"
                             v-show="showStateBtn" :disabled="stateBtnDisabled"
                             :class="stateBtnDisabled?'layui-btn-disabled':''" v-html="stateBtnHtml">
                             >
@@ -195,7 +195,7 @@
                         }
                     });
                 },
-                state: function () {
+                updateState: function () {
                     const _this = this;
                     if (!this.detail) {
                         return false;

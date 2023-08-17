@@ -41,13 +41,13 @@
             ]
         },
         {
-            "title": "消费管理",
+            "title": "交易管理",
             "icon": "fa fa-jpy",
             "target": "_self",
             "child": [
                 {
-                    "title": "消费列表",
-                    "href": "page/admin/consume/index.html",
+                    "title": "交易列表",
+                    "href": "page/admin/trade/index.html",
                     "icon": "fa fa-list",
                     "target": "_self"
                 }

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <title>交易详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/color.css">
+    <style>
+        body {
+            background-color: #ffffff;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <h2>交易信息</h2>
+        <table class="layui-table" lay-skin="line">
+            <colgroup>
+                <col width="100">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>{{trade.id}}</td>
+                </tr>
+                <tr>
+                    <td>账户</td>
+                    <td>{{trade.account}}</td>
+                </tr>
+
+                <tr>
+                    <td>出入账</td>
+                    <td v-html="level1"></td>
+                </tr>
+                <tr>
+                    <td>支付方式</td>
+                    <td v-html="level2"></td>
+                </tr>
+                <tr>
+                    <td>支付用途</td>
+                    <td v-html="level3"></td>
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td v-html="tradeState"></td>
+                </tr>
+                <tr>
+                    <td>外部ID</td>
+                    <td>{{trade.out_id}}</td>
+                </tr>
+                <tr>
+                    <td>内部ID</td>
+                    <td>{{trade.in_id}}</td>
+                </tr>
+                <tr>
+                    <td>金额</td>
+                    <td>{{trade.amount/100}}</td>
+                </tr>
+                <tr>
+                    <td>创建时间</td>
+                    <td>{{trade.createTime}}</td>
+                </tr>
+                <tr>
+                    <td>创建者</td>
+                    <td>{{trade.creator}}</td>
+                </tr>
+                <tr>
+                    <td>描述</td>
+                    <td>{{trade.description}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>支付账户</h2>
+        <table class="layui-table" lay-skin="line">
+            <colgroup>
+                <col width="100">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>{{payer.id}}</td>
+                </tr>
+                <tr>
+                    <td>角色</td>
+                    <td>{{role(payer.role)}}</td>
+                </tr>
+
+                <tr>
+                    <td>状态</td>
+                    <td>{{state(payer.state)}}</td>
+                </tr>
+                <tr>
+                    <td>部门ID</td>
+                    <td>{{payer.department}}</td>
+                </tr>
+                <tr>
+                    <td>部门链</td>
+                    <td>{{payerDeptChainText}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>收款方/创建者</h2>
+        <table class="layui-table" lay-skin="line">
+            <colgroup>
+                <col width="100">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>{{creator.id}}</td>
+                </tr>
+                <tr>
+                    <td>角色</td>
+                    <td>{{role(creator.role)}}</td>
+                </tr>
+
+                <tr>
+                    <td>状态</td>
+                    <td>{{state(creator.state)}}</td>
+                </tr>
+                <tr>
+                    <td>部门ID</td>
+                    <td>{{creator.department}}</td>
+                </tr>
+                <tr>
+                    <td>部门链</td>
+                    <td>{{creatorDeptChainText}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <script src="/lib/layui/layui.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script src="/lib/vue2/vue.min.js"></script>
+    <script>
+
+        let $, util;
+        let app = new Vue({
+            el: '#app',
+            data: {
+                trade: {},
+                payer: {},
+                creator: {},
+                payerDeptChain: [],
+                creatorDeptChain: []
+            },
+            computed: {
+                payerDeptChainText() {
+                    let text = '';
+                    let chain = this.payerDeptChain;
+                    for (let i = 0; i < chain.length; i++) {
+                        text += (chain[i].name + ' > ');
+                    }
+                    return text.substring(0, text.length - 3);
+                },
+                creatorDeptChainText() {
+                    let text = '';
+                    let chain = this.creatorDeptChain;
+                    for (let i = 0; i < chain.length; i++) {
+                        text += (chain[i].name + ' > ');
+                    }
+                    return text.substring(0, text.length - 3);
+                },
+                level1() {
+                    switch (this.trade.level1) {
+                        case 'in': return "<span style='color:var(--green)'><i class='fa fa-arrow-right'></i> 入账</span>";
+                        case 'out': return "<span style='color:var(--blue)'><i class='fa fa-arrow-left'></i> 出账</span>";
+                        default: return '未知';
+                    }
+                },
+                level2() {
+                    switch (this.trade.level2) {
+                        case 'qr': return '扫码';
+                        case 'card': return '刷卡';
+                        case 'system': return '系统';
+                        case 'alipay': return '支付宝';
+                        default: return '未知';
+                    }
+                },
+                level3() {
+                    switch (this.trade.level3) {
+                        case 'consume': return '消费';
+                        case 'payment': return '缴费';
+                        case 'refund': return '退费';
+                        case 'recharge': return '充值';
+                        case 'withdraw': return '提现';
+                        case 'other': return '其他';
+                        default: return '未知';
+                    }
+                },
+                tradeState() {
+                    switch (this.trade.state) {
+                        case 'fail': text = '<span style="color:var(--red)"><i class="fa fa-close"></i> 失败</span>'; break;
+                        case 'success': text = '<span style="color:var(--green)"><i class="fa fa-check"></i> 成功</span>'; break;
+                        case 'refund': text = '<span style="color:var(--orange)"><i class="fa fa-reply"></i> 退款</span>'; break;
+                        case 'processing': text = '<span style="color:var(--blue)"><i class="fa fa-refresh"></i> 处理中</span>'; break;
+                        default: text = '未知'; break;
+                    }
+                    return text;
+                },
+
+
+            },
+            methods: {
+                getRecord(id) {
+                    $.ajax({
+                        url: 'api/trade/one/detail.do?id=' + id,
+                        success: (res) => {
+                            if (res.success) {
+                                this.trade = res.data.trade;
+                                this.payer = res.data.payer;
+                                this.creator = res.data.creator;
+                                this.payerDeptChain = res.data.payerDeptChain;
+                                this.creatorDeptChain = res.data.creatorDeptChain;
+                                return;
+                            }
+                            layer.msg(res.message);
+                        }
+                    })
+                },
+                role(d) {
+                    switch (d) {
+                        case 'admin': return '管理员';
+                        case 'user': return '用户';
+                        case 'pos': return '刷卡机';
+                        default: return '未知';
+                    }
+                },
+                state(d) {
+                    switch (d) {
+                        case 'normal': return '正常';
+                        case 'canceled': return '注销';
+                        case 'frozen': return '冻结';
+                        default: return '未知';
+                    }
+                }
+            }
+        })
+
+
+        layui.use(function () {
+            $ = layui.jquery;
+            util = layui.util;
+            common.ajaxSetup($);
+            const id = common.urlLocation().search.id;
+            if (!id) {
+                return;
+            }
+            app.getRecord(id);
+        });
+    </script>
+</body>
+
+</html>
