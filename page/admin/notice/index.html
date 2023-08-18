@@ -51,6 +51,7 @@
 
     <script type="text/html" id="table-tools">
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail-open-new-window"><i class="fa fa-arrow-up" style="rotate: 45deg;"></i> 详情</a>
         <a class="layui-btn layui-btn-primary layui-border-red layui-btn-xs" lay-event="delete"><i class="fa fa-remove"> 删除</i></a>
     </script>
 
@@ -78,7 +79,7 @@
                 cols: [[
                     { field: 'id', width: 120, title: 'ID', fixed: 'left', sort: true },
                     { field: 'title', title: '标题' },
-                    { field: 'content', title: '内容' },
+                    { field: 'content', title: '内容',width: 350 },
                     { field: 'author', width: 80, title: '作者ID' },
                     {
                         field: 'createTime', title: '创建时间', templet: d => {
@@ -86,7 +87,7 @@
                         }
                     },
 
-                    { title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-tools' }
+                    { title: '操作', width: 200, align: 'center', fixed: 'right', toolbar: '#table-tools' }
                 ]],
                 limits: [20, 40, 60, 80, 100],
                 limit: 20,
@@ -128,12 +129,16 @@
                         area: ['50%', '100%'],
                         shade: 0.2,
                         shadeClose: true,
-                        content: './sub/notice-record.html?id=' + obj.data.id,
+                        content: 'sub/record.html?id=' + obj.data.id,
                     });
                 }
 
+                else if (obj.event === 'detail-open-new-window') {
+                    window.open('sub/record.html?id=' + obj.data.id);
+                }
+
                 //删除公告
-                if (obj.event === 'delete') {
+                else if (obj.event === 'delete') {
                     layer.open({
                         title: "删除", content: '确认删除吗? ID:' + obj.data.id,
                         btn: ['删除', '取消'], icon: 3, shadeClose: true,

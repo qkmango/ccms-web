@@ -10,9 +10,9 @@
     },
     "menuInfo": [
         {
-            "title": "消费信息",
-            "icon": "fa fa-bar-chart",
-            "href": "page/user/consume.html",
+            "title": "交易记录",
+            "icon": "fa fa-jpy",
+            "href": "page/user/trade/index.html",
             "target": "_self"
         },
         {

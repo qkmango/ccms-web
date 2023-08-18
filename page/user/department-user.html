@@ -52,8 +52,8 @@
 
         function get() {
             $.ajax({
-                // url: "/api/user/list/department-user-list.do",
-                url: "./index.test.json",
+                url: "/api/user/list/department-user-list.do",
+                // url: "./index.test.json",
                 dataType: "json",
                 success: function (res) {
                     if (res.success) {

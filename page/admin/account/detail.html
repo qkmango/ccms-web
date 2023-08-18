@@ -207,7 +207,7 @@
     <script src="/lib/util/common.js"></script>
     <script src="/lib/util/constant.js"></script>
     <script>
-        let form, $, layer, miniTab;
+        let form, $, layer;
         let app = new Vue({
             el: '#app',
             data: {
@@ -489,11 +489,11 @@
             }
         })
 
-        layui.use(['form', 'miniTab'], function () {
+        layui.use(['form'], function () {
             $ = layui.$;
             form = layui.form;
             layer = layui.layer;
-            miniTab = layui.miniTab;
+            // miniTab = layui.miniTab;
             // ajax全局配置
             common.ajaxSetup($);
             //配置layui表单验证配置

@@ -73,12 +73,12 @@
 
     <script type="text/html" id="table-tools">
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="record">详情</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="record-open-new-window"><i class="fa fa-arrow-up" style="rotate: 45deg;"></i> 详情</a>
         <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-red" lay-event="delete"><i class="fa fa-remove"> 删除</i></a>
     </script>
 
 
     <script src="/lib/layui/layui.js" charset="utf-8"></script>
-    <script src="/lib/util/utils.js"></script>
     <script src="/lib/util/common.js"></script>
 
     <script>
@@ -101,7 +101,6 @@
             const cardTable = table.render({
                 elem: '#currentTableId',
                 url: 'api/message/pagination/list.do',
-                // url: './index.test.json',
                 method: 'post',
                 toolbar: '#toolbarDemo',
                 defaultToolbar: ['filter', 'exports', 'print'],
@@ -114,13 +113,12 @@
                         }
                     },
                     { field: 'content', title: '内容' },
-                    { title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-tools' }
+                    { title: '操作', width: 200, align: 'center', fixed: 'right', toolbar: '#table-tools' }
                 ]],
                 limits: [20, 40, 60, 80, 100],
                 limit: 20,
                 page: true,
                 skin: 'line',
-                // where: { 'test': 'test' },
                 contentType: 'application/json; charset=utf-8',
                 parseData: function (res) {
                     return {
@@ -137,7 +135,6 @@
                 let param = data.field;
                 param.startCreateTime = Date.parse(param.startCreateTime)
                 param.endCreateTime = Date.parse(param.endCreateTime)
-                param = utils.removeEmptyProperty(param);
 
                 table.reload('currentTableId', {
                     page: { curr: 1 },
@@ -178,15 +175,19 @@
                 //获取留言详细信息
                 else if (obj.event === 'record') {
                     const index = layer.open({
-                        title: '留言详情',
+                        title: '留言信息',
                         type: 2,
                         offset: 'rb',
                         anim: 'slideLeft',
                         area: ['50%', '100%'],
                         shade: 0.2,
                         shadeClose: true,
-                        content: 'sub/message-record.html?id=' + obj.data.id
+                        content: 'sub/record.html?id=' + obj.data.id
                     });
+                }
+
+                else if (obj.event === 'record-open-new-window') {
+                    window.open('sub/record.html?id=' + obj.data.id);
                 }
             });
         });

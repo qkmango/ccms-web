@@ -97,15 +97,15 @@
                     "target": "_self"
                 },
                 {
-                    "title": "添加部门",
-                    "icon": "fa fa-plus-square",
-                    "href": "page/admin/department/insert.html",
-                    "target": "_self"
-                },
-                {
                     "title": "部门架构",
                     "icon": "fa fa-sitemap",
                     "href": "page/admin/department/structure.html",
+                    "target": "_self"
+                },
+                {
+                    "title": "添加部门",
+                    "icon": "fa fa-plus-square",
+                    "href": "page/admin/department/insert.html",
                     "target": "_self"
                 }
             ]

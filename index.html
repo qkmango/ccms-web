@@ -259,7 +259,8 @@
         const token = common.token();
         //渲染
         if((!account) || (!token)) {
-            window.top.location.href = '/page/common/login/index.html'
+            console.log(account, token);
+            window.top.location.href = '/page/common/login/index.html';
         }
         miniAdminRender(account);
 

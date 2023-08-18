@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all" />
     <link rel="stylesheet" href="/css/public.css" media="all" />
     <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
-    <!-- <link rel="stylesheet" href="/js/lay-module/dtree/dtree.css" media="all" /> -->
-    <!-- <link rel="stylesheet" href="/js/lay-module/dtree/font/dtreefont.css" media="all" /> -->
     <style>
         /* 设置文字无法选中 */
         .layui-table-view {
@@ -33,7 +31,8 @@
                 </div>
             </script>
             <script type="text/html" id="table-tools">
-                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="info">详情</a>
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail-open-new-window"><i class="fa fa-arrow-up" style="rotate: 45deg;"></i> 详情</a>
             </script>
         </div>
     </div>
@@ -91,7 +90,7 @@
                         }
                     },
                 },
-                { fixed: "right", title: "操作", width: 75, align: "center", toolbar: "#table-tools" }
+                { fixed: "right", title: "操作", width: 130, align: "center", toolbar: "#table-tools" }
             ]],
             // page: true,
             parseData: function (res) {
@@ -127,7 +126,7 @@
             var trData = obj.data;
             var tableId = obj.config.id;
 
-            if (layEvent === "info") {
+            if (layEvent === "detail") {
                 const index = layer.open({
                     title: '部门信息',
                     type: 2,
@@ -140,7 +139,11 @@
                 });
             }
 
-            else if (layEvent === "addChild") {
+            else if(layEvent === 'detail-open-new-window') {
+                window.open('sub/detail.html?id=' + obj.data.id);
+            }
+
+            else if (layEvent === "add-child") {
                 var data = { id: Date.now(), name: "新节点" };
                 var newNode2 = treeTable.addNodes(tableId, {
                     parentIndex: trData["LAY_DATA_INDEX"],
