@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <title>充值</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+</head>
+
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <div id="app">
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">卡信息</div>
+                        <div class="layui-card-body">
+                            <table class="layui-table" lay-skin="nob">
+                                <tbody>
+                                    <tr>
+                                        <td>卡ID</td>
+                                        <td>{{card?card.id:''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>所属账户</td>
+                                        <td>{{card?card.account:''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>卡余额</td>
+                                        <td>{{card?card.balance/100:''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>卡状态</td>
+                                        <td>{{state}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-form layui-form-pane">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
+                                    <input type="number" name="amount" placeholder="输入金额" autocomplete="off"
+                                        class="layui-input" min="0" step="1" lay-affix="number" v-model="amount">
+                                </div>
+                            </div>
+                            <button class="layui-btn layui-btn-primary" @click="recharge">
+                                <i class="fa fa-search"></i> 充值
+                            </button>
+                            <button class="layui-btn layui-btn-primary" v-html="stateBtnHtml"
+                                :disabled="stateBtnDisable" :class="stateBtnDisable?'layui-btn-disabled':''"></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="/lib/vue2/vue.js"></script>
+    <script src="/lib/util/layui_verify_config.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script src="/lib/util/amount.js"></script>
+
+    <script>
+
+        let $, layer;
+
+
+        let app = new Vue({
+            el: '#app',
+            data: {
+                card: null,
+                amount: 0
+            },
+            computed: {
+                stateBtnHtml() {
+                    if (this.card && this.card.state === 'normal') {
+                        return '<i class="fa fa-lock"></i> 挂失';
+                    }
+                    if (this.card && this.card.state === 'loss') {
+                        return '<i class="fa fa-unlock"></i> 解挂';
+                    }
+                    return '<i class="fa fa-lock"></i> 挂失 / 解挂';
+                },
+                state() {
+                    if (!this.card) {
+                        return ''
+                    }
+                    switch (this.card.state) {
+                        case 'normal': return '正常';
+                        case 'loss': return '挂失';
+                        case 'canceled': return '注销';
+                        default: return '未知';
+                    }
+                },
+                stateBtnDisable() {
+                    if (!this.card) {
+                        return ''
+                    }
+                    switch (this.card.state) {
+                        case 'normal':
+                        case 'loss':
+                        case 'canceled': return false;
+                        default: return true;
+                    }
+                }
+            },
+            methods: {
+                queryCard() {
+                    const _this = this;
+                    $.ajax({
+                        url: 'api/card/one/current-card-info.do',
+                        success: function (res) {
+                            //赋值
+                            if (res.success) {
+                                _this.card = res.data;
+                            }
+                        }
+                    });
+                },
+                recharge() {
+                    if (!this.card) {
+                        return;
+                    }
+
+                    const _this = this;
+                    let amount = Number.parseFloat(document.querySelector('input[name="amount"]').value);
+                    if (amount <= 0) {
+                        layer.msg('充值金额不能为0');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: 'api/pay/alipay/create-pay.do',
+                        data: {
+                            subject: '一卡通充值',
+                            amount: amount * 100
+                        },
+                        success: function (res) {
+                            if (res.success) {
+                                window.open(common.baseURL + '/' + res.data)
+                            }
+                            layer.msg(res.message);
+                        }
+                    });
+                }
+            },
+        });
+
+
+        layui.use(function () {
+            $ = layui.jquery;
+            layer = layui.layer;
+            common.ajaxSetup($);
+            app.queryCard();
+        });
+
+
+
+    </script>
+</body>
+
+</html>

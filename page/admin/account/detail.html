@@ -393,6 +393,7 @@
                     }
 
                     const account = this.id;
+                    const version = this.detail.card.version;
 
                     layer.prompt({ title: '充值', formType: 0 }, function (amount, index) {
                         //判断是否为金额
@@ -415,7 +416,11 @@
 
                         $.ajax({
                             url: 'api/card/update/recharge.do',
-                            data: { account, amount: Amount.multi(amount, 2) },
+                            data: {
+                                account,
+                                amount: Amount.multi(amount, 2),
+                                version
+                            },
                             type: 'post',
                             success: function (res) {
                                 if (res.success) {

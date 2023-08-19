@@ -239,9 +239,6 @@
                 },
                 recharge: function (data) {
 
-                    //目前充值权限只有管理员可以
-                    return;
-
                     const _this = this;
                     if (!this.detail) {
                         return false;
@@ -272,7 +269,7 @@
 
                         // 充值
                         $.ajax({
-                            url: 'api/card/update/recharge.do',
+                            url: 'api/pay/alipay/create-pay.do',
                             data: { account: _this.detail.account.id, amount },
                             type: 'post',
                             success: function (res) {
