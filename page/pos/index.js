@@ -86,14 +86,14 @@ let app = new Vue({
             const _this = this;
             const qrcode = JSON.parse(_this.qrcode);
             $.ajax({
-                url: '/api/pay/consume-by-qrcode.do',
+                url: '/api/trade/consume-by-qrcode.do',
                 type: 'post',
                 contentType: 'application/json',
-                data: JSON.stringify({
+                data: {
                     code: qrcode.code,
                     account: qrcode.account,
                     amount: _this.amountNum,
-                }),
+                },
                 success: function (res) {
                     _this.message = res.message;
                     if (res.success) {

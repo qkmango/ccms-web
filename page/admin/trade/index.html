@@ -89,11 +89,11 @@
         </div>
     </div>
 
-    <script type="text/html" id="table-tools">
+    <!-- <script type="text/html" id="table-tools">
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail-open-new-window"><i class="fa fa-arrow-up" style="rotate: 45deg;"></i> 详情</a>
-        <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-red" lay-event="delete"><i class="fa fa-remove"> 删除</i></a>
-    </script>
+        <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-red" lay-event="refund"><i class="fa fa-remove"> 退款</i></a>
+    </script> -->
 
     <script src="/lib/layui/layui.js" charset="utf-8"></script>
     <script src="/js/lay-module/layuimini/miniTab.js"></script>
@@ -125,7 +125,7 @@
                 defaultToolbar: ['filter', 'exports', 'print'],
                 title: '消费列表',
                 cols: [[
-                    { field: 'id', title: 'ID', fixed: 'left', width: 180},
+                    { field: 'id', title: 'ID', fixed: 'left', width: 180 },
                     { field: 'account', title: '账户', width: 120 },
                     {
                         field: 'level1', title: '出入账', width: 80, templet: d => d.level1 == 'in' ?
@@ -176,7 +176,14 @@
                     { field: 'in_id', title: '内部ID', width: 80 },
                     { field: 'version', title: '版本', hide: true },
 
-                    { title: '操作', width: 200, align: 'center', fixed: 'right', toolbar: '#table-tools' }
+                    // { title: '操作', width: 200, align: 'center', fixed: 'right', toolbar: '#table-tools' }
+                    {
+                        title: '操作', width: 200, align: 'center', fixed: 'right', templet: d => {
+                            return `<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+                        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail-open-new-window"><i class="fa fa-arrow-up" style="rotate: 45deg;"></i> 详情</a>
+                        <a class="layui-btn layui-btn-primary layui-btn-xs layui-border-red ${d.state === 'success' ? '' : 'layui-btn-disabled'}" lay-event="refund"><i class="fa fa-remove"> 退款</i></a>`
+                        }
+                    }
                 ]],
                 limits: [20, 40, 60, 80, 100],
                 limit: 20,
@@ -203,9 +210,6 @@
                     state: data.field.state,
                     level1: data.field.level1,
                 }
-
-                console.log(param);
-
                 table.reload('currentTableId', {
                     page: { curr: 1 },
                     where: { "param": param },
@@ -218,24 +222,62 @@
 
             //获取消费详细信息
             table.on('tool(currentTableFilter)', function (obj) {
-                if (obj.event === 'detail') {
-                    const index = layer.open({
-                        title: '交易详情',
-                        type: 2,
-                        offset: 'rb',
-                        anim: 'slideLeft',
-                        area: ['50%', '100%'],
-                        shade: 0.2,
-                        shadeClose: true,
-                        content: './sub/detail.html?id=' + obj.data.id
-                    });
-                }
-                else if (obj.event === 'detail-open-new-window') {
-                    window.open('./sub/detail.html?id=' + obj.data.id);
+                switch (obj.event) {
+                    case 'detail': {
+                        const index = layer.open({
+                            title: '交易详情',
+                            type: 2,
+                            offset: 'rb',
+                            anim: 'slideLeft',
+                            area: ['50%', '100%'],
+                            shade: 0.2,
+                            shadeClose: true,
+                            content: './sub/detail.html?id=' + obj.data.id
+                        });
+                    } break;
+                    case 'detail-open-new-window': {
+                        window.open('./sub/detail.html?id=' + obj.data.id);
+                    } break;
+                    case 'refund': {
+                        console.log(obj.data);
+                        if (obj.data.state !== 'success') {
+                            return;
+                        }
+                        layer.open({
+                            title: '退款',
+                            content: '确认退款吗?',
+                            btn: ['退款', '取消'],
+                            icon: 3,
+                            shadeClose: true,
+                            btn1: function (index) {
+                                layer.close(index);
+                                let { id, version } = obj.data;
+                                refund(id, version);
+                            },
+                        });
+                    } break;
                 }
             });
 
+
+            // 退款
+            function refund(id, version) {
+                $.ajax({
+                    url: 'api/trade/update/refund.do',
+                    data: { id, version },
+                    type: 'post',
+                    success: function (res) {
+                        if (res.success) {
+                            layer.msg(res.message, { icon: 1 });
+                            return;
+                        }
+                        layer.msg(res.message, { icon: 2 });
+                    },
+                });
+            }
+
         });
+
     </script>
 </body>
 
