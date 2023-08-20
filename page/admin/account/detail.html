@@ -203,7 +203,8 @@
     <script src="/lib/vue2/vue.js"></script>
     <script src="/js/lay-config.js"></script>
     <script src="/lib/util/layui_verify_config.js"></script>
-    <script src="/lib/util/amount.js"></script>
+    <!-- <script src="/lib/util/amount.js"></script> -->
+    <script src="/lib/util/decimal.min.js"></script>
     <script src="/lib/util/common.js"></script>
     <script src="/lib/util/constant.js"></script>
     <script>
@@ -327,8 +328,8 @@
                         return false;
                     }
 
-                    const account = this.detail.account.id;
-                    let state = this.detail.card.state;
+                    let { account, state, version } = this.detail.card;
+
                     switch (state) {
                         case 'loss': state = 'normal'; break;
                         case 'normal': state = 'loss'; break;
@@ -344,7 +345,7 @@
                         btn1: function (index) {
                             $.ajax({
                                 url: 'api/card/update/state.do',
-                                data: { account, state },
+                                data: { account, state, version },
                                 type: 'post',
                                 success: function (res) {
                                     if (res.success) {
@@ -395,30 +396,24 @@
                     const account = this.id;
                     const version = this.detail.card.version;
 
-                    layer.prompt({ title: '充值', formType: 0 }, function (amount, index) {
-                        //判断是否为金额
-                        if (!Amount.isAmount(amount)) {
-                            layer.msg('不是金额', { icon: 2 });
-                            return false;
+                    layer.prompt({ title: '充值', formType: 0 }, function (value, index) {
+                        //单位 分
+                        let amount = new Decimal(value).mul(new Decimal('100'));
+                        if (amount.cmp(0) !== 1) {
+                            layer.msg('充值金额要大于0');
+                            return;
                         }
 
-                        //判断小数位数是否为1或2位
-                        const dl = Amount.decimalLength(amount);
-                        if (!(dl <= 2 && dl >= 0)) {
-                            layer.msg(`小数点后最多两位(${dl})`, { icon: 2 });
-                            return false;
-                        }
-
-                        if (!Amount.inRange(amount, 1, 1000)) {
-                            layer.msg(`充值金额在 1~1000 元(${amount})`, { icon: 2 });
-                            return false;
+                        if (!amount.isInteger()) {
+                            layer.msg('最多两位小数');
+                            return;
                         }
 
                         $.ajax({
                             url: 'api/card/update/recharge.do',
                             data: {
                                 account,
-                                amount: Amount.multi(amount, 2),
+                                amount: amount.toString(),
                                 version
                             },
                             type: 'post',

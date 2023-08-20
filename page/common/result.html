@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>认证结果</title>
+    <title></title>
     <link rel="stylesheet" href="/css/color.css" media="all">
     <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <meta name="renderer" content="webkit">
@@ -85,47 +85,52 @@
 <script src="/lib/util/common.js"></script>
 
 <script>
-    let {
+
+    let search = common.urlLocation().search;
+
+    let a = {
+        title,
+        subject,
         success,//认证是否成功
         message,//认证消息
-        platform,//认证平台
-        accessCode,//授权码
-        bind//第三方账号是否绑定本站账号
-    } = common.urlLocation().search;
-    success = JSON.parse(success || false);
-    bind = bind ? JSON.parse(bind) : null;
+        redirect,//重定向的页面
+        channel, //信道
+        type,//页面跳转方式 channel:信道发送data数据后关闭页面; redirect:直接重定向到页面
+    } = search
 
-    console.log(success);
+    success = JSON.parse(success || false);
+
+    document.querySelector('title').innerText = title;
 
     if (success) {
         document.querySelector('#message').innerHTML = `
             <i class="fa fa-check" style="color: var(--green-tint-solid);background-color: var(--green);"></i>
-            <p style="color: var(--green);">认证成功</p>
-            <p style="color: var(--green);">即将跳转到主页</p>
+            <p style="color: var(--green);">${message}</p>
             <p style="color: var(--green);">${message}</p>
         `;
     } else {
         document.querySelector('#message').innerHTML = `
             <i class="fa fa-times" style="color: var(--red-tint-solid);background-color: var(--red);"></i>
-            <p style="color: var(--red);">认证失败</p>
-            <p style="color: var(--red);">即将跳转到登陆页面</p>
+            <p style="color: var(--red);">${message}</p>
             <p style="color: var(--red);">${message}</p>
         `;
     }
 
-    //信道通信，定时2秒发送消息，关闭窗口
-    const timer = setInterval(function () {
-        let channel = new BroadcastChannel('auth');
-        channel.postMessage({
-            success,
-            message,
-            platform,
-            accessCode,
-            bind
-        });
-        clearInterval(timer);
-        channel.close();
-        window.close();
-    }, 2000);
+
+    console.log(type);
+    switch (type) {
+        case 'channel': {
+            const timer = setInterval(function () {
+                let bc = new BroadcastChannel(channel);
+                bc.postMessage(search);
+                clearInterval(timer);
+                bc.close();
+                window.close();
+            }, 2000);
+        } break;
+        case 'redirect': {
+            window.location.href = redirect;
+        } break;
+    }
 
 </script>

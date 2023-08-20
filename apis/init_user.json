@@ -10,6 +10,12 @@
     },
     "menuInfo": [
         {
+            "title": "一卡通",
+            "icon": "fa fa-credit-card",
+            "href": "page/user/card.html",
+            "target": "_self"
+        },
+        {
             "title": "交易记录",
             "icon": "fa fa-jpy",
             "href": "page/user/trade/index.html",

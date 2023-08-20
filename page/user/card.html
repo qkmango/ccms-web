@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>充值</title>
+    <title>一卡通</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -36,7 +36,7 @@
                                     </tr>
                                     <tr>
                                         <td>卡状态</td>
-                                        <td>{{state}}</td>
+                                        <td v-html="state"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -58,7 +58,8 @@
                                 <i class="fa fa-search"></i> 充值
                             </button>
                             <button class="layui-btn layui-btn-primary" v-html="stateBtnHtml"
-                                :disabled="stateBtnDisable" :class="stateBtnDisable?'layui-btn-disabled':''"></button>
+                                :disabled="stateBtnDisable" :class="stateBtnDisable?'layui-btn-disabled':''"
+                                @click="updateState"></button>
                         </div>
                     </div>
                 </div>
@@ -72,6 +73,7 @@
     <script src="/lib/util/layui_verify_config.js"></script>
     <script src="/lib/util/common.js"></script>
     <script src="/lib/util/amount.js"></script>
+    <script src="/lib/util/decimal.min.js"></script>
 
     <script>
 
@@ -99,9 +101,9 @@
                         return ''
                     }
                     switch (this.card.state) {
-                        case 'normal': return '正常';
-                        case 'loss': return '挂失';
-                        case 'canceled': return '注销';
+                        case 'normal': return '<span style="color:var(--green)"><i class="fa fa-check"></i> 正常</span>';
+                        case 'loss': return '<span style="color:var(--orange)"><i class="fa fa-lock"></i> 挂失</span>';
+                        case 'canceled': return '<span style="color:var(--red)"><i class="fa fa-times"></i> 注销</span>';
                         default: return '未知';
                     }
                 },
@@ -136,9 +138,22 @@
                     }
 
                     const _this = this;
-                    let amount = Number.parseFloat(document.querySelector('input[name="amount"]').value);
-                    if (amount <= 0) {
-                        layer.msg('充值金额不能为0');
+
+                    let channel = new BroadcastChannel('recharge');
+                    channel.onmessage = e => {
+                        _this.queryCard();
+                        channel.close();
+                    }
+
+                    //单位 分
+                    let amount = new Decimal(document.querySelector('input[name="amount"]').value).mul(new Decimal('100'));
+                    if (amount.cmp(0) !== 1) {
+                        layer.msg('充值金额要大于0');
+                        return;
+                    }
+                    
+                    if (!amount.isInteger()) {
+                        layer.msg('最多两位小数');
                         return;
                     }
 
@@ -146,7 +161,7 @@
                         url: 'api/pay/alipay/create-pay.do',
                         data: {
                             subject: '一卡通充值',
-                            amount: amount * 100
+                            amount: amount.toString()
                         },
                         success: function (res) {
                             if (res.success) {
@@ -154,6 +169,43 @@
                             }
                             layer.msg(res.message);
                         }
+                    });
+                },
+                updateState() {
+                    if (!this.card || this.card.state === 'canceled') {
+                        return;
+                    }
+                    const _this = this;
+                    let { state, version } = this.card;
+
+                    console.log(state);
+                    switch (state) {
+                        case 'normal': state = 'loss'; break;
+                        case 'loss': state = 'normal'; break;
+                        default: throw new Error("一卡通状态错误!");
+                    }
+
+                    layer.open({
+                        title: '挂失',
+                        content: state === 'normal' ? '确认解挂吗' : '确认挂失吗',
+                        btn: ['确定', '取消'],
+                        icon: 3,
+                        shadeClose: true,
+                        btn1: function (index) {
+                            $.ajax({
+                                url: 'api/card/update/current-state.do',
+                                data: { state, version },
+                                type: 'post',
+                                success: function (res) {
+                                    if (res.success) {
+                                        layer.msg(res.message, { icon: 1 });
+                                        _this.queryCard(_this.id);
+                                        return;
+                                    }
+                                    layer.msg(res.message, { icon: 2 });
+                                },
+                            });
+                        },
                     });
                 }
             },
