@@ -151,7 +151,7 @@
                         layer.msg('充值金额要大于0');
                         return;
                     }
-                    
+
                     if (!amount.isInteger()) {
                         layer.msg('最多两位小数');
                         return;
@@ -165,7 +165,8 @@
                         },
                         success: function (res) {
                             if (res.success) {
-                                window.open(common.baseURL + '/' + res.data)
+                                // window.open(common.baseURL + '/' + res.data)
+                                window.open(res.data);
                             }
                             layer.msg(res.message);
                         }

@@ -86,9 +86,13 @@
 
 <script>
 
+    //所有的参数
     let search = common.urlLocation().search;
+    //后端传回的JSON
+    let result = JSON.parse(search.result);
+    search.result = result;
 
-    let a = {
+    let {
         title,
         subject,
         success,//认证是否成功
@@ -96,7 +100,8 @@
         redirect,//重定向的页面
         channel, //信道
         type,//页面跳转方式 channel:信道发送data数据后关闭页面; redirect:直接重定向到页面
-    } = search
+    } = result;
+
 
     success = JSON.parse(success || false);
 
@@ -105,13 +110,13 @@
     if (success) {
         document.querySelector('#message').innerHTML = `
             <i class="fa fa-check" style="color: var(--green-tint-solid);background-color: var(--green);"></i>
-            <p style="color: var(--green);">${message}</p>
+            <p style="color: var(--green);">${subject}</p>
             <p style="color: var(--green);">${message}</p>
         `;
     } else {
         document.querySelector('#message').innerHTML = `
             <i class="fa fa-times" style="color: var(--red-tint-solid);background-color: var(--red);"></i>
-            <p style="color: var(--red);">${message}</p>
+            <p style="color: var(--red);">${subject}</p>
             <p style="color: var(--red);">${message}</p>
         `;
     }
