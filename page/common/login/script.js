@@ -60,8 +60,8 @@ let app = new Vue({
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
-                        const { token, account } = res.data;
-                        common.token(token);
+                        const account = res.data;
+                        // common.token(token);
                         common.account(account);
                         layer.msg(res.message, { icon: 1, time: 1000 }, (end) => {
                             switch (account.role) {
@@ -96,8 +96,7 @@ let app = new Vue({
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
-                        const { token, account } = res.data;
-                        common.token(token);
+                        const account = res.data;
                         common.account(account);
                         layer.msg(res.message, { icon: 1, time: 1000 }, (end) => {
                             switch (account.role) {

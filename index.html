@@ -180,6 +180,7 @@
 </html>
 
 <script src="js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="/lib/util/js.cookie.min.js"></script>
 <script src="/lib/util/common.js"></script>
 <script>
 
@@ -256,10 +257,9 @@
 
 
         const account = common.account();
-        const token = common.token();
+        // const token = common.token();
         //渲染
-        if((!account) || (!token)) {
-            console.log(account, token);
+        if (!account) {
             window.top.location.href = '/page/common/login/index.html';
         }
         miniAdminRender(account);
@@ -268,11 +268,11 @@
         document.querySelector('#logout').addEventListener('click', function () {
             // 清除 account 和 token 信息
             common.account(null);
-            common.token(null);
+            // common.token(null);
+            Cookies.set('Authorization', null, { expires: 0, path: '/api/' });
 
             layer.msg("已退出登陆", { icon: 1 }, end => window.top.location.href = 'page/common/login/index.html');
         });
-
     });
 
 

@@ -156,21 +156,7 @@
                         layer.msg('最多两位小数');
                         return;
                     }
-
-                    $.ajax({
-                        url: 'api/pay/alipay/create-pay.do',
-                        data: {
-                            subject: '一卡通充值',
-                            amount: amount.toString()
-                        },
-                        success: function (res) {
-                            if (res.success) {
-                                // window.open(common.baseURL + '/' + res.data)
-                                window.open(res.data);
-                            }
-                            layer.msg(res.message);
-                        }
-                    });
+                    window.open('/api/pay/alipay/pay.do?amount=' + amount.toString());
                 },
                 updateState() {
                     if (!this.card || this.card.state === 'canceled') {
