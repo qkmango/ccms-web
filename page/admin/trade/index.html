@@ -70,6 +70,7 @@
                                         <option value="fail">失败</option>
                                         <option value="refund">退款</option>
                                         <option value="processing">处理中</option>
+                                        <option value="close">关闭</option>
                                     </select>
                                 </div>
                             </div>
@@ -164,6 +165,7 @@
                                 case 'success': text = '<span style="color:var(--green)"><i class="fa fa-check"></i> 成功</span>'; break;
                                 case 'refund': text = '<span style="color:var(--orange)"><i class="fa fa-reply"></i> 退款</span>'; break;
                                 case 'processing': text = '<span style="color:var(--blue)"><i class="fa fa-refresh"></i> 处理中</span>'; break;
+                                case 'close': text = '<span><i class="fa fa-hourglass-end"></i> 关闭</span>'; break;
                                 default: text = '未知'; break;
                             }
                             return text;
