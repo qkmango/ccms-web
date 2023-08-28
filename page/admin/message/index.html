@@ -79,14 +79,12 @@
 
 
     <script src="/lib/layui/layui.js" charset="utf-8"></script>
-    <script src="/lib/util/common.js"></script>
+    <script src="/lib/util/config.js"></script>
 
     <script>
         layui.use(['laydate'], function () {
             const { $, form, table, laydate, util } = layui;
 
-            // ajax 全局配置
-            common.ajaxSetup($);
 
             //渲染日期时间选择框
             laydate.render({

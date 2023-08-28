@@ -44,10 +44,10 @@
             </div>
         </div>
     </div>
-    <script src="/lib/layui/layui.js" charset="utf-8"></script>
-    <script src="/js/lay-config.js" charset="utf-8"></script>
+    <script src="/lib/layui/layui.js"></script>
+    <script src="/lib/util/config.js"></script>
+    <script src="/js/lay-config.js"></script>
     <script src="/lib/util/layui_verify_config.js"></script>
-    <script src="/lib/util/common.js"></script>
     <script src="/lib/vue2/vue.js"></script>
     <script>
 
@@ -77,7 +77,7 @@
                     const _this = this;
 
                     $.ajax({
-                        url: 'api/sender/captcha/update-email.do',
+                        url: 'api/mail/captcha/update-email.do',
                         data: {
                             email: this.email,
                         },
@@ -132,8 +132,6 @@
         layui.use(function () {
             form = layui.form;
             $ = layui.jquery;
-            common.ajaxSetup($);
-
             //监听提交
             form.on('submit(saveBtn)', function (data) {
                 app.update();

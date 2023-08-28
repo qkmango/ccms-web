@@ -203,9 +203,8 @@
     <script src="/lib/vue2/vue.js"></script>
     <script src="/js/lay-config.js"></script>
     <script src="/lib/util/layui_verify_config.js"></script>
-    <!-- <script src="/lib/util/amount.js"></script> -->
     <script src="/lib/util/decimal.min.js"></script>
-    <script src="/lib/util/common.js"></script>
+    <script src="/lib/util/config.js"></script>
     <script src="/lib/util/constant.js"></script>
     <script>
         let form, $, layer;
@@ -492,9 +491,6 @@
             $ = layui.$;
             form = layui.form;
             layer = layui.layer;
-            // miniTab = layui.miniTab;
-            // ajax全局配置
-            common.ajaxSetup($);
             //配置layui表单验证配置
             form.verify(layui_verify_config);
 

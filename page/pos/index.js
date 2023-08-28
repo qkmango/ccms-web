@@ -5,7 +5,6 @@ let scanner;
 layui.use('layer', function () {
     layer = layui.layer;
     $ = layui.jquery;
-    common.ajaxSetup($);
 });
 
 let app = new Vue({

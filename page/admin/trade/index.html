@@ -98,13 +98,10 @@
 
     <script src="/lib/layui/layui.js" charset="utf-8"></script>
     <script src="/js/lay-module/layuimini/miniTab.js"></script>
-    <script src="/lib/util/common.js"></script>
-
+    <script src="/lib/util/config.js"></script>
     <script>
         layui.use(['form', 'table', 'laydate'], function () {
             let { $, form, table, miniTab, laydate, util } = layui;
-            common.ajaxSetup($);
-            // form.verify(layui_verify_config)
 
             //渲染日期时间选择框
             laydate.render({

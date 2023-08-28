@@ -85,13 +85,11 @@
     <script src="/lib/layui/layui.js"></script>
     <script src="/lib/util/layui_verify_config.js"></script>
     <script src="/js/lay-config.js"></script>
-    <script src="/lib/util/common.js"></script>
+    <script src="/lib/util/config.js"></script>
     <script>
         layui.use(['cascader'], function () {
             const { $, form, layer, cascader } = layui;
             form.verify(layui_verify_config);
-            common.ajaxSetup($);
-
             let tree = cascader({
                 elem: '#department',
                 clearable: true,

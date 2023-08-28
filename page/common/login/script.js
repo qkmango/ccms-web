@@ -144,7 +144,6 @@ let app = new Vue({
 layui.use(function () {
     $ = layui.jquery;
     layer = layui.layer;
-    common.ajaxSetup($);
 });
 
 //信道通信

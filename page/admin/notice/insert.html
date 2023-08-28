@@ -42,13 +42,12 @@
 		</div>
 	</div>
 	<script src="/lib/layui/layui.js"></script>
-	<script src="/lib/util/common.js"></script>
+	<script src="/lib/util/config.js"></script>
 	<script>
 		layui.use(['form'], function () {
 			const form = layui.form;
 			const layer = layui.layer;
 			let $ = layui.$;
-			common.ajaxSetup($);
 
 			//监听提交
 			form.on('submit(saveBtn)', function (data) {

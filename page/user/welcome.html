@@ -294,6 +294,7 @@
         </div>
     </div>
     <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="/lib/util/config.js"></script>
     <script src="/lib/vue2/vue.js"></script>
     <script src="/lib/util/datetime.js"></script>
     <script src="/lib/util/fieldMapping.js"></script>
@@ -381,7 +382,6 @@
             miniTab = layui.miniTab;
             util = layui.util;
 
-            common.ajaxSetup($);
             app.getNoticeList();
 
             miniTab.listen();

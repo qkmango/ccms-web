@@ -51,13 +51,12 @@
 
     <div id="markdown" style="height: calc(100% - 64px);"></div>
     <script src="/lib/layui/layui.js"></script>
+    <script src="/lib/util/config.js"></script>
     <script src="/lib/util/common.js"></script>
     <script src="/lib/cherry-markdown/cherry-markdown.min.js"></script>
     <script>
 
         let { $, layer } = layui;
-        common.ajaxSetup($);
-
         const id = common.urlLocation().search.id;
         render(id);
         function render(id) {
