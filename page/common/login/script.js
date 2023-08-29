@@ -53,10 +53,11 @@ let app = new Vue({
             });
 
             const { id, password } = this.account;
+            const type = 'COOKIE';
             $.ajax({
                 url: 'api/account/system-login.do',
                 headers: {},
-                data: { id, password },
+                data: { id, password, type },
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
@@ -89,10 +90,11 @@ let app = new Vue({
                 shade: 0.01,
             });
 
+            const type = 'COOKIE';
             $.ajax({
                 url: 'api/account/access-login.do',
                 headers: {},
-                data: { accessCode },
+                data: { accessCode, type },
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
