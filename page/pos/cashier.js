@@ -33,11 +33,19 @@ for (var i = 0; i < keys.length; i++) {
 
             let amount = eval(equation);
 
-            let isAmount = Amount.isAmount(amount);
-            if (isAmount) {
-                app.amount = Amount.format2Decimal(amount);
-            } else {
-                layer.msg('金额不正确');
+            // let isAmount = Amount.isAmount(amount);
+            // if (isAmount) {
+            //     app.amount = Amount.format2Decimal(amount);
+            // } else {
+            //     layer.msg('金额不正确');
+            // }
+
+            console.log(amount);
+            try {
+                app.amount = Decimal(amount).toFixed(2, Decimal.ROUND_DOWN).toString();
+            } catch {
+                layer.msg('1金额不正确');
+                return;
             }
             decimalAdded = false;
         }

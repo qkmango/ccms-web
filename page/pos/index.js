@@ -25,7 +25,8 @@ let app = new Vue({
     computed: {
         //金额数字,单位分
         amountNum() {
-            return Number.parseInt(Amount.multi(this.amount, 2));
+            return new Decimal(this.amount).mul(100).toNumber();
+            // return Number.parseInt(Amount.multi(this.amount, 2));
         },
         deviceAccount() {
             console.log(this.account);
@@ -41,7 +42,15 @@ let app = new Vue({
         },
         //到扫码界面
         toQrPage() {
-            const isAmount = Amount.isAmount(app.amount);
+            let isAmount;
+            try {
+                new Decimal(app.amount).toString();
+                isAmount = true;
+            } catch {
+                layer.msg('金额不正确');
+                return;
+            }
+
             if (!isAmount) {
                 layer.msg('金额不正确');
                 return;
@@ -85,9 +94,9 @@ let app = new Vue({
             const _this = this;
             const qrcode = JSON.parse(_this.qrcode);
             $.ajax({
-                url: '/api/trade/consume-by-qrcode.do',
+                url: '/api/pay/system/consume-by-qrcode.do',
                 type: 'post',
-                contentType: 'application/json',
+                // contentType: 'application/json',
                 data: {
                     code: qrcode.code,
                     account: qrcode.account,
