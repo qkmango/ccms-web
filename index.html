@@ -105,17 +105,6 @@
                     <li class="layui-nav-item layuimini-setting">
                         <a href="javascript:;" id="name">未登录</a>
                         <dl class="layui-nav-child">
-                            <!-- <dd>
-                                <a href="javascript:;" layuimini-content-href="page/common/account-detail.html"
-                                    data-title="基本资料" data-icon="fa fa-gears">基本资料</a>
-                            </dd>
-                            <dd>
-                                <a href="javascript:;" layuimini-content-href="page/common/update-password.html"
-                                    data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
-                            </dd>
-                            <dd>
-                                <hr>
-                            </dd> -->
                             <dd>
                                 <a href="javascript:;" class="login-out" id="logout">退出登录</a>
                             </dd>
@@ -267,7 +256,7 @@
             // 清除 account 和 token 信息
             common.account(null);
             // common.token(null);
-            Cookies.set('Authorization', null, { expires: 0, path: '/api/' });
+            Cookies.set('Authorization', null, { expires: 0, path: '/api' });
 
             layer.msg("已退出登陆", { icon: 1 }, end => window.top.location.href = 'page/common/login/index.html');
         });
