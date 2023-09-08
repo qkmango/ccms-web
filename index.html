@@ -106,7 +106,7 @@
                         <a href="javascript:;" id="name">未登录</a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a href="javascript:;" class="login-out" id="logout">退出登录</a>
+                                <a href="javascript:;" class="login-out" id="logout" onclick="logout()">退出登录</a>
                             </dd>
                         </dl>
                     </li>
@@ -174,7 +174,7 @@
 <script src="/lib/util/common.js"></script>
 <script>
 
-    let element;
+    let element, $;
     var progress = {
         timerId: 0,
         start: function () {
@@ -237,35 +237,25 @@
 
 
     layui.use(['jquery', 'layer', 'miniAdmin'], function () {
-        const { $, layer, miniAdmin } = layui;
+        const { layer, miniAdmin } = layui;
+        $ = layui.jquery;
 
+        //进度条
         element = layui.element;
         element.render('progress', 'request-progress');
 
-
         const account = common.account();
-        // const token = common.token();
         //渲染
         if (!account) {
             window.top.location.href = '/page/common/login/index.html';
         }
         miniAdminRender(account);
-
-        //退出
-        document.querySelector('#logout').addEventListener('click', function () {
-            // 清除 account 和 token 信息
-            common.account(null);
-            // common.token(null);
-            Cookies.set('Authorization', null, { expires: 0, path: '/api' });
-
-            layer.msg("已退出登陆", { icon: 1 }, end => window.top.location.href = 'page/common/login/index.html');
-        });
+        ping();
     });
 
 
     /**
      * 渲染 miniAdmin
-     * @param {Object} account
      */
     function miniAdminRender(account) {
         return new Promise((resolve, reject) => {
@@ -286,4 +276,27 @@
         })
     }
 
+
+    //退出
+    function logout() {
+        // 清除 account 信息
+        common.account(null);
+        Cookies.set('Authorization', null, { expires: 0, path: '/api' });
+        layer.msg("已退出登陆", { icon: 1 }, end => window.top.location.href = 'page/common/login/index.html');
+    }
+
+
+    // 检查登录状态
+    function ping() {
+        $.ajax({
+            url: '/api/auth/ping.do',
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                if (!res.data) {
+                    window.top.location.href = '/page/common/login/index.html';
+                }
+            },
+        })
+    }
 </script>
