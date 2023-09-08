@@ -53,11 +53,11 @@ let app = new Vue({
             });
 
             const { id, password } = this.account;
-            const type = 'COOKIE';
+            const authCarryType = 'COOKIE';
             $.ajax({
-                url: 'api/account/system-login.do',
+                url: 'api/auth/system-login.do',
                 headers: {},
-                data: { id, password, type },
+                data: { id, password, authCarryType },
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
@@ -90,11 +90,11 @@ let app = new Vue({
                 shade: 0.01,
             });
 
-            const type = 'COOKIE';
+            const authCarryType = 'COOKIE';
             $.ajax({
-                url: 'api/account/access-login.do',
+                url: 'api/auth/access-login.do',
                 headers: {},
-                data: { accessCode, type },
+                data: { accessCode, authCarryType },
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
