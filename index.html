@@ -106,7 +106,7 @@
                         <a href="javascript:;" id="name">未登录</a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a href="javascript:;" class="login-out" id="logout" onclick="logout()">退出登录</a>
+                                <a href="javascript:;" class="login-out" onclick="logout()">退出登录</a>
                             </dd>
                         </dl>
                     </li>
@@ -244,19 +244,19 @@
         element = layui.element;
         element.render('progress', 'request-progress');
 
+        //获取账号信息，如果没有则跳转到登陆页面
         const account = common.account();
-        //渲染
         if (!account) {
             window.top.location.href = '/page/common/login/index.html';
         }
+        //渲染
         miniAdminRender(account);
+        //测试登陆状态
         ping();
     });
 
 
-    /**
-     * 渲染 miniAdmin
-     */
+    // 渲染 miniAdmin
     function miniAdminRender(account) {
         return new Promise((resolve, reject) => {
             document.querySelector('#name').innerText = account.id;
@@ -290,10 +290,10 @@
     function ping() {
         $.ajax({
             url: '/api/auth/ping.do',
-            type: 'GET',
             dataType: 'json',
             success: function (res) {
                 if (!res.data) {
+                    common.account(null);
                     window.top.location.href = '/page/common/login/index.html';
                 }
             },
