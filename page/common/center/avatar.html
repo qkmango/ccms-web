@@ -56,7 +56,8 @@
                             <div class="layui-card-header">当前头像</div>
                             <div class="layui-card-body">
                                 <div class="layui-row image-box">
-                                    <img :src="originalImage" class="image" />
+                                    <img :src="showAvatar" class="image"
+                                        onerror="this.onerror=null;this.src='/image/default_avatar.svg'" />
                                 </div>
                             </div>
                         </div>
@@ -70,19 +71,25 @@
                                         class="layui-btn layui-btn-primary file fa fa-upload" accept=".jpg,.jpeg"
                                         @change="onimagechange" />
                                 </div>
-                                <div
-                                    class="image-box layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12 layui-col-xl12">
-                                    <img :src="sourcesImage" class="image" ref="imgRef" crossorigin="anonymous">
+
+                                <div v-show="newAvatarBase64!==null">
+                                    <div
+                                        class="image-box layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12 layui-col-xl12">
+                                        <img :src="newAvatarBase64" class="image" ref="imgRef" crossorigin="anonymous">
+                                    </div>
+                                    <div id="preview" class="image-box">
+                                        <img id="preview-img" class="image preview" />
+                                    </div>
+
+                                    <div class="layui-row btn-group">
+                                        <button type="primary" size="mini" @click="upload"
+                                            class="layui-btn fa fa-check">
+                                            确定</button>
+                                        <button type="primary" size="mini" @click="restore"
+                                            class="layui-btn layui-btn-primary fa fa-repeat"> 还原</button>
+                                    </div>
                                 </div>
-                                <div id="preview" class="image-box">
-                                    <img class="image preview" />
-                                </div>
-                                <div class="layui-row btn-group">
-                                    <button type="primary" size="mini" @click="EditSeal('tailor')"
-                                        class="layui-btn fa fa-check"> 确定</button>
-                                    <button type="primary" size="mini" @click="EditSeal('restore')"
-                                        class="layui-btn layui-btn-primary fa fa-repeat"> 还原</button>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -95,21 +102,29 @@
     <script src="/lib/util/config.js"></script>
     <script src="/lib/vue2/vue.js"></script>
     <script src="/lib/cropper/cropper.min.js"></script>
+    <script src="/lib/util/common.js"></script>
+    <script src="/lib/util/config.js"></script>
     <script>
-        let $, layer, upload;
+        let $, layer;
 
         let app = new Vue({
             el: "#app",
             data: {
-                originalImage: "/test/avatar.jpg",
                 cropper: null,
-                sourcesImage: null,
-                cropImageBase64: ''
+                currAvatarBase64: null,
+                newAvatarBase64: null,
+                account: ''
+            },
 
+            computed: {
+                showAvatar() {
+                    if (this.currAvatarBase64) {
+                        return this.currAvatarBase64;
+                    }
+                    return "http://192.168.0.100:9000/ccms/avatar/" + this.account + ".jpg?t=" + new Date().getTime();
+                },
             },
-            mounted() {
-                this.cropImage();
-            },
+
             methods: {
                 cropImage() {
                     this.cropper = new Cropper(this.$refs.imgRef, {
@@ -122,40 +137,32 @@
                         restore: false, //窗口改变后 恢复被裁剪的区域 默认true
                         dragMode: "none", // none禁止重新框选选取
                     });
-                    // console.log(this.cropper);
                 },
 
-                EditSeal(method) {
-                    if (method) {
-                        switch (method) {
-                            case "tailor":
-                                this.tailor();
-                                break;
-                            case "restore":
-                                this.cropper.reset();
-                                break;
-                        }
-                    }
+                restore() {
+                    this.cropper.reset();
                 },
+
+                //裁剪，并转换为base64
                 tailor() {
                     let result = this.cropper.getCroppedCanvas(); //获取裁剪后数据\
                     if (!result) {
                         layer.msg('请先选择图片');
                         return false;
                     }
-                    let base64url = result.toDataURL("image/jpeg");
-                    this.cropImageBase64 = base64url;
-                    console.log(base64url);
-                    // TODO: 上传图片
+                    this.newAvatarBase64 = result.toDataURL("image/jpeg");
                 },
 
                 onimagechange() {
                     const _this = this;
+                    this.newAvatarBase64 = null;
+
                     let reader = new FileReader();
                     reader.readAsDataURL(this.$refs.fileRef.files[0]); // 读出 base64
+
                     reader.onloadend = async function () {
                         const dataURL = reader.result;//base64
-                        _this.sourcesImage = dataURL;
+                        _this.newAvatarBase64 = dataURL;
                         if (_this.cropper) {
                             await _this.cropper.destroy();
                         }
@@ -163,17 +170,92 @@
                     };
                 },
 
+                upload() {
+                    let r = this.tailor();
+                    if (r === false) {
+                        return false;
+                    }
+
+                    const _this = this;
+                    let fileImg = this.base64ToBlob(this.newAvatarBase64);
+
+                    //判断文件大小
+                    if (fileImg.size > 128 * 1024) {
+                        layer.msg('图片大小不能超过128KB');
+                        return false;
+                    }
+
+                    let fd = new FormData();
+                    fd.append('avatar', fileImg, "image.jpg")
+                    $.ajax({
+                        url: '/api/oss/upload/avatar.do',
+                        data: fd,
+                        type: 'POST',
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        success: function (res) {
+                            if (res.success) {
+                                _this.currAvatarBase64 = _this.newAvatarBase64;
+                                _this.newAvatarBase64 = null;
+                                _this.$refs.fileRef.value = '';
+
+                                //刷新父页面头像
+                                if (window.top !== window.self) {
+                                    // window.top.location.reload();
+                                    window.top.reloadAvatar(_this.currAvatarBase64);
+                                }
+
+                                if (_this.cropper) {
+                                    _this.cropper.destroy();
+                                }
+                                // _this.cropImage();
+                                return false;
+                            }
+                            layer.msg(res.message);
+                        },
+                    })
+                },
+
+                base64ToBlob(urlData) {
+                    var arr = urlData.split(',');
+                    var mime = arr[0].match(/:(.*?);/)[1] || 'image/jpg';
+                    // 去掉url的头，并转化为byte
+                    var bytes = window.atob(arr[1]);
+                    // 处理异常,将ascii码小于0的转换为大于0
+                    var ab = new ArrayBuffer(bytes.length);
+                    // 生成视图（直接针对内存）：8位无符号整数，长度1个字节
+                    var ia = new Uint8Array(ab);
+
+                    for (var i = 0; i < bytes.length; i++) {
+                        ia[i] = bytes.charCodeAt(i);
+                    }
+
+                    return new Blob([ab], {
+                        type: mime
+                    });
+                },
+
             },
+
+            created() {
+                layui.use(function () {
+                    layer = layui.layer;
+                    $ = layui.$;
+                    return false;
+                });
+                this.account = common.account().id;
+            },
+
+            mounted() {
+                this.cropImage();
+            }
+
         })
 
 
 
-        layui.use(function () {
-            layer = layui.layer;
-            $ = layui.$;
-            upload = layui.upload;
-            return false;
-        });
+
     </script>
 </body>
 

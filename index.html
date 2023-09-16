@@ -58,6 +58,14 @@
             height: 100%;
             border-radius: 0 20px 20px 0;
         }
+
+        .avatar {
+            width: 35px;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            border-radius: 50%;
+            border: 1px solid #e6e6e6;
+        }
     </style>
 </head>
 
@@ -93,6 +101,10 @@
 
                 <ul class="layui-nav layui-layout-right">
 
+                    <li class="layui-nav-item" lay-unselect>
+                        <img class="avatar" id="avatar"
+                            onerror="this.onerror=null;this.src='/image/default_avatar.svg'" />
+                    </li>
                     <li class="layui-nav-item" lay-unselect>
                         <a href="javascript:;" data-refresh="刷新"><i class="fa fa-refresh"></i></a>
                     </li>
@@ -260,6 +272,7 @@
     function miniAdminRender(account) {
         return new Promise((resolve, reject) => {
             document.querySelector('#name').innerText = account.id;
+            document.querySelector('#avatar').src = "http://192.168.0.100:9000/ccms/avatar/" + account.id + ".jpg";
             const iniUrl = `/apis/init_${account.role}.json`;
 
             layui.miniAdmin.render({
@@ -298,5 +311,11 @@
                 }
             },
         })
+    }
+
+
+    //重新加载头像
+    function reloadAvatar(base64) {
+        document.querySelector('#avatar').src = base64;
     }
 </script>

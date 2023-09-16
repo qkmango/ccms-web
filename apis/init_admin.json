@@ -173,6 +173,12 @@
                     "target": "_self"
                 },
                 {
+                    "title": "账户头像",
+                    "icon": "fa fa-id-card-o",
+                    "href": "page/common/center/avatar.html",
+                    "target": "_self"
+                },
+                {
                     "title": "授权平台",
                     "icon": "fa fa-cubes",
                     "href": "page/common/center/open-platform-state.html",
