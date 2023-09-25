@@ -174,7 +174,7 @@
                 },
                 {
                     "title": "账户头像",
-                    "icon": "fa fa-id-card-o",
+                    "icon": "fa fa-user-circle-o",
                     "href": "page/common/center/avatar.html",
                     "target": "_self"
                 },
