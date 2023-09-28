@@ -184,7 +184,9 @@
 <script src="js/lay-config.js?v=2.0.0" charset="utf-8"></script>
 <script src="/lib/util/js.cookie.min.js"></script>
 <script src="/lib/util/common.js"></script>
-<script>
+<script type="module">
+
+    import Storage from '/lib/util/storage.mjs';
 
     let element, $;
     var progress = {
@@ -257,14 +259,14 @@
         element.render('progress', 'request-progress');
 
         //获取账号信息，如果没有则跳转到登陆页面
-        const account = common.account();
+        const account = Storage.account();
         if (!account) {
             window.top.location.href = '/page/common/login/index.html';
         }
         //渲染
         miniAdminRender(account);
         //测试登陆状态
-        ping();
+        // ping();
     });
 
 
@@ -293,8 +295,9 @@
     //退出
     function logout() {
         // 清除 account 信息
-        common.account(null);
-        Cookies.set('Authorization', null, { expires: 0, path: '/api' });
+        Storage.account(null);
+        // Cookies.set('Authorization', null, { expires: 0, path: '/api' });
+        Cookies.remove('Authorization', { path: '/api' });
         layer.msg("已退出登陆", { icon: 1 }, end => window.top.location.href = 'page/common/login/index.html');
     }
 
@@ -306,7 +309,7 @@
             dataType: 'json',
             success: function (res) {
                 if (!res.data) {
-                    common.account(null);
+                    Storage.account(null);
                     window.top.location.href = '/page/common/login/index.html';
                 }
             },

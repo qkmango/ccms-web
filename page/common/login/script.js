@@ -1,3 +1,5 @@
+import Storage from '/lib/util/storage.mjs';
+
 let $, layer;
 
 let app = new Vue({
@@ -53,17 +55,16 @@ let app = new Vue({
             });
 
             const { id, password } = this.account;
-            const authCarryType = 'COOKIE';
             $.ajax({
                 url: 'api/auth/system-login.do',
                 headers: {},
-                data: { id, password, authCarryType },
+                data: { id, password },
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
-                        const account = res.data;
-                        // common.token(token);
-                        common.account(account);
+                        const { token, account } = res.data;
+                        Storage.account(account);
+                        Storage.token(token);
                         layer.msg(res.message, { icon: 1, time: 1000 }, (end) => {
                             switch (account.role) {
                                 case 'user':
@@ -90,16 +91,17 @@ let app = new Vue({
                 shade: 0.01,
             });
 
-            const authCarryType = 'COOKIE';
             $.ajax({
                 url: 'api/auth/access-login.do',
                 headers: {},
-                data: { accessCode, authCarryType },
+                data: { accessCode },
                 type: 'post',
                 success: function (res) {
                     if (res.success) {
-                        const account = res.data;
-                        common.account(account);
+                        const { token, account } = res.data;
+                        Storage.account(account);
+                        Storage.token(token);
+
                         layer.msg(res.message, { icon: 1, time: 1000 }, (end) => {
                             switch (account.role) {
                                 case 'user':
