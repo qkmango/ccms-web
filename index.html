@@ -185,11 +185,11 @@
 <script src="/lib/util/js.cookie.min.js"></script>
 <script src="/lib/util/common.js"></script>
 <script type="module">
-
-    import Storage from '/lib/util/storage.mjs';
-
+    import ProjectStorage from '/lib/util/storage.mjs';
+    import Common from '/lib/util/common.mjs';
     let element, $;
-    var progress = {
+    // 挂载到 window 对象上
+    window.progress = {
         timerId: 0,
         start: function () {
             const _this = this;
@@ -259,7 +259,7 @@
         element.render('progress', 'request-progress');
 
         //获取账号信息，如果没有则跳转到登陆页面
-        const account = Storage.account();
+        const account = ProjectStorage.account();
         if (!account) {
             window.top.location.href = '/page/common/login/index.html';
         }
@@ -295,7 +295,7 @@
     //退出
     function logout() {
         // 清除 account 信息
-        Storage.account(null);
+        ProjectStorage.account(null);
         // Cookies.set('Authorization', null, { expires: 0, path: '/api' });
         Cookies.remove('Authorization', { path: '/api' });
         layer.msg("已退出登陆", { icon: 1 }, end => window.top.location.href = 'page/common/login/index.html');
@@ -309,7 +309,7 @@
             dataType: 'json',
             success: function (res) {
                 if (!res.data) {
-                    Storage.account(null);
+                    ProjectStorage.account(null);
                     window.top.location.href = '/page/common/login/index.html';
                 }
             },
