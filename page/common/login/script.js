@@ -1,4 +1,4 @@
-import Storage from '/lib/util/storage.mjs';
+import SystemStorage from '/lib/util/storage.mjs';
 
 let $, layer;
 
@@ -63,8 +63,9 @@ let app = new Vue({
                 success: function (res) {
                     if (res.success) {
                         const { token, account } = res.data;
-                        Storage.account(account);
-                        Storage.token(token);
+                        // Storage.account(account);
+                        // Storage.token(token);
+                        SystemStorage.login(account, token);
                         layer.msg(res.message, { icon: 1, time: 1000 }, (end) => {
                             switch (account.role) {
                                 case 'user':
@@ -99,8 +100,9 @@ let app = new Vue({
                 success: function (res) {
                     if (res.success) {
                         const { token, account } = res.data;
-                        Storage.account(account);
-                        Storage.token(token);
+                        // Storage.account(account);
+                        // Storage.token(token);
+                        SystemStorage.login(account, token);
 
                         layer.msg(res.message, { icon: 1, time: 1000 }, (end) => {
                             switch (account.role) {
